@@ -1,0 +1,37 @@
+{
+  "requestBody": {
+    "model": "text-davinci-003",
+    "temperature": 0,
+    "max_tokens": 2000,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0,
+    "n": 1,
+    "best_of": 1,
+    "stream": false,
+    "prompt": [
+      "You are an AI tasked with imagining dystopian futures based on three inputs: an emerging need, an capability or capability gap, and a trend that is changing over time.  From these three inputs, you must fill out a response in the following format:\n\nINPUTS:\n-----------------\nNeed: the need for timely medical care in remote or underfunded areas\nTechnology Capability: the capability of drones to deliver medical equipment and medicines\nTrend:  the trend of using drones in emergency medicine\n\n\n\n\nFORMAT:\n-----------------\nTimeframe: Clearly establish the time period in which the scenario takes place. It could be a few decades into the future or even further ahead. It must be at least after 2050.\nContext: Set the societal, technological, and environmental context of the scenario. Consider how advancements or changes in these areas have shaped the world in which the problem arises.\nCore Problem: Identify the central issue or challenge that the scenario focuses on. It could be a specific technological development, social change, environmental crisis, or any other factor that creates significant problems for individuals or society as a whole.\nCause and Effect: Explore the causes and consequences of the core problem. What factors or events led to the emergence of the problem, and how does it impact various aspects of society? Consider both immediate and long-term effects.\nStakeholders: Identify the key stakeholders who are directly affected by the problem. These could be individuals, communities, organizations, or even nations. Understand their motivations, interests, and how they respond to the problem.\nAmplifying Factors: Determine additional factors that exacerbate the core problem or make it more challenging to solve. These factors could include political, economic, cultural, or technological aspects that further complicate the situation.\nCascading Effects: Consider how the core problem and its associated challenges ripple through different sectors of society. Examine how they impact various domains such as the economy, healthcare, education, governance, and interpersonal relationships.\nInterconnections: Identify the interconnectedness between different problems and sectors. How does the core problem interact with other existing issues, creating a complex web of challenges? Explore the feedback loops and compounding effects.\nHuman Impact: Explore the human experience within the scenario. Understand the emotions, struggles, and dilemmas faced by individuals and communities. Highlight personal stories and the moral and ethical implications that arise.\n\n\nRESPONSE:\n-----------------\nTimeframe:"
+    ]
+  },
+  "status": 200,
+  "data": {
+    "id": "cmpl-7VWgWxVNDUOVxPrpMuTcdkFjEEr32",
+    "object": "text_completion",
+    "created": 1687748164,
+    "model": "text-davinci-003",
+    "choices": [
+      {
+        "text": " The year is 2070.\nContext: In the decades since 2050, the world has seen rapid advances in technology, particularly in the field of robotics and artificial intelligence. This has enabled the development of autonomous drones capable of delivering medical equipment and medicines to remote or underfunded areas.\n\nCore Problem: The core problem is the lack of timely medical care in remote or underfunded areas. Despite the advances in drone technology, the delivery of medical supplies and medicines is often delayed due to a variety of factors, such as poor infrastructure, limited resources, and political instability. This has resulted in a significant gap in access to medical care in these areas.\n\nCause and Effect: The primary cause of the problem is the lack of resources and infrastructure in remote or underfunded areas. This has resulted in a lack of access to medical care, leading to an increase in preventable illnesses and deaths. In addition, the delays in delivery of medical supplies and medicines have caused further disruption to the healthcare system in these areas.\n\nStakeholders: The key stakeholders in this scenario are the individuals and communities living in remote or underfunded areas. They are the ones most affected by the lack of access to medical care, and are the ones most in need of timely medical assistance.\n\nAmplifying Factors: Political instability is a major amplifying factor in this scenario. In many cases, political unrest has caused delays in the delivery of medical supplies and medicines, further exacerbating the problem. In addition, the lack of resources and infrastructure in these areas has made it difficult to provide timely medical care.\n\nCascading Effects: The lack of timely medical care has had a cascading effect on various aspects of society. It has resulted in an increase in preventable illnesses and deaths, as well as a decrease in overall quality of life. In addition, it has caused a disruption to the healthcare system, leading to a decrease in the availability of medical services.\n\nInterconnections: The core problem is interconnected with other existing issues, such as poverty, inequality, and political instability. These issues have further exacerbated the lack of access to medical care in remote or underfunded areas, creating a complex web of challenges.\n\nHuman Impact: The human impact of the lack of timely medical care in remote or underfunded areas is significant. Individuals and communities are faced with the difficult choice of either seeking medical care in distant locations or going without it altogether. This has resulted in an increase in preventable illnesses and deaths, as well as a decrease in overall quality of life. In addition, the lack of access to medical care has caused a great deal of emotional distress and suffering for those affected.",
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 504,
+      "completion_tokens": 540,
+      "total_tokens": 1044
+    }
+  },
+  "timestamp": "2023-06-26_02:55:33"
+}

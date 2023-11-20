@@ -1,0 +1,83 @@
+
+[
+  {
+    "name": "Accessibility",
+    "description": "The ability to obtain or use a service or product without difficulty or inconvenience."
+  },
+  {
+    "name": "Affordability",
+    "description": "The ability to purchase a service or product at a reasonable cost."
+  },
+  {
+    "name": "Accountability",
+    "description": "The responsibility of an individual or organization to be answerable for their actions."
+  },
+  {
+    "name": "Adaptability",
+    "description": "The ability to adjust to changing circumstances or requirements."
+  },
+  {
+    "name": "Availability",
+    "description": "The presence of a service or product when needed."
+  },
+  {
+    "name": "Efficiency",
+    "description": "The ability to achieve a desired result with minimal effort or cost."
+  },
+  {
+    "name": "Equity",
+    "description": "The fairness of a system or process, ensuring all individuals or groups are treated equally."
+  },
+  {
+    "name": "Inclusion",
+    "description": "The practice of including individuals or groups who have been historically excluded."
+  },
+  {
+    "name": "Innovation",
+    "description": "The introduction of new ideas, methods, or products."
+  },
+  {
+    "name": "Integrity",
+    "description": "The adherence to moral and ethical principles."
+  },
+  {
+    "name": "Quality",
+    "description": "The degree to which a service or product meets or exceeds expectations."
+  },
+  {
+    "name": "Reliability",
+    "description": "The ability of a system or process to consistently produce the desired result."
+  },
+  {
+    "name": "Responsiveness",
+    "description": "The ability to quickly and accurately respond to customer needs."
+  },
+  {
+    "name": "Safety",
+    "description": "The practice of protecting individuals from harm or injury."
+  },
+  {
+    "name": "Sustainability",
+    "description": "The ability to maintain a desired level of performance over time."
+  },
+  {
+    "name": "Transparency",
+    "description": "The practice of providing clear and accurate information."
+  },
+  {
+    "name": "Usability",
+    "description": "The ease with which an individual can use a service or product."
+  },
+  {
+    "name": "Value",
+    "description": "The benefit an individual or group receives from a service or product."
+  },
+  {
+    "name": "Empowerment",
+    "description": "The practice of giving individuals or groups the authority to make decisions."
+  },
+  {
+    "name": "Engagement",
+    "description": "The practice of actively involving individuals or groups in a process or activity."
+  }
+]

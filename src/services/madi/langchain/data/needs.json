@@ -1,0 +1,82 @@
+[
+    {
+      "name": "Physical health",
+      "description": "The state of being physically fit and healthy, free from illness or injury. It is the overall physical condition of an individual, including physical strength, endurance, and flexibility."
+    },
+    {
+      "name": "Mental health",
+      "description": "The psychological well-being of an individual, including the ability to cope with stress, manage emotions, and make positive decisions."
+    },
+    {
+      "name": "Education",
+      "description": "The process of acquiring knowledge, skills, and values through formal study, instruction, and experience."
+    },
+    {
+      "name": "Food security",
+      "description": "The availability of adequate, safe, and nutritious food to meet the dietary needs of individuals and their families."
+    },
+    {
+      "name": "Equal rights",
+      "description": "The right of all individuals to be treated equally and without discrimination, regardless of their race, gender, religion, or other characteristics."
+    },
+    {
+      "name": "Access to clean water",
+      "description": "The availability of clean, safe, and potable water for drinking, cooking, and other uses."
+    },
+    {
+      "name": "Environmental sustainability",
+      "description": "The ability of the environment to sustain its natural resources and support the needs of current and future generations."
+    },
+    {
+      "name": "Lack of poverty",
+      "description": "The absence of extreme poverty, in which individuals and families have access to basic needs such as food, shelter, and healthcare."
+    },
+    {
+      "name": "Gender equality",
+      "description": "The equal rights and opportunities of all individuals, regardless of gender."
+    },
+    {
+      "name": "Economic stability",
+      "description": "The ability of an economy to maintain a consistent level of growth and development over time."
+    },
+    {
+      "name": "Access to energy",
+      "description": "The availability of energy sources such as electricity, gas, and oil to meet the needs of individuals and businesses."
+    },
+    {
+      "name": "Security",
+      "description": "The protection of individuals, property, and information from harm or theft."
+    },
+    {
+      "name": "Job opportunities",
+      "description": "The availability of employment opportunities that provide individuals with the means to support themselves and their families."
+    },
+    {
+      "name": "Political stability",
+      "description": "The ability of a government to maintain a consistent level of political order and stability over time."
+    },
+    {
+      "name": "Good governance",
+      "description": "The effective management of a country’s resources and institutions in a way that is transparent, accountable, and responsive to the needs of its citizens."
+    },
+    {
+      "name": "Financial inclusion",
+      "description": "The ability of individuals and businesses to access and use financial services, such as banking, credit, and insurance."
+    },
+    {
+      "name": "Quality housing",
+      "description": "The availability of safe, secure, and affordable housing for individuals and families."
+    },
+    {
+      "name": "Social protection",
+      "description": "The provision of social services and benefits to individuals and families in need."
+    },
+    {
+      "name": "Reduced inequality",
+      "description": "The reduction of disparities in income, wealth, and access to resources between different groups of people."
+    },
+    {
+      "name": "Haven from violence",
+      "description": "The availability of safe and secure environments in which individuals and families can live without fear of violence or harm."
+    }
+   ]

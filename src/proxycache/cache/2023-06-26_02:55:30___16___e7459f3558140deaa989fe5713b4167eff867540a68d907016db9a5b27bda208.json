@@ -1,0 +1,37 @@
+{
+  "requestBody": {
+    "model": "text-davinci-003",
+    "temperature": 0,
+    "max_tokens": 256,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0,
+    "n": 1,
+    "best_of": 1,
+    "stream": false,
+    "prompt": [
+      "You must format your output as a JSON value that adheres to a given \"JSON Schema\" instance.\n\n\"JSON Schema\" is a declarative language that allows you to annotate and validate JSON documents.\n\nFor example, the example \"JSON Schema\" instance {{\"properties\": {{\"foo\": {{\"description\": \"a list of test words\", \"type\": \"array\", \"items\": {{\"type\": \"string\"}}}}}}, \"required\": [\"foo\"]}}}}\nwould match an object with one required property, \"foo\". The \"type\" property specifies \"foo\" must be an \"array\", and the \"description\" property semantically describes it as \"a list of test words\". The items within \"foo\" must be strings.\nThus, the object {{\"foo\": [\"bar\", \"baz\"]}} is a well-formatted instance of this example \"JSON Schema\". The object {{\"properties\": {{\"foo\": [\"bar\", \"baz\"]}}}} is not well-formatted.\n\nYour output will be parsed and type-checked according to the provided schema instance, so make sure all fields in your output match the schema exactly and there are no trailing commas!\n\nHere is the JSON Schema instance your output must adhere to. Include the enclosing markdown codeblock:\n```json\n{\"type\":\"object\",\"properties\":{\"trend\":{\"type\":\"string\",\"description\":\"The trend over time of a specific need or capability.\"},\"need\":{\"type\":\"string\",\"description\":\"The need or problem described by the user.\"},\"capability\":{\"type\":\"string\",\"description\":\"The capability, solution, or new technology described by the user.\"}},\"required\":[\"trend\",\"need\",\"capability\"],\"additionalProperties\":false,\"$schema\":\"http://json-schema.org/draft-07/schema#\"}\n```\n Here is the input that you must format. Remember your response must start with ``` and adhere to the format instructions. \n\nINPUT:\nTREND: the trend of using drones in emergency medicine; NEED: the need for timely medical care in remote or underfunded areas; CAPABILITY: the capability of drones to deliver medical equipment and medicines\n\nRESPONSE:\n"
+    ]
+  },
+  "status": 200,
+  "data": {
+    "id": "cmpl-7VWgT6r05mJc2IqdLE6IuPJz3zQw7",
+    "object": "text_completion",
+    "created": 1687748161,
+    "model": "text-davinci-003",
+    "choices": [
+      {
+        "text": "```json\n{\n    \"trend\": \"the trend of using drones in emergency medicine\",\n    \"need\": \"the need for timely medical care in remote or underfunded areas\",\n    \"capability\": \"the capability of drones to deliver medical equipment and medicines\"\n}\n```",
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 478,
+      "completion_tokens": 63,
+      "total_tokens": 541
+    }
+  },
+  "timestamp": "2023-06-26_02:55:30"
+}

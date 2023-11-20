@@ -1,0 +1,37 @@
+{
+  "requestBody": {
+    "model": "text-davinci-003",
+    "temperature": 0,
+    "max_tokens": 2000,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0,
+    "n": 1,
+    "best_of": 1,
+    "stream": false,
+    "prompt": [
+      "You are an AI tasked with imagining dystopian futures based on three inputs: an emerging need, an capability or capability gap, and a trend that is changing over time.  From these three inputs, you must fill out a response in the following format:\n\nINPUTS:\n-----------------\nNeed: Access to timely medical care in remote or underfunded areas\nTechnology Capability: Delivery of medical equipment and medicines\nTrend:  Increasing use of drones in emergency medical services\n\n\n\n\nFORMAT:\n-----------------\nTimeframe: Clearly establish the time period in which the scenario takes place. It could be a few decades into the future or even further ahead. It must be at least after 2050.\nContext: Set the societal, technological, and environmental context of the scenario. Consider how advancements or changes in these areas have shaped the world in which the problem arises.\nCore Problem: Identify the central issue or challenge that the scenario focuses on. It could be a specific technological development, social change, environmental crisis, or any other factor that creates significant problems for individuals or society as a whole.\nCause and Effect: Explore the causes and consequences of the core problem. What factors or events led to the emergence of the problem, and how does it impact various aspects of society? Consider both immediate and long-term effects.\nStakeholders: Identify the key stakeholders who are directly affected by the problem. These could be individuals, communities, organizations, or even nations. Understand their motivations, interests, and how they respond to the problem.\nAmplifying Factors: Determine additional factors that exacerbate the core problem or make it more challenging to solve. These factors could include political, economic, cultural, or technological aspects that further complicate the situation.\nCascading Effects: Consider how the core problem and its associated challenges ripple through different sectors of society. Examine how they impact various domains such as the economy, healthcare, education, governance, and interpersonal relationships.\nInterconnections: Identify the interconnectedness between different problems and sectors. How does the core problem interact with other existing issues, creating a complex web of challenges? Explore the feedback loops and compounding effects.\nHuman Impact: Explore the human experience within the scenario. Understand the emotions, struggles, and dilemmas faced by individuals and communities. Highlight personal stories and the moral and ethical implications that arise.\n\n\nRESPONSE:\n-----------------\nTimeframe:"
+    ]
+  },
+  "status": 200,
+  "data": {
+    "id": "cmpl-7VWHegI45SrpyDYPDICIVcKfr39WQ",
+    "object": "text_completion",
+    "created": 1687746622,
+    "model": "text-davinci-003",
+    "choices": [
+      {
+        "text": " 2060\nContext: By 2060, the world has become increasingly reliant on technology, with drones being used for a variety of tasks, including emergency medical services. However, access to timely medical care in remote or underfunded areas remains a challenge.\nCore Problem: The core problem is the lack of access to medical care in remote or underfunded areas, which is exacerbated by the increasing use of drones in emergency medical services. The drones are unable to reach these areas due to their limited range and lack of infrastructure, leaving those in need without access to medical care.\nCause and Effect: The cause of this problem is the lack of infrastructure and resources in remote or underfunded areas, which prevents the delivery of medical equipment and medicines. This lack of access to medical care has a devastating effect on the health and wellbeing of those living in these areas, leading to increased mortality rates and a decrease in quality of life.\nStakeholders: The key stakeholders in this scenario are the individuals and communities living in remote or underfunded areas, as well as the organizations and governments responsible for providing medical care.\nAmplifying Factors: Political and economic factors are amplifying the core problem, as governments and organizations are unable to provide adequate resources to these areas due to budget constraints and other limitations. Additionally, the increasing use of drones in emergency medical services is further limiting access to medical care in remote or underfunded areas.\nCascading Effects: The lack of access to medical care has a cascading effect on other aspects of society, such as education, employment, and economic development. Without access to medical care, individuals and communities are unable to lead healthy and productive lives, leading to a decrease in quality of life and an increase in poverty and inequality.\nInterconnections: The core problem is interconnected with other existing issues, such as poverty, inequality, and lack of access to resources. These issues are further compounded by the lack of access to medical care, creating a complex web of challenges.\nHuman Impact: The human impact of this scenario is immense, as individuals and communities are unable to access the medical care they need. This leads to increased mortality rates, decreased quality of life, and a lack of hope for the future. Additionally, the moral and ethical implications of this situation are significant, as those in need are unable to access the medical care they require.",
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 499,
+      "completion_tokens": 476,
+      "total_tokens": 975
+    }
+  },
+  "timestamp": "2023-06-26_02:29:51"
+}

@@ -1,0 +1,88 @@
+[
+    {
+        "scope": "https://api.openai.com:443",
+        "method": "POST",
+        "path": "/v1/completions",
+        "body": {
+            "model": "text-davinci-003",
+            "temperature": 0,
+            "max_tokens": 256,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "n": 1,
+            "best_of": 1,
+            "stream": false,
+            "prompt": [
+                "Given the user input below, extract the relevant url.  If there is no url return NO_URL_FOUND.\n\n-----------------\nhttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC8605877/\n\n"
+            ]
+        },
+        "status": 200,
+        "response": {
+            "id": "cmpl-7VXAS5Qh6oKsnZiH6J9hXJZmGS0HG",
+            "object": "text_completion",
+            "created": 1687750020,
+            "model": "text-davinci-003",
+            "choices": [
+                {
+                    "text": "\nhttps://www.ncbi.nlm.nih.gov/pmc/articles/PMC8605877/",
+                    "index": 0,
+                    "logprobs": null,
+                    "finish_reason": "stop"
+                }
+            ],
+            "usage": {
+                "prompt_tokens": 56,
+                "completion_tokens": 26,
+                "total_tokens": 82
+            }
+        },
+        "rawHeaders": [
+            "Date",
+            "Mon, 26 Jun 2023 03:27:01 GMT",
+            "Content-Type",
+            "application/json",
+            "Content-Length",
+            "408",
+            "Connection",
+            "keep-alive",
+            "access-control-allow-origin",
+            "*",
+            "Cache-Control",
+            "no-cache, must-revalidate",
+            "openai-model",
+            "text-davinci-003",
+            "openai-organization",
+            "nasa-379",
+            "openai-processing-ms",
+            "913",
+            "openai-version",
+            "2020-10-01",
+            "strict-transport-security",
+            "max-age=15724800; includeSubDomains",
+            "x-ratelimit-limit-requests",
+            "3000",
+            "x-ratelimit-limit-tokens",
+            "250000",
+            "x-ratelimit-remaining-requests",
+            "2999",
+            "x-ratelimit-remaining-tokens",
+            "249487",
+            "x-ratelimit-reset-requests",
+            "20ms",
+            "x-ratelimit-reset-tokens",
+            "122ms",
+            "x-request-id",
+            "d138071300050d9992e1ba7140112d95",
+            "CF-Cache-Status",
+            "DYNAMIC",
+            "Server",
+            "cloudflare",
+            "CF-RAY",
+            "7dd25a180eae2aca-ORD",
+            "alt-svc",
+            "h3=\":443\"; ma=86400"
+        ],
+        "responseIsBinary": false
+    }
+]

@@ -1,0 +1,205 @@
+{
+    "geoengineering":[
+  {
+    "name": "Carbon Dioxide Removal",
+    "description": "Carbon Dioxide Removal (CDR) is a type of geoengineering that involves removing carbon dioxide from the atmosphere to reduce global warming. This can be done through various methods such as direct air capture, bioenergy with carbon capture and storage, and ocean fertilization."
+  },
+  {
+    "name": "Solar Radiation Management",
+    "description": "Solar Radiation Management (SRM) is a type of geoengineering that involves reflecting sunlight away from the Earth to reduce global warming. This can be done through various methods such as injecting aerosols into the atmosphere, increasing the albedo of clouds, and deploying space-based mirrors."
+  },
+  {
+    "name": "Cloud Albedo Enhancement",
+    "description": "Cloud Albedo Enhancement (CAE) is a type of geoengineering that involves increasing the reflectivity of clouds to reduce global warming. This can be done through various methods such as seeding clouds with reflective particles, increasing the amount of aerosols in the atmosphere, and deploying space-based mirrors."
+  },
+  {
+    "name": "Ocean Fertilization",
+    "description": "Ocean Fertilization is a type of geoengineering that involves adding nutrients to the ocean to increase the growth of phytoplankton which can absorb carbon dioxide from the atmosphere. This can be done through various methods such as adding iron to the ocean, adding nitrogen and phosphorus, and deploying floating devices."
+  },
+  {
+    "name": "Direct Air Capture",
+    "description": "Direct Air Capture (DAC) is a type of geoengineering that involves capturing carbon dioxide directly from the atmosphere. This can be done through various methods such as using chemical filters, using adsorbents, and using membranes."
+  },
+  {
+    "name": "Bioenergy with Carbon Capture and Storage",
+    "description": "Bioenergy with Carbon Capture and Storage (BECCS) is a type of geoengineering that involves burning biomass to generate energy while capturing and storing the carbon dioxide produced. This can be done through various methods such as using chemical filters, using adsorbents, and using membranes."
+  },
+  {
+    "name": "Afforestation and Reforestation",
+    "description": "Afforestation and Reforestation (A&R) is a type of geoengineering that involves planting trees to absorb carbon dioxide from the atmosphere. This can be done through various methods such as planting trees in existing forests, planting trees in deforested areas, and planting trees in urban areas."
+  },
+  {
+    "name": "Enhanced Weathering",
+    "description": "Enhanced Weathering is a type of geoengineering that involves increasing the rate of weathering of rocks to absorb carbon dioxide from the atmosphere. This can be done through various methods such as adding crushed rocks to soils, adding crushed rocks to oceans, and adding crushed rocks to lakes."
+  },
+  {
+    "name": "Ocean Alkalinity Enhancement",
+    "description": "Ocean Alkalinity Enhancement (OAE) is a type of geoengineering that involves increasing the alkalinity of the ocean to absorb carbon dioxide from the atmosphere. This can be done through various methods such as adding crushed rocks to the ocean, adding limestone to the ocean, and adding sodium bicarbonate to the ocean."
+  },
+  {
+    "name": "Artificial Trees",
+    "description": "Artificial Trees are a type of geoengineering that involves using artificial devices to absorb carbon dioxide from the atmosphere. This can be done through various methods such as using chemical filters, using adsorbents, and using membranes."
+  }
+],
+"health and wellness":
+[
+    {
+      "name": "Nutrition Research",
+      "description": "The study of the effects of food and nutrition on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Exercise Research",
+      "description": "The study of the effects of physical activity on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Mental Health Research",
+      "description": "The study of the effects of mental health on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Substance Abuse Research",
+      "description": "The study of the effects of substance abuse on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Chronic Disease Research",
+      "description": "The study of the effects of chronic diseases on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Infectious Disease Research",
+      "description": "The study of the effects of infectious diseases on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Cancer Research",
+      "description": "The study of the effects of cancer on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Genetics Research",
+      "description": "The study of the effects of genetics on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Environmental Health Research",
+      "description": "The study of the effects of environmental factors on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Public Health Research",
+      "description": "The study of the effects of public health policies on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Occupational Health Research",
+      "description": "The study of the effects of occupational health on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Preventive Medicine Research",
+      "description": "The study of the effects of preventive medicine on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Alternative Medicine Research",
+      "description": "The study of the effects of alternative medicine on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Pharmaceutical Research",
+      "description": "The study of the effects of pharmaceuticals on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Medical Device Research",
+      "description": "The study of the effects of medical devices on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Behavioral Health Research",
+      "description": "The study of the effects of behavioral health on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Health Economics Research",
+      "description": "The study of the effects of health economics on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Health Care Delivery Research",
+      "description": "The study of the effects of health care delivery on the body and how it affects physical and mental health."
+    },
+    {
+      "name": "Health Policy Research",
+      "description": "The study of the effects of health policy on the body and how it affects physical and mental health."
+    }
+  ],
+  "zia":[
+      {
+          "name": "Aircraft Design and Technology",
+          "description": "Research focused on the development of new aircraft designs and technologies that reduce the environmental impact of aviation, such as more efficient engines, quieter aircraft, and lighter materials."
+      },
+      {
+          "name": "Air Traffic Management",
+          "description": "Research focused on the development of new air traffic management systems that reduce the environmental impact of aviation, such as more efficient flight routes, optimized airspace utilization, and improved air traffic control."
+      },
+      {
+          "name": "Alternative Fuels",
+          "description": "Research focused on the development of alternative fuels for aviation, such as biofuels, hydrogen, and electric propulsion, that reduce the environmental impact of aviation."
+      },
+      {
+          "name": "Aviation Emissions",
+          "description": "Research focused on the measurement and reduction of aviation emissions, such as carbon dioxide, nitrogen oxides, and particulate matter, that contribute to global climate change."
+      },
+      {
+          "name": "Aviation Noise",
+          "description": "Research focused on the measurement and reduction of aviation noise, such as engine noise and sonic booms, that can cause disruption to communities."
+      },
+      {
+          "name": "Carbon Offsetting",
+          "description": "Research focused on the development of carbon offsetting schemes for aviation, such as the purchase of carbon credits, that reduce the environmental impact of aviation."
+      },
+      {
+          "name": "Eco-Friendly Airports",
+          "description": "Research focused on the development of eco-friendly airports that reduce the environmental impact of aviation, such as the use of renewable energy sources, improved waste management, and reduced water consumption."
+      },
+      {
+          "name": "Eco-Friendly Aircraft Operations",
+          "description": "Research focused on the development of eco-friendly aircraft operations that reduce the environmental impact of aviation, such as fuel-efficient flight paths, reduced engine idling, and optimized take-off and landing procedures."
+      },
+      {
+          "name": "Eco-Friendly Maintenance",
+          "description": "Research focused on the development of eco-friendly maintenance practices that reduce the environmental impact of aviation, such as the use of recycled materials, improved waste management, and reduced water consumption."
+      },
+      {
+          "name": "Eco-Friendly Technologies",
+          "description": "Research focused on the development of eco-friendly technologies that reduce the environmental impact of aviation, such as electric aircraft, hydrogen fuel cells, and advanced aerodynamics."
+      },
+      {
+          "name": "Environmental Impact Assessment",
+          "description": "Research focused on the assessment of the environmental impact of aviation, such as the measurement of carbon dioxide emissions, noise levels, and air pollution."
+      },
+      {
+          "name": "Green Aviation",
+          "description": "Research focused on the development of green aviation initiatives that reduce the environmental impact of aviation, such as the use of renewable energy sources, improved waste management, and reduced water consumption."
+      },
+      {
+          "name": "Green Flight Paths",
+          "description": "Research focused on the development of green flight paths that reduce the environmental impact of aviation, such as fuel-efficient routes, optimized airspace utilization, and improved air traffic control."
+      },
+      {
+          "name": "Green Logistics",
+          "description": "Research focused on the development of green logistics initiatives that reduce the environmental impact of aviation, such as the use of renewable energy sources, improved waste management, and reduced water consumption."
+      },
+      {
+          "name": "Green Technologies",
+          "description": "Research focused on the development of green technologies that reduce the environmental impact of aviation, such as electric aircraft, hydrogen fuel cells, and advanced aerodynamics."
+      },
+      {
+          "name": "Noise Abatement",
+          "description": "Research focused on the development of noise abatement initiatives that reduce the environmental impact of aviation, such as the use of quieter engines, improved flight paths, and optimized airspace utilization."
+      },
+      {
+          "name": "Pollution Reduction",
+          "description": "Research focused on the development of pollution reduction initiatives that reduce the environmental impact of aviation, such as the use of cleaner fuels, improved waste management, and reduced water consumption."
+      },
+      {
+          "name": "Sustainable Aviation",
+          "description": "Research focused on the development of sustainable aviation initiatives that reduce the environmental impact of aviation, such as the use of renewable energy sources, improved waste management, and reduced water consumption."
+      },
+      {
+          "name": "Sustainable Flight Paths",
+          "description": "Research focused on the development of sustainable flight paths that reduce the environmental impact of aviation, such as fuel-efficient routes, optimized airspace utilization, and improved air traffic control."
+      },
+      {
+          "name": "Sustainable Logistics",
+          "description": "Research focused on the development of sustainable logistics initiatives that reduce the environmental impact of aviation, such as the use of renewable energy sources, improved waste management, and reduced water consumption."
+      }
+  ]
+}

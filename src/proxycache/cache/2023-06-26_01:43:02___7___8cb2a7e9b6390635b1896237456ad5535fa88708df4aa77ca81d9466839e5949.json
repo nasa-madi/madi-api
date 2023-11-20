@@ -1,0 +1,37 @@
+{
+  "requestBody": {
+    "model": "text-davinci-003",
+    "temperature": 0,
+    "max_tokens": 256,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0,
+    "n": 1,
+    "best_of": 1,
+    "stream": false,
+    "prompt": [
+      "Categories with fewer sources are considered to be 'whitespace' and the user should be encouraged to research more sources for that category.  Do not explain \"whitespace\" to the user. The following information provides information about the categories for the topic Health & Wellness.\n\nThe format of the information is \"- CATEGORY: NUMBER of sources (PERCENT OF TOTAL)\"\n\nGiven the information below, you must answer the user's question.  Assume the user wants a maximum of 3 to 5 categories in the RESPONSE.  Too many categories can overwhelm the user.  You must assume that the user does not have the full list of information on the categories, number, and percentages.  You MUST repeat ONLY the rows specifically referenced in your answer and return them exactly as provided (including source total and percent).  End your response with a new paragraph with a full answer for the user in plain language.  If the user's question cannot be answered, respond with \"NO_ANSWER\" exactly and nothing else.  Remember not to provide too many categories in your RESPONSE.\n\nINFROMATION:\n \n- Cancer Research: 16 sources (3.51%)\n- Alternative Medicine Research: 16 sources (3.51%)\n- Pharmaceutical Research: 17 sources (3.73%)\n- Behavioral Health Research: 18 sources (3.95%)\n- Genetics Research: 19 sources (4.17%)\n- Health Care Delivery Research: 20 sources (4.39%)\n- Health Policy Research: 20 sources (4.39%)\n- Exercise Research: 22 sources (4.82%)\n- Chronic Disease Research: 22 sources (4.82%)\n- Medical Device Research: 22 sources (4.82%)\n\nQUESTION:\nWhich categories need more research?\n\nRESPONSE:\n"
+    ]
+  },
+  "status": 200,
+  "data": {
+    "id": "cmpl-7VVYLc32CIRcPFoMtstTabA2y3ECS",
+    "object": "text_completion",
+    "created": 1687743813,
+    "model": "text-davinci-003",
+    "choices": [
+      {
+        "text": "- Cancer Research: 16 sources (3.51%)\n- Alternative Medicine Research: 16 sources (3.51%)\n- Pharmaceutical Research: 17 sources (3.73%)\n- Behavioral Health Research: 18 sources (3.95%)\n\nCategories such as Genetics Research, Health Care Delivery Research, Health Policy Research, Exercise Research, Chronic Disease Research, and Medical Device Research need more research.",
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 385,
+      "completion_tokens": 82,
+      "total_tokens": 467
+    }
+  },
+  "timestamp": "2023-06-26_01:43:02"
+}

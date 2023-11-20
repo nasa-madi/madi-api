@@ -1,0 +1,82 @@
+version: "3.8"
+
+services:
+  ## This is the mock API available at port 8080
+  api_mock:
+    image: stoplight/prism:4.2.6
+    volumes:
+      - "./api/specifications:/tmp"
+    ports:
+      - "8080:4010"
+    command: >
+      mock -m -p 4010 --host 0.0.0.0 "/tmp/api-specification.yml" -m
+
+  ## This is the real API available at port 3030
+  ##   - This builds an image for the top level docker-compose
+  ##     and may not be the same image as built under the /api folder directly
+  api:
+    build: .
+    environment:
+      - NODE_CONFIG_ENV=mac-docker
+      - POSTGRES_PASSWORD=magical_password
+      - POSTGRES_USER=unicorn_user
+      - POSTGRES_DB=rainbow_database
+      - POSTGRES_HOST=database
+      - POSTGRES_PORT=5432
+      - PUSH_ENDPOINT=http://api:3030/
+      - PUBSUB_API_ENDPOINT=pubsub:8085
+    ports:
+      - "3030:3030"
+    networks:
+      - madi
+    depends_on:
+      database:
+        condition: service_healthy
+
+  ## This is the postgres docker DB available at port 35432
+  ##   - This only for local usage and has no bearing on CloudSQL
+  ##   - When referencing the db from a compose container, use database:5432
+  ##   - When referencing the db from an external process, use localhost:35432
+  database:
+    image: "postgres:10.16"
+    environment:
+      - POSTGRES_USER=unicorn_user
+      - POSTGRES_PASSWORD=magical_password
+      - POSTGRES_DB=rainbow_database
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+    ports:
+      - "35432:5432"
+    networks:
+      - madi
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U unicorn_user -d rainbow_database"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  storage:
+    image: fsouza/fake-gcs-server
+    ports:
+      - "5050:4443"
+    command: -scheme http
+    # replace the above with this line to make file storage temporary
+    # command: -scheme http -backend memory
+    networks:
+      - madi
+    volumes:
+      # this make the initial bucket state a local folder.  You cannot add directly.
+      # uncomment this line to have docker manage a persistent folder for you.
+      - ./dl/uploads:/storage
+
+  cache:
+    container_name: cache
+    image: redis:6
+    networks:
+      - madi
+
+networks:
+  madi:
+
+volumes:
+  database-data:

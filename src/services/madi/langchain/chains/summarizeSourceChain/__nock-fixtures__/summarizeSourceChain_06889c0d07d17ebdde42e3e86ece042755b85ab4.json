@@ -1,0 +1,88 @@
+[
+    {
+        "scope": "https://api.openai.com:443",
+        "method": "POST",
+        "path": "/v1/completions",
+        "body": {
+            "model": "text-davinci-003",
+            "temperature": 0,
+            "max_tokens": 3157,
+            "top_p": 1,
+            "frequency_penalty": 0,
+            "presence_penalty": 0,
+            "n": 1,
+            "best_of": 1,
+            "stream": false,
+            "prompt": [
+                "You are an assistant and a large language model named Madi.  As Madi, you work for the NASA Convergent Aeronautics Solutions project.  \n\nYou are designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics.  Whether the user needs help with a specific question or just wants to have a conversation about a particular topic, you, Madi, are here to assist. However, above all else, all responses must adhere to the format of RESPONSE FORMAT INSTRUCTIONS.  \n\nYou must analyze the following text under SOURCE and respond to the user acccording to the RESPONSE FORMAT INSTRUCTIONS.  Do not make up information.  All information must be derived from the source, whether the source is wrong or not. \n\nRESPONSE FORMAT INSTRUCTIONS\n----------------------------\nUse the following format in your response:\n\nSummary: a 7-10 sentence summary of the source\nQuote: the quote from the QUOTE list provided below that best demonstrates the intent of of the primary actor in the source information or best represents the problem described in the source.\nProblem: the problem identified in the source.  If there is no problem, this can be blank.\nSolution: the solution to the problem proposed in the source.  If there is no problem or no solution, this can be blank.\n\nQUOTES:\n--------------------------\n\"Drones are a promising technology for improving patient survival, outcomes, and quality of life, particularly for those in areas that are remote or that lack funds or infrastructure.\"\n\n - \"Medical drones are now used in a wide range of medical and public health situations to supplement ground response teams and manned aircraft, particularly in situations in which responders may be in danger or in which manned air or ground vehicles are costly.\"\n\n - \"The application of drone technology in emergency medicine is especially promising given the inherent need for a rapid response to enhance patient outcomes.\"\n\n - \"EMS is consistently seeking new and better ways to safely decrease response times and improve patient outcomes.\"\n\n - \"Bystander use of AEDs has the potential to improve survival, yet bystander AED use in the US remains at less than 2%, despite programs to increase their use in public areas.\"\n\n - \"In all simulated tests, the drone delivered the AED 1.8 to 8.0 minutes faster than the ambulance.\"\n\n - \"The timely use of blood products (eg, packed red blood cells [PRBCs], plasma, platelets) and whole blood has been shown to decrease mortality in trauma patients.\"\n\n - \"Early administration of epinephrine is the only first-line medication for anaphylaxis treatment and is routinely delivered by patients themselves or lay bystanders using an EpiPen® or similar delivery system.\"\n\n - \"Using deep learning, Hungarian researchers Liu and Szirányi (2021) demonstrated that drones have the capability to accurately and reliably recognizing a range of human gestures from a distance that could aid in future SAR operations.\"\n\n - \"In a French simulation study, Seguin et al conducted 28 tests and compared response times with and without use of a drone.\"\n\n\nSOURCE\n----------------------------\n\n\nThis article discusses the potential applications of drones in emergency medicine, including delivery of defibrillators, blood and blood products, and rescue medications. It also outlines the challenges and opportunities associated with the use of drones in emergency medicine. Unmanned aerial vehicles (UAVs) have been used since 1849, and their design and application have modernized dramatically in the last decade. During the COVID-19 pandemic, drones have been used for contactless delivery of PPE, COVID-19 tests, lab samples, and vaccines, as well as for telemedicine and monitoring quarantine orders.\n\nEMS is a core component of the emergency medical and trauma care system, responding to and transporting millions of Americans every year. Prolonged EMS response and scene times are associated with worse outcomes in patients with significant traumatic injury and shock. Changes in the US healthcare system have further complicated timely EMS response and patient outcomes, including trauma center closures, particularly in rural areas. EMS is consistently seeking new and better ways to safely decrease response times and improve patient outcomes, and drones have emerged as a particularly promising innovation.\n\nApproximately 350,000 individuals have an out-of-hospital cardiac arrest (OHCA) in the US each year, with survival\n\n----------------------------\nSummary:"
+            ]
+        },
+        "status": 200,
+        "response": {
+            "id": "cmpl-7VU6hvL6tJNlSwTL8hATw2tZL3X1r",
+            "object": "text_completion",
+            "created": 1687738255,
+            "model": "text-davinci-003",
+            "choices": [
+                {
+                    "text": " This article discusses the potential applications of drones in emergency medicine, including delivery of defibrillators, blood and blood products, and rescue medications. It also outlines the challenges and opportunities associated with the use of drones in emergency medicine. Unmanned aerial vehicles (UAVs) have been used since 1849, and their design and application have modernized dramatically in the last decade. During the COVID-19 pandemic, drones have been used for contactless delivery of PPE, COVID-19 tests, lab samples, and vaccines, as well as for telemedicine and monitoring quarantine orders. EMS is a core component of the emergency medical and trauma care system, responding to and transporting millions of Americans every year. Prolonged EMS response and scene times are associated with worse outcomes in patients with significant traumatic injury and shock. Changes in the US healthcare system have further complicated timely EMS response and patient outcomes, including trauma center closures, particularly in rural areas. Approximately 350,000 individuals have an out-of-hospital cardiac arrest (OHCA) in the US each year, with survival rates of less than 10%. \nQuote: \"EMS is consistently seeking new and better ways to safely decrease response times and improve patient outcomes.\"\nProblem: Prolonged EMS response and scene times are associated with worse outcomes in patients with significant traumatic injury and shock.\nSolution: Drones have emerged as a particularly promising innovation for EMS to safely decrease response times and improve patient outcomes.",
+                    "index": 0,
+                    "logprobs": null,
+                    "finish_reason": "stop"
+                }
+            ],
+            "usage": {
+                "prompt_tokens": 940,
+                "completion_tokens": 299,
+                "total_tokens": 1239
+            }
+        },
+        "rawHeaders": [
+            "Date",
+            "Mon, 26 Jun 2023 00:11:10 GMT",
+            "Content-Type",
+            "application/json",
+            "Content-Length",
+            "1948",
+            "Connection",
+            "keep-alive",
+            "access-control-allow-origin",
+            "*",
+            "Cache-Control",
+            "no-cache, must-revalidate",
+            "openai-model",
+            "text-davinci-003",
+            "openai-organization",
+            "nasa-379",
+            "openai-processing-ms",
+            "15138",
+            "openai-version",
+            "2020-10-01",
+            "strict-transport-security",
+            "max-age=15724800; includeSubDomains",
+            "x-ratelimit-limit-requests",
+            "3000",
+            "x-ratelimit-limit-tokens",
+            "250000",
+            "x-ratelimit-remaining-requests",
+            "2999",
+            "x-ratelimit-remaining-tokens",
+            "243685",
+            "x-ratelimit-reset-requests",
+            "20ms",
+            "x-ratelimit-reset-tokens",
+            "1.515s",
+            "x-request-id",
+            "249bdf5d80b12870c16e55dcd5643cbc",
+            "CF-Cache-Status",
+            "DYNAMIC",
+            "Server",
+            "cloudflare",
+            "CF-RAY",
+            "7dd13ae1deb56306-ORD",
+            "alt-svc",
+            "h3=\":443\"; ma=86400"
+        ],
+        "responseIsBinary": false
+    }
+]

@@ -1,0 +1,37 @@
+{
+  "requestBody": {
+    "model": "text-davinci-003",
+    "temperature": 0,
+    "max_tokens": 256,
+    "top_p": 1,
+    "frequency_penalty": 0,
+    "presence_penalty": 0,
+    "n": 1,
+    "best_of": 1,
+    "stream": false,
+    "prompt": [
+      "Categories with fewer sources are considered to be 'whitespace' and the user should be encouraged to research more sources for that category.  Do not explain \"whitespace\" to the user. The following information provides information about the categories for the topic Health & Wellness.\n\nThe format of the information is \"- $CATEGORY ($SENTIMENT): Average sentiment: $AVG_SENTIMENT, Distance from Mean: $DISTANCE_FROM_MEAN\"\n\nGiven the information below, you must answer the user's question.  Assume the user wants a maximum of 3 to 5 categories in the RESPONSE.  Too many categories can overwhelm the user.  You must assume that the user does not have the full list of information on the categories, number, and percentages.  You MUST repeat the relevant rows of information in the following new format: \n\n- $CATEGORY ($SENTIMENT) ($AVG_SENTIMENT)\n\nMake sure that the $AVG_SENTIMENT is rounded to nearest 100th decimal place. Do not include the $DISTANCE_FROM_MEAN in the format.\n\nEnd your response with a new paragraph with a full answer for the user in plain language.  If the user's question cannot be answered, respond with \"NO_ANSWER\" exactly and nothing else.  Remember not to provide too many categories in your RESPONSE.\n\nINFROMATION:\n \n- Environmental Health Research (positive, average sentiment: 0.5924516129032258)\n- Alternative Medicine Research (negative, average sentiment: 0.4275625)\n- Cancer Research (positive, average sentiment: 0.571125)\n- Health Care Delivery Research (negative, average sentiment: 0.42975)\n- null (negative, average sentiment: 0.43227999999999994)\n- Substance Abuse Research (negative, average sentiment: 0.4457241379310345)\n- Nutrition Research (positive, average sentiment: 0.5495384615384614)\n- Pharmaceutical Research (negative, average sentiment: 0.4525882352941176)\n- Health Policy Research (negative, average sentiment: 0.4542)\n- Genetics Research (positive, average sentiment: 0.543421052631579)\n\nQUESTION:\nHealth & Wellness\n\nRESPONSE:\n"
+    ]
+  },
+  "status": 200,
+  "data": {
+    "id": "cmpl-7VVYjXIa1UXQpg4nC7ntLV2bmZVGt",
+    "object": "text_completion",
+    "created": 1687743837,
+    "model": "text-davinci-003",
+    "choices": [
+      {
+        "text": "- Environmental Health Research (positive) (0.592)\n- Cancer Research (positive) (0.571)\n- Nutrition Research (positive) (0.550)\n- Genetics Research (positive) (0.543)\n\nBased on the information provided, the categories with the highest average sentiment for Health & Wellness are Environmental Health Research, Cancer Research, Nutrition Research, and Genetics Research.",
+        "index": 0,
+        "logprobs": null,
+        "finish_reason": "stop"
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 520,
+      "completion_tokens": 84,
+      "total_tokens": 604
+    }
+  },
+  "timestamp": "2023-06-26_01:43:26"
+}
