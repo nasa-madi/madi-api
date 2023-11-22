@@ -32,6 +32,7 @@ node_modules
 
 # IDEs
 .idea
+.env
 
 # Distributables
 dist/
