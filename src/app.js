@@ -7,6 +7,8 @@ import { configurationValidator } from './configuration.js'
 import { logError } from './hooks/log-error.js'
 import { postgresql } from './postgresql.js'
 
+import { authentication } from './authentication.js'
+
 import { services } from './services/index.js'
 
 const app = koa(feathers())
@@ -25,6 +27,8 @@ app.use(bodyParser())
 app.configure(rest())
 
 app.configure(postgresql)
+
+app.configure(authentication)
 
 app.configure(services)
 

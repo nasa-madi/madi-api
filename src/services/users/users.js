@@ -13,7 +13,9 @@ import {
   userQueryResolver
 } from './users.schema.js'
 import { UserService, getOptions } from './users.class.js'
-import { userPath, userMethods } from './users.shared.js'
+
+export const userPath = 'users'
+export const userMethods = ['find', 'get', 'create', 'patch', 'remove']
 
 export * from './users.class.js'
 export * from './users.schema.js'
