@@ -3,53 +3,55 @@ import { authenticate } from '@feathersjs/authentication'
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
-  documentsDataValidator,
-  documentsPatchValidator,
-  documentsQueryValidator,
-  documentsResolver,
-  documentsExternalResolver,
-  documentsDataResolver,
-  documentsPatchResolver,
-  documentsQueryResolver
+  documentDataValidator,
+  documentPatchValidator,
+  documentQueryValidator,
+  documentResolver,
+  documentExternalResolver,
+  documentDataResolver,
+  documentPatchResolver,
+  documentQueryResolver
 } from './documents.schema.js'
-import { DocumentsService, getOptions } from './documents.class.js'
-import { documentsPath, documentsMethods } from './documents.shared.js'
+import { DocumentService, getOptions } from './documents.class.js'
+
+export const documentPath = 'documents'
+export const documentMethods = ['find', 'get', 'create', 'patch', 'remove']
 
 export * from './documents.class.js'
 export * from './documents.schema.js'
 
 // A configure function that registers the service and its hooks via `app.configure`
-export const documents = (app) => {
+export const document = (app) => {
   // Register our service on the Feathers application
-  app.use(documentsPath, new DocumentsService(getOptions(app)), {
+  app.use(documentPath, new DocumentService(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: documentsMethods,
+    methods: documentMethods,
     // You can add additional custom events to be sent to clients here
     events: []
   })
   // Initialize hooks
-  app.service(documentsPath).hooks({
+  app.service(documentPath).hooks({
     around: {
       all: [
         authenticate('jwt'),
-        schemaHooks.resolveExternal(documentsExternalResolver),
-        schemaHooks.resolveResult(documentsResolver)
+        schemaHooks.resolveExternal(documentExternalResolver),
+        schemaHooks.resolveResult(documentResolver)
       ]
     },
     before: {
       all: [
-        schemaHooks.validateQuery(documentsQueryValidator),
-        schemaHooks.resolveQuery(documentsQueryResolver)
+        schemaHooks.validateQuery(documentQueryValidator),
+        schemaHooks.resolveQuery(documentQueryResolver)
       ],
       find: [],
       get: [],
       create: [
-        schemaHooks.validateData(documentsDataValidator),
-        schemaHooks.resolveData(documentsDataResolver)
+        schemaHooks.validateData(documentDataValidator),
+        schemaHooks.resolveData(documentDataResolver)
       ],
       patch: [
-        schemaHooks.validateData(documentsPatchValidator),
-        schemaHooks.resolveData(documentsPatchResolver)
+        schemaHooks.validateData(documentPatchValidator),
+        schemaHooks.resolveData(documentPatchResolver)
       ],
       remove: []
     },

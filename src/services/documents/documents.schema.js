@@ -4,41 +4,41 @@ import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 
 // Main data model schema
-export const documentsSchema = Type.Object(
+export const documentSchema = Type.Object(
   {
     id: Type.Number(),
     text: Type.String()
   },
-  { $id: 'Documents', additionalProperties: false }
+  { $id: 'Document', additionalProperties: false }
 )
-export const documentsValidator = getValidator(documentsSchema, dataValidator)
-export const documentsResolver = resolve({})
+export const documentValidator = getValidator(documentSchema, dataValidator)
+export const documentResolver = resolve({})
 
-export const documentsExternalResolver = resolve({})
+export const documentExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const documentsDataSchema = Type.Pick(documentsSchema, ['text'], {
-  $id: 'DocumentsData'
+export const documentDataSchema = Type.Pick(documentSchema, ['text'], {
+  $id: 'DocumentData'
 })
-export const documentsDataValidator = getValidator(documentsDataSchema, dataValidator)
-export const documentsDataResolver = resolve({})
+export const documentDataValidator = getValidator(documentDataSchema, dataValidator)
+export const documentDataResolver = resolve({})
 
 // Schema for updating existing entries
-export const documentsPatchSchema = Type.Partial(documentsSchema, {
-  $id: 'DocumentsPatch'
+export const documentPatchSchema = Type.Partial(documentSchema, {
+  $id: 'DocumentPatch'
 })
-export const documentsPatchValidator = getValidator(documentsPatchSchema, dataValidator)
-export const documentsPatchResolver = resolve({})
+export const documentPatchValidator = getValidator(documentPatchSchema, dataValidator)
+export const documentPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const documentsQueryProperties = Type.Pick(documentsSchema, ['id', 'text'])
-export const documentsQuerySchema = Type.Intersect(
+export const documentQueryProperties = Type.Pick(documentSchema, ['id', 'text'])
+export const documentQuerySchema = Type.Intersect(
   [
-    querySyntax(documentsQueryProperties),
+    querySyntax(documentQueryProperties),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
   { additionalProperties: false }
 )
-export const documentsQueryValidator = getValidator(documentsQuerySchema, queryValidator)
-export const documentsQueryResolver = resolve({})
+export const documentQueryValidator = getValidator(documentQuerySchema, queryValidator)
+export const documentQueryResolver = resolve({})
