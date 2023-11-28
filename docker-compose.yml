@@ -38,7 +38,7 @@ services:
   ##   - When referencing the db from a compose container, use database:5432
   ##   - When referencing the db from an external process, use localhost:35432
   database:
-    image: "postgres:10.16"
+    image: "ankane/pgvector"
     environment:
       - POSTGRES_USER=unicorn_user
       - POSTGRES_PASSWORD=magical_password
@@ -46,7 +46,7 @@ services:
     volumes:
       - database-data:/var/lib/postgresql/data/
     ports:
-      - "35432:5432"
+      - "5432:5432"
     networks:
       - madi
     healthcheck:
