@@ -1,0 +1,47 @@
+host: localhost
+port: 3030
+public: "./public/"
+origins:
+  - http://localhost:3030
+paginate:
+  default: 10
+  max: 50
+
+# DATABASE
+postgresql:
+  client: pg
+  connection:
+    host: localhost
+    user: unicorn_user
+    password: magical_password
+    database: rainbow_database
+    port: 5432
+
+# API KEYS
+openai: 
+  key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXX
+  # MODEL OPTIONS
+  max_tokens_llm: 4000
+  use_proxy: true
+  proxy_port: 8888
+
+# TESTING
+debug: true
+verbose: false
+
+authentication:
+  entity: user
+  service: users
+  secret: Z5EMUOsgs9oQ8+6Otfy8eNc6DRTU3L5O
+  authStrategies:
+    - jwt
+    - local
+  jwtOptions:
+    header:
+      typ: access
+    audience: https://yourdomain.com
+    algorithm: HS256
+    expiresIn: 1d
+  local:
+    usernameField: email
+    passwordField: password

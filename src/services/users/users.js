@@ -32,7 +32,10 @@ export const user = (app) => {
   // Initialize hooks
   app.service(userPath).hooks({
     around: {
-      all: [schemaHooks.resolveExternal(userExternalResolver), schemaHooks.resolveResult(userResolver)],
+      all: [
+        schemaHooks.resolveExternal(userExternalResolver), 
+        schemaHooks.resolveResult(userResolver)
+      ],
       find: [authenticate('jwt')],
       get: [authenticate('jwt')],
       create: [],
@@ -49,7 +52,15 @@ export const user = (app) => {
       remove: []
     },
     after: {
-      all: []
+      all: [],
+      get: [(ctx)=>{
+        //adds plugins
+        // console.log(ctx)
+        ctx.result = {
+          ...ctx.result,
+          plugins:['help','weather','joke','search']
+        }
+      }]
     },
     error: {
       all: []
