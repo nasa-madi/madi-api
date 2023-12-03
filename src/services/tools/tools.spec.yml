@@ -1,0 +1,177 @@
+paths:
+  /tools:
+    get:
+      tags:
+        - tools
+      summary: Returns tool based on query parameters
+      operationId: getTools
+      description: By including the appropriate query string parameters, search &
+        return relevant tools records.
+      responses:
+        "200":
+          $ref: "#/components/responses/Tool_FJS_Array"
+        "400":
+          description: bad input parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: default response if no query string parameters are sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - tools
+      summary: adds a new tool
+      operationId: postTool
+      description: Creates a new tool
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/Tool"
+                - type: array
+                  items:
+                    $ref: "#/components/schemas/Tool"
+      responses:
+        "201":
+          description: Tool created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Tool"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Tool"
+              examples:
+                "${names}_post_default":
+                  $ref: "#/components/examples/tools_post_default"
+                "${names}_post_array":
+                  $ref: "#/components/examples/tools_post_array"
+        "400":
+          description: invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: that tool already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  responses:
+    Tool_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tool"
+          examples:
+            tools_default:
+              $ref: "#/components/examples/tools_default"
+            tools_zero:
+              $ref: "#/components/examples/tools_zero"
+  schemas:
+    Tool:
+      type: object
+      properties:
+        tool_calls:
+          type: array
+          items:
+            additionalProperties: false
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                anyOf:
+                  - const: function
+                    type: string
+              function:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  arguments:
+                    anyOf:
+                      - type: string
+                      - type: object
+                        properties: {}
+                required:
+                  - name
+                  - arguments
+            required:
+              - id
+              - type
+              - function
+  examples:
+    tools_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    tools_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: tools_default
+    tools_post_default:
+      value:
+        id: call_1
+        type: function
+        function:
+          name: get_current_weather
+          arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
+    tools_post_array:
+      value:
+        - id: call_1
+          type: function
+          function:
+            name: get_current_weather
+            arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
+        - id: call_2
+          type: function
+          function:
+            name: get_current_weather
+            arguments:
+              location: San Francisco, CA
+              unit: celsius
+    tools_id_default:
+      $ref: "#/components/examples/tools_post_default"
+    tools_id_patch_default:
+      value: {}
+    tools_id_put_default:
+      value: null
+    tools_id_delete_default:
+      value: null

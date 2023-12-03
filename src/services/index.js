@@ -1,9 +1,17 @@
+import { upload } from './uploads/uploads.js'
+
+import { tool } from './tools/tools.js'
+
 import { chat } from './chats/chats.js'
 
 import { document } from './documents/documents.js'
 import { user } from './users/users.js'
 
 export const services = (app) => {
+  app.configure(upload)
+
+  app.configure(tool)
+
   app.configure(chat)
 
   app.configure(document)

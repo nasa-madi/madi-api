@@ -1,0 +1,236 @@
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: Returns user based on query parameters
+      operationId: getUsers
+      description: By including the appropriate query string parameters, search &
+        return relevant users records.
+      responses:
+        "200":
+          $ref: "#/components/responses/User_FJS_Array"
+        "400":
+          description: bad input parameter
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: default response if no query string parameters are sent
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      tags:
+        - users
+      summary: adds a new user
+      operationId: postUser
+      description: Creates a new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/User"
+                - type: array
+                  items:
+                    $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: User created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/User"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/User"
+              examples:
+                "${names}_post_default":
+                  $ref: "#/components/examples/users_post_default"
+                "${names}_post_array":
+                  $ref: "#/components/examples/users_post_array"
+        "400":
+          description: invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: that user already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  "/users/{userId}":
+    get:
+      tags:
+        - users
+      summary: Returns user based id
+      operationId: getUser
+      description: By including the id, get a single user
+      parameters:
+        - in: path
+          name: userId
+          description: the id of a specific user
+          required: true
+          schema:
+            $ref: "#/components/schemas/IntegerId"
+          example: 1
+      responses:
+        "200":
+          description: includes the results matching query string criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+              examples:
+                users_id_default:
+                  $ref: "#/components/examples/users_id_default"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - users
+      summary: soft deletes multiple users
+      operationId: deleteUsers
+      parameters:
+        - in: path
+          name: userId
+          description: the id of a specific user
+          required: true
+          schema:
+            $ref: "#/components/schemas/IntegerId"
+          example: 1
+      responses:
+        "200":
+          description: User deleted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              examples:
+                users_delete:
+                  $ref: "#/components/examples/users_id_delete_default"
+        "405":
+          description: multiple deletes not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags:
+        - users
+      summary: patches a subset of fields on a user
+      operationId: patchUser
+      description: Patches a user by field
+      parameters:
+        - in: path
+          name: userId
+          description: the id of a specific user
+          schema:
+            $ref: "#/components/schemas/IntegerId"
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: user patched
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              examples:
+                users_id_patch_default:
+                  $ref: "#/components/examples/users_id_patch_default"
+        "400":
+          description: invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  responses:
+    User_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+          examples:
+            users_default:
+              $ref: "#/components/examples/users_default"
+            users_zero:
+              $ref: "#/components/examples/users_zero"
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/IntegerId"
+        email:
+          type: string
+        password:
+          type: string
+  examples:
+    users_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    users_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: users_default
+    users_post_default:
+      value: {}
+    users_post_array: {}
+    users_id_default:
+      $ref: "#/components/examples/users_post_default"
+    users_id_patch_default:
+      value: {}
+    users_id_put_default: {}
+    users_id_delete_default: {}

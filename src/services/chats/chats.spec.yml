@@ -1,0 +1,161 @@
+paths:
+  /chats:
+    post:
+      tags:
+        - chats
+      summary: adds a new chat
+      operationId: postChat
+      description: Creates a new chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/Chat"
+                - type: array
+                  items:
+                    $ref: "#/components/schemas/Chat"
+      responses:
+        "201":
+          description: Chat created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Chat"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Chat"
+              examples:
+                "${names}_post_default":
+                  $ref: "#/components/examples/chats_post_default"
+                "${names}_post_array":
+                  $ref: "#/components/examples/chats_post_array"
+        "400":
+          description: invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: that chat already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  responses:
+    Chat_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Chat"
+          examples:
+            chats_default:
+              $ref: "#/components/examples/chats_default"
+            chats_zero:
+              $ref: "#/components/examples/chats_zero"
+  schemas:
+    Chat:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+              content:
+                type: string
+            required:
+              - role
+              - content
+        model:
+          type: string
+        frequency_penalty:
+          type: number
+        logit_bias:
+          type: object
+          properties: {}
+        max_tokens:
+          type: integer
+        n:
+          type: integer
+        presence_penalty:
+          type: number
+        response_format:
+          type: object
+          properties:
+            type:
+              type: string
+          required:
+            - type
+        seed:
+          type: integer
+        stop:
+          anyOf:
+            - type: string
+            - type: array
+              items:
+                type: string
+        stream:
+          type: boolean
+        temperature:
+          minimum: 0
+          maximum: 2
+          type: number
+        top_p:
+          type: number
+        tools:
+          type: array
+          items:
+            type: string
+        tool_choice:
+          type: string
+          pattern: ^none|auto|(0|[1-9]\d{0,}|)$
+  examples:
+    chats_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    chats_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: chats_default
+    chats_post_default:
+      value: {}
+    chats_post_array: {}
+    chats_id_default:
+      $ref: "#/components/examples/chats_post_default"
+    chats_id_patch_default:
+      value: {}
+    chats_id_put_default: {}
+    chats_id_delete_default: {}

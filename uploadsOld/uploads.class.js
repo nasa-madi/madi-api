@@ -1,5 +1,5 @@
 // This is a skeleton for a custom service class. Remove or add the methods you need here
-export class UploadService {
+export class UploadsService {
   constructor(options) {
     this.options = options
   }

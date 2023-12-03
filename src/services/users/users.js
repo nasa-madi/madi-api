@@ -1,5 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
+import { toolDescs } from '../../plugin-tools/index.js'
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
@@ -58,7 +59,7 @@ export const user = (app) => {
         // console.log(ctx)
         ctx.result = {
           ...ctx.result,
-          plugins:['help','weather','joke','search']
+          tools: Object.keys(toolDescs)
         }
       }]
     },

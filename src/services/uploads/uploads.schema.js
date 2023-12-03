@@ -4,41 +4,41 @@ import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 
 // Main data model schema
-export const uploadsSchema = Type.Object(
+export const uploadSchema = Type.Object(
   {
     id: Type.Number(),
     text: Type.String()
   },
-  { $id: 'Uploads', additionalProperties: false }
+  { $id: 'Upload', additionalProperties: false }
 )
-export const uploadsValidator = getValidator(uploadsSchema, dataValidator)
-export const uploadsResolver = resolve({})
+export const uploadValidator = getValidator(uploadSchema, dataValidator)
+export const uploadResolver = resolve({})
 
-export const uploadsExternalResolver = resolve({})
+export const uploadExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const uploadsDataSchema = Type.Pick(uploadsSchema, ['text'], {
-  $id: 'UploadsData'
+export const uploadDataSchema = Type.Pick(uploadSchema, ['text'], {
+  $id: 'UploadData'
 })
-export const uploadsDataValidator = getValidator(uploadsDataSchema, dataValidator)
-export const uploadsDataResolver = resolve({})
+export const uploadDataValidator = getValidator(uploadDataSchema, dataValidator)
+export const uploadDataResolver = resolve({})
 
 // Schema for updating existing entries
-export const uploadsPatchSchema = Type.Partial(uploadsSchema, {
-  $id: 'UploadsPatch'
+export const uploadPatchSchema = Type.Partial(uploadSchema, {
+  $id: 'UploadPatch'
 })
-export const uploadsPatchValidator = getValidator(uploadsPatchSchema, dataValidator)
-export const uploadsPatchResolver = resolve({})
+export const uploadPatchValidator = getValidator(uploadPatchSchema, dataValidator)
+export const uploadPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const uploadsQueryProperties = Type.Pick(uploadsSchema, ['id', 'text'])
-export const uploadsQuerySchema = Type.Intersect(
+export const uploadQueryProperties = Type.Pick(uploadSchema, ['id', 'text'])
+export const uploadQuerySchema = Type.Intersect(
   [
-    querySyntax(uploadsQueryProperties),
+    querySyntax(uploadQueryProperties),
     // Add additional query properties here
     Type.Object({}, { additionalProperties: false })
   ],
   { additionalProperties: false }
 )
-export const uploadsQueryValidator = getValidator(uploadsQuerySchema, queryValidator)
-export const uploadsQueryResolver = resolve({})
+export const uploadQueryValidator = getValidator(uploadQuerySchema, queryValidator)
+export const uploadQueryResolver = resolve({})

@@ -1,0 +1,81 @@
+import { toolFuncs, toolDescs } from "../../plugin-tools/index.js";
+
+// This is a skeleton for a custom service class. Remove or add the methods you need here
+export class ToolService {
+  constructor(options) {
+    this.options = options
+  }
+
+
+  async getAuthorizedTools(params){
+
+
+    // get the user
+    let user = params.user || {}
+    let usersToolNames = user.tools || ['get_current_weather']
+    let allToolNames = Object.keys(toolDescs);
+    let intersectionToolNames = allToolNames.filter(value => usersToolNames.includes(value)); //<- was incorrect
+    let intersectionTools = intersectionToolNames.map(name => Object.assign({},toolDescs[name]));
+    return intersectionTools
+
+  }
+
+  async find(_params) {
+    let authorizedTools = await this.getAuthorizedTools(_params)
+
+    const sortedData = authorizedTools.sort((a, b) => {
+      if(a.function.name < b.function.name) { return -1; }
+      if(a.function.name > b.function.name) { return 1; }
+      return 0;
+    });
+
+    return {
+      skip: null,
+      limit: null,
+      total: sortedData.length,
+      data: sortedData
+    }
+  }
+
+  async get(toolName, _params) {
+    let { data } = await this.find(_params)
+    return data.find(item => item.function.name === toolName);
+  }
+
+  async create(data, params) {
+    // get available tools
+    let authorizedTools = await this.getAuthorizedTools(params)
+
+
+    let { tool_calls } = data
+    tool_calls = Array.isArray(tool_calls)?tool_calls:[tool_calls]
+    let response = []
+    for (const toolCall of tool_calls) {
+      let functionName = toolCall?.function?.name
+      let functionResponse
+      if(authorizedTools.map(t=>t?.function?.name).includes(functionName)){
+        const functionToCall = toolFuncs[functionName];
+        const functionArgs = typeof toolCall.function.arguments === 'string' 
+          ? JSON.parse(toolCall?.function?.arguments)
+          : toolCall?.function?.arguments
+        functionResponse = await functionToCall(functionArgs);
+      }else{
+        throw new Error(`Tool ${functionName} is not allowed or not available.`)
+      }
+
+      // update the messages to include the tool calls
+      response.push({
+          tool_call_id: toolCall.id,
+          role: "tool",
+          name: functionName,
+          content: functionResponse,
+      });
+    }
+      
+    return response
+  }
+}
+
+export const getOptions = (app) => {
+  return { app }
+}

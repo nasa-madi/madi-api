@@ -1,4 +1,4 @@
-export function getCurrentWeather({location, unit = "fahrenheit"}) {
+export function get_current_weather({location, unit = "fahrenheit"}) {
     if (location.toLowerCase().includes("tokyo")) {
       return JSON.stringify({ location: "Tokyo", temperature: "10", unit: "celsius" });
     } else if (location.toLowerCase().includes("san francisco")) {
@@ -10,7 +10,7 @@ export function getCurrentWeather({location, unit = "fahrenheit"}) {
     }
 }
 
-export const getCurrentWeatherDesc = {
+export const get_current_weather_desc = {
   type: "function",
   function: {
     name: "get_current_weather",

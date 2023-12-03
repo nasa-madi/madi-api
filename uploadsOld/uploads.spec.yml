@@ -1,0 +1,182 @@
+paths:
+  /uploads:
+    get: {}
+    post:
+      tags:
+        - uploads
+      summary: adds a new upload
+      operationId: postUpload
+      description: Creates a new upload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/Upload"
+                - type: array
+                  items:
+                    $ref: "#/components/schemas/Upload"
+      responses:
+        "201":
+          description: Upload created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Upload"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Upload"
+              examples:
+                "${names}_post_default":
+                  $ref: "#/components/examples/uploads_post_default"
+                "${names}_post_array":
+                  $ref: "#/components/examples/uploads_post_array"
+        "400":
+          description: invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: that upload already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  "/uploads/{uploadId}":
+    get:
+      tags:
+        - uploads
+      summary: Returns upload based id
+      operationId: getUpload
+      description: By including the id, get a single upload
+      parameters:
+        - in: path
+          name: uploadId
+          description: the id of a specific upload
+          required: true
+          schema:
+            $ref: "#/components/schemas/IntegerId"
+          example: 1
+      responses:
+        "200":
+          description: includes the results matching query string criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Upload"
+              examples:
+                uploads_id_default:
+                  $ref: "#/components/examples/uploads_id_default"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags:
+        - uploads
+      summary: soft deletes multiple uploads
+      operationId: deleteUploads
+      parameters:
+        - in: path
+          name: uploadId
+          description: the id of a specific upload
+          required: true
+          schema:
+            $ref: "#/components/schemas/IntegerId"
+          example: 1
+      responses:
+        "200":
+          description: Upload deleted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Upload"
+              examples:
+                uploads_delete:
+                  $ref: "#/components/examples/uploads_id_delete_default"
+        "405":
+          description: multiple deletes not allowed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  responses:
+    Upload_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Upload"
+          examples:
+            uploads_default:
+              $ref: "#/components/examples/uploads_default"
+            uploads_zero:
+              $ref: "#/components/examples/uploads_zero"
+  schemas:
+    Upload:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/IntegerId"
+        text:
+          type: string
+  examples:
+    uploads_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    uploads_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: []
+    uploads_post_default:
+      value: {}
+    uploads_post_array:
+      value: []
+    uploads_id_default:
+      $ref: "#/components/examples/uploads_post_default"
+    uploads_id_patch_default:
+      value: {}
+    uploads_id_put_default:
+      value: {}
+    uploads_id_delete_default:
+      value: {}
