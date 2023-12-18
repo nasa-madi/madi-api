@@ -132,6 +132,10 @@ paths:
                       tool_choice:
                         type: string
                         pattern: ^none|auto|(0|[1-9]\d{0,}|)$
+            examples:
+              ${names}_post_default:
+                value: {}
+              ${names}_post_array: {}
       responses:
         '201':
           description: Chat created.
@@ -277,7 +281,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  $ref#document: ../../src/services/documents/documents.spec.yml#paths
   /tools:
     get:
       tags:
@@ -440,6 +443,28 @@ paths:
                             - id
                             - type
                             - function
+            examples:
+              ${names}_post_default:
+                value:
+                  id: call_1
+                  type: function
+                  function:
+                    name: get_current_weather
+                    arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
+              ${names}_post_array:
+                value:
+                  - id: call_1
+                    type: function
+                    function:
+                      name: get_current_weather
+                      arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
+                  - id: call_2
+                    type: function
+                    function:
+                      name: get_current_weather
+                      arguments:
+                        location: San Francisco, CA
+                        unit: celsius
       responses:
         '201':
           description: Tool created.
@@ -644,6 +669,10 @@ paths:
                         type: string
                       password:
                         type: string
+            examples:
+              ${names}_post_default:
+                value: {}
+              ${names}_post_array: {}
       responses:
         '201':
           description: User created.
@@ -820,258 +849,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /uploads:
-    get:
-      tags:
-        - uploads
-      summary: Returns upload based on query parameters
-      operationId: getUploads
-      description: >-
-        By including the appropriate query string parameters, search & return
-        relevant uploads records.
-      responses:
-        '200':
-          description: includes the results matching query string criteria
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - total
-                  - limit
-                  - skip
-                  - data
-                properties:
-                  total:
-                    type: integer
-                  limit:
-                    type: integer
-                  skip:
-                    type: integer
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          $ref: '#/components/schemas/IntegerId'
-                        text:
-                          type: string
-              examples:
-                uploads_default:
-                  value:
-                    total: 2
-                    limit: 10
-                    skip: 0
-                    data: uploads_default
-                uploads_zero:
-                  value:
-                    total: 0
-                    limit: 10
-                    skip: 0
-                    data: []
-        '400':
-          description: bad input parameter
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        default:
-          description: default response if no query string parameters are sent
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    post:
-      tags:
-        - uploads
-      summary: adds a new upload
-      operationId: postUpload
-      description: Creates a new upload
-      requestBody:
-        content:
-          application/json:
-            schema:
-              oneOf:
-                - type: object
-                  properties:
-                    id:
-                      $ref: '#/components/schemas/IntegerId'
-                    text:
-                      type: string
-                - type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        $ref: '#/components/schemas/IntegerId'
-                      text:
-                        type: string
-      responses:
-        '201':
-          description: Upload created.
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - type: object
-                    properties:
-                      id:
-                        $ref: '#/components/schemas/IntegerId'
-                      text:
-                        type: string
-                  - type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          $ref: '#/components/schemas/IntegerId'
-                        text:
-                          type: string
-              examples:
-                ${names}_post_default:
-                  value: {}
-                ${names}_post_array: {}
-        '400':
-          description: invalid input, object invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '409':
-          description: that upload already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /uploads/{uploadId}:
-    get:
-      tags:
-        - uploads
-      summary: Returns upload based id
-      operationId: getUpload
-      description: By including the id, get a single upload
-      parameters:
-        - in: path
-          name: uploadId
-          description: the id of a specific upload
-          required: true
-          schema:
-            $ref: '#/components/schemas/IntegerId'
-          example: 1
-      responses:
-        '200':
-          description: includes the results matching query string criteria
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      $ref: '#/components/schemas/IntegerId'
-                    text:
-                      type: string
-              examples:
-                uploads_id_default:
-                  value: {}
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    delete:
-      tags:
-        - uploads
-      summary: soft deletes multiple uploads
-      operationId: deleteUploads
-      parameters:
-        - in: path
-          name: uploadId
-          description: the id of a specific upload
-          required: true
-          schema:
-            $ref: '#/components/schemas/IntegerId'
-          example: 1
-      responses:
-        '200':
-          description: Upload deleted.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    $ref: '#/components/schemas/IntegerId'
-                  text:
-                    type: string
-              examples:
-                uploads_delete: {}
-        '405':
-          description: multiple deletes not allowed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    patch:
-      tags:
-        - uploads
-      summary: patches a subset of fields on a upload
-      operationId: patchUpload
-      description: Patches a upload by field
-      parameters:
-        - in: path
-          name: uploadId
-          description: the id of a specific upload
-          schema:
-            $ref: '#/components/schemas/IntegerId'
-          required: true
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  $ref: '#/components/schemas/IntegerId'
-                text:
-                  type: string
-      responses:
-        '200':
-          description: upload patched
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    $ref: '#/components/schemas/IntegerId'
-                  text:
-                    type: string
-              examples:
-                uploads_id_patch_default:
-                  value: {}
-        '400':
-          description: invalid input, object invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-components:
+  components:
   securitySchemes: {}
   requestBodies: {}
   responses:
@@ -1166,7 +944,46 @@ components:
                 limit: 10
                 skip: 0
                 data: []
-    $ref#document: ../../src/services/documents/documents.spec.yml#/components/responses
+    Document_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      $ref: '#/components/schemas/IntegerId'
+                    text:
+                      type: string
+          examples:
+            documents_default:
+              value:
+                total: 2
+                limit: 10
+                skip: 0
+                data: documents_default
+            documents_zero:
+              value:
+                total: 0
+                limit: 10
+                skip: 0
+                data: []
     Tool_FJS_Array:
       description: includes the results matching query string criteria
       content:
@@ -1336,7 +1153,27 @@ components:
       value: {}
     chats_id_put_default: {}
     chats_id_delete_default: {}
-    $ref#document: ../../src/services/documents/documents.spec.yml#/components/examples
+    documents_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    documents_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: documents_default
+    documents_post_default:
+      value: {}
+    documents_post_array: {}
+    documents_id_default:
+      value: {}
+    documents_id_patch_default:
+      value: {}
+    documents_id_put_default: {}
+    documents_id_delete_default: {}
     tools_zero:
       value:
         total: 0
@@ -1521,7 +1358,13 @@ components:
         tool_choice:
           type: string
           pattern: ^none|auto|(0|[1-9]\d{0,}|)$
-    $ref#document: ../../src/services/documents/documents.spec.yml#/components/schemas
+    Document:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/IntegerId'
+        text:
+          type: string
     Tool:
       type: object
       properties:

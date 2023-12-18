@@ -37,6 +37,11 @@ paths:
                 - type: array
                   items:
                     $ref: "#/components/schemas/Tool"
+            examples:
+              "${names}_post_default":
+                $ref: "#/components/examples/tools_post_default"
+              "${names}_post_array":
+                $ref: "#/components/examples/tools_post_array"
       responses:
         "201":
           description: Tool created.

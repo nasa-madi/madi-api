@@ -49,9 +49,9 @@ import openai from "./cacheProxy.js";
 
 
 
-// export const makeRequest = async (options)=>{
-//   return openai.chat.completions.create(options);
-// }
+export const makeRequest = async (options)=>{
+  return openai.chat.completions.create(options);
+}
 
 
 
@@ -104,7 +104,15 @@ export class ChatService {
     console.log("tool_choice: ",data.tool_choice || "auto")
     // console.log("tools: ", availableToolDescriptions)
     let { messages, tools, tool_choice } = data
-    return data
+    let options = {
+      model: 'gpt-4-1106-preview',
+      stream: params?.query?.stream === 'false' ? false:true,
+      messages, 
+      tools, 
+      tool_choice
+    }
+    // return data
+    return makeRequest(options)
     // let writeFunc = (text)=>console.log(text)
     // return await processConversation(messages, tools, tool_choice, writeFunc)
   }

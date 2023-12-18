@@ -30,6 +30,16 @@ export const chatSchema = Type.Object(
 )
 export const chatValidator = getValidator(chatSchema, dataValidator)
 export const chatResolver = resolve({})
+export const chatSchemaExamples = {
+    chats_post_default: {
+        messages: [
+          {
+              "role": "user",
+              "content": "What's the weather like in San Francisco, Tokyo, and Paris?"
+          }
+        ]
+    }
+}
 
 export const chatExternalResolver = resolve({})
 

@@ -37,6 +37,11 @@ paths:
                 - type: array
                   items:
                     $ref: "#/components/schemas/User"
+            examples:
+              "${names}_post_default":
+                $ref: "#/components/examples/users_post_default"
+              "${names}_post_array":
+                $ref: "#/components/examples/users_post_array"
       responses:
         "201":
           description: User created.

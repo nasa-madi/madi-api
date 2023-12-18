@@ -1,7 +1,7 @@
 {
     "item": [
         {
-            "id": "78fe3e35-1b38-4086-9e79-eef97c4f0e1c",
+            "id": "6fdd8ce3-0bdd-405c-8c17-27f86fb0d622",
             "name": "adds a new chat",
             "request": {
                 "name": "adds a new chat",
@@ -43,7 +43,7 @@
             },
             "response": [
                 {
-                    "id": "597f12ae-e6e7-44d9-a6a8-d36b076b3262",
+                    "id": "9448a2ff-6ef4-4bc3-a4fb-68a25bf9742a",
                     "name": "Chat created.",
                     "originalRequest": {
                         "url": {
@@ -65,7 +65,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"<string>\",\n  \"frequency_penalty\": \"<number>\",\n  \"logit_bias\": {},\n  \"max_tokens\": \"<integer>\",\n  \"n\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"response_format\": {\n    \"type\": \"<string>\"\n  },\n  \"seed\": \"<integer>\",\n  \"stop\": \"<string>\",\n  \"stream\": \"<boolean>\",\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tool_choice\": \"<string>\"\n}",
+                            "raw": "{}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -86,7 +86,7 @@
                     "_postman_previewlanguage": "json"
                 },
                 {
-                    "id": "37ea297e-fd3d-466d-8d0d-c12d59ee921e",
+                    "id": "2b7b2379-5f96-49f6-93f0-3ea51c610676",
                     "name": "invalid input, object invalid",
                     "originalRequest": {
                         "url": {
@@ -108,7 +108,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"<string>\",\n  \"frequency_penalty\": \"<number>\",\n  \"logit_bias\": {},\n  \"max_tokens\": \"<integer>\",\n  \"n\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"response_format\": {\n    \"type\": \"<string>\"\n  },\n  \"seed\": \"<integer>\",\n  \"stop\": \"<string>\",\n  \"stream\": \"<boolean>\",\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tool_choice\": \"<string>\"\n}",
+                            "raw": "{}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -124,12 +124,12 @@
                             "value": "application/json"
                         }
                     ],
-                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                     "cookie": [],
                     "_postman_previewlanguage": "json"
                 },
                 {
-                    "id": "714faf2b-bb45-4df5-b2a6-255d32995e12",
+                    "id": "b5726356-6c45-4ff3-b197-772682693afe",
                     "name": "that chat already exists",
                     "originalRequest": {
                         "url": {
@@ -151,7 +151,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"<string>\",\n  \"frequency_penalty\": \"<number>\",\n  \"logit_bias\": {},\n  \"max_tokens\": \"<integer>\",\n  \"n\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"response_format\": {\n    \"type\": \"<string>\"\n  },\n  \"seed\": \"<integer>\",\n  \"stop\": \"<string>\",\n  \"stream\": \"<boolean>\",\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tool_choice\": \"<string>\"\n}",
+                            "raw": "{}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -167,12 +167,12 @@
                             "value": "application/json"
                         }
                     ],
-                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                     "cookie": [],
                     "_postman_previewlanguage": "json"
                 },
                 {
-                    "id": "0e76506f-e483-4d7a-81d3-4fb887841e79",
+                    "id": "22643aa1-fbae-4f46-87df-018e30c8882c",
                     "name": "unexpected error",
                     "originalRequest": {
                         "url": {
@@ -194,7 +194,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    },\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\"\n    }\n  ],\n  \"model\": \"<string>\",\n  \"frequency_penalty\": \"<number>\",\n  \"logit_bias\": {},\n  \"max_tokens\": \"<integer>\",\n  \"n\": \"<integer>\",\n  \"presence_penalty\": \"<number>\",\n  \"response_format\": {\n    \"type\": \"<string>\"\n  },\n  \"seed\": \"<integer>\",\n  \"stop\": \"<string>\",\n  \"stream\": \"<boolean>\",\n  \"temperature\": \"<number>\",\n  \"top_p\": \"<number>\",\n  \"tools\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tool_choice\": \"<string>\"\n}",
+                            "raw": "{}",
                             "options": {
                                 "raw": {
                                     "language": "json"
@@ -210,7 +210,7 @@
                             "value": "application/json"
                         }
                     ],
-                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                     "cookie": [],
                     "_postman_previewlanguage": "json"
                 }
@@ -221,11 +221,851 @@
             }
         },
         {
-            "id": "5a534936-cc7d-42a9-8439-c8b9df47d32d",
+            "id": "e6f1ec4d-893a-4b12-87d3-a43cef16ee1a",
+            "name": "documents",
+            "item": [
+                {
+                    "id": "51b57edb-993c-49bb-9515-37ad996d575d",
+                    "name": "Returns document based on query parameters",
+                    "request": {
+                        "name": "Returns document based on query parameters",
+                        "description": {
+                            "content": "By including the appropriate query string parameters, search & return relevant documents records.",
+                            "type": "text/plain"
+                        },
+                        "url": {
+                            "path": [
+                                "documents"
+                            ],
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "GET",
+                        "auth": null
+                    },
+                    "response": [
+                        {
+                            "id": "2bcc60a5-77a8-4ac2-8b64-e51e7fb33532",
+                            "name": "includes the results matching query string criteria",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "documents"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {}
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"total\": 2,\n  \"limit\": 10,\n  \"skip\": 0,\n  \"data\": \"documents_default\"\n}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        },
+                        {
+                            "id": "b74c67e3-f7d3-409b-a27d-e431c557978d",
+                            "name": "bad input parameter",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "documents"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {}
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        },
+                        {
+                            "id": "994bf5da-ac10-4b80-8622-3063c54e298b",
+                            "name": "default response if no query string parameters are sent",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "documents"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "body": {}
+                            },
+                            "status": "Internal Server Error",
+                            "code": 500,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        }
+                    ],
+                    "event": [],
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    }
+                },
+                {
+                    "id": "374377ce-c957-433d-b45c-44910770d516",
+                    "name": "adds a new document",
+                    "request": {
+                        "name": "adds a new document",
+                        "description": {
+                            "content": "Creates a new document",
+                            "type": "text/plain"
+                        },
+                        "url": {
+                            "path": [
+                                "documents"
+                            ],
+                            "host": [
+                                "{{baseUrl}}"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "auth": null,
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"id\": \"<integer>\",\n  \"text\": \"<string>\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    },
+                    "response": [
+                        {
+                            "id": "d4da88a3-acb6-438c-8fff-26d59ea0fe82",
+                            "name": "Document created.",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "documents"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Created",
+                            "code": 201,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        },
+                        {
+                            "id": "2e64fac8-2f0b-4621-b36c-bdf4dd625233",
+                            "name": "invalid input, object invalid",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "documents"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Bad Request",
+                            "code": 400,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        },
+                        {
+                            "id": "f3d2ee6f-325c-4a4d-88db-f063eeb1acbf",
+                            "name": "that document already exists",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "documents"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Conflict",
+                            "code": 409,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        },
+                        {
+                            "id": "d8c7af56-cfb6-457d-84aa-d4a663f094be",
+                            "name": "unexpected error",
+                            "originalRequest": {
+                                "url": {
+                                    "path": [
+                                        "documents"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": []
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "POST",
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "status": "Internal Server Error",
+                            "code": 500,
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                            "cookie": [],
+                            "_postman_previewlanguage": "json"
+                        }
+                    ],
+                    "event": [],
+                    "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                    }
+                },
+                {
+                    "id": "f56f42c9-4221-45b4-b3fc-1f476adbee25",
+                    "name": "{documentId}",
+                    "item": [
+                        {
+                            "id": "7a54d3ec-3986-4293-9b31-41a9600bfeb4",
+                            "name": "Returns document based id",
+                            "request": {
+                                "name": "Returns document based id",
+                                "description": {
+                                    "content": "By including the id, get a single document",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "documents",
+                                        ":documentId"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "disabled": false,
+                                            "type": "any",
+                                            "value": "<integer>",
+                                            "key": "documentId",
+                                            "description": "(Required) the id of a specific document"
+                                        }
+                                    ]
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "GET",
+                                "auth": null
+                            },
+                            "response": [
+                                {
+                                    "id": "9bb349d9-e165-46b4-9efd-0207e8cbc386",
+                                    "name": "includes the results matching query string criteria",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "documents",
+                                                ":documentId"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": [
+                                                {
+                                                    "disabled": false,
+                                                    "type": "any",
+                                                    "value": "<integer>",
+                                                    "key": "documentId",
+                                                    "description": "(Required) the id of a specific document"
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "e292601a-4f2f-4135-9395-8d8f9e1ee348",
+                                    "name": "unexpected error",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "documents",
+                                                ":documentId"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": [
+                                                {
+                                                    "disabled": false,
+                                                    "type": "any",
+                                                    "value": "<integer>",
+                                                    "key": "documentId",
+                                                    "description": "(Required) the id of a specific document"
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "GET",
+                                        "body": {}
+                                    },
+                                    "status": "Internal Server Error",
+                                    "code": 500,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "id": "df6744c4-bc95-43b8-bda0-724b6c1b8a4b",
+                            "name": "soft deletes multiple documents",
+                            "request": {
+                                "name": "soft deletes multiple documents",
+                                "description": {},
+                                "url": {
+                                    "path": [
+                                        "documents",
+                                        ":documentId"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "disabled": false,
+                                            "type": "any",
+                                            "value": "<integer>",
+                                            "key": "documentId",
+                                            "description": "(Required) the id of a specific document"
+                                        }
+                                    ]
+                                },
+                                "header": [
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "DELETE",
+                                "auth": null
+                            },
+                            "response": [
+                                {
+                                    "id": "ba2ede4b-81ff-4370-9ed4-7c82cb7e66a8",
+                                    "name": "Document deleted.",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "documents",
+                                                ":documentId"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": [
+                                                {
+                                                    "disabled": false,
+                                                    "type": "any",
+                                                    "value": "<integer>",
+                                                    "key": "documentId",
+                                                    "description": "(Required) the id of a specific document"
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "DELETE",
+                                        "body": {}
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "55b7f2ab-31d3-4078-8504-4e94d70b71a9",
+                                    "name": "multiple deletes not allowed",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "documents",
+                                                ":documentId"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": [
+                                                {
+                                                    "disabled": false,
+                                                    "type": "any",
+                                                    "value": "<integer>",
+                                                    "key": "documentId",
+                                                    "description": "(Required) the id of a specific document"
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "DELETE",
+                                        "body": {}
+                                    },
+                                    "status": "Method Not Allowed",
+                                    "code": 405,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "8412d03c-9bf6-4cf1-9428-52021c66c042",
+                                    "name": "unexpected error",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "documents",
+                                                ":documentId"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": [
+                                                {
+                                                    "disabled": false,
+                                                    "type": "any",
+                                                    "value": "<integer>",
+                                                    "key": "documentId",
+                                                    "description": "(Required) the id of a specific document"
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "DELETE",
+                                        "body": {}
+                                    },
+                                    "status": "Internal Server Error",
+                                    "code": 500,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        },
+                        {
+                            "id": "86553fe1-d0f3-46cd-b9f1-6dee1f3eede3",
+                            "name": "patches a subset of fields on a document",
+                            "request": {
+                                "name": "patches a subset of fields on a document",
+                                "description": {
+                                    "content": "Patches a document by field",
+                                    "type": "text/plain"
+                                },
+                                "url": {
+                                    "path": [
+                                        "documents",
+                                        ":documentId"
+                                    ],
+                                    "host": [
+                                        "{{baseUrl}}"
+                                    ],
+                                    "query": [],
+                                    "variable": [
+                                        {
+                                            "disabled": false,
+                                            "type": "any",
+                                            "value": "<integer>",
+                                            "key": "documentId",
+                                            "description": "(Required) the id of a specific document"
+                                        }
+                                    ]
+                                },
+                                "header": [
+                                    {
+                                        "key": "Content-Type",
+                                        "value": "application/json"
+                                    },
+                                    {
+                                        "key": "Accept",
+                                        "value": "application/json"
+                                    }
+                                ],
+                                "method": "PATCH",
+                                "auth": null,
+                                "body": {
+                                    "mode": "raw",
+                                    "raw": "{\n  \"id\": \"<integer>\",\n  \"text\": \"<string>\"\n}",
+                                    "options": {
+                                        "raw": {
+                                            "language": "json"
+                                        }
+                                    }
+                                }
+                            },
+                            "response": [
+                                {
+                                    "id": "851ff6b2-4978-4694-a7d7-afe1d12ee669",
+                                    "name": "document patched",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "documents",
+                                                ":documentId"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": [
+                                                {
+                                                    "disabled": false,
+                                                    "type": "any",
+                                                    "value": "<integer>",
+                                                    "key": "documentId",
+                                                    "description": "(Required) the id of a specific document"
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "PATCH",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"id\": 1,\n  \"text\": \"<string>\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "OK",
+                                    "code": 200,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                },
+                                {
+                                    "id": "b8cf6dcb-f4f4-4b9e-a929-cbdf6194e246",
+                                    "name": "invalid input, object invalid",
+                                    "originalRequest": {
+                                        "url": {
+                                            "path": [
+                                                "documents",
+                                                ":documentId"
+                                            ],
+                                            "host": [
+                                                "{{baseUrl}}"
+                                            ],
+                                            "query": [],
+                                            "variable": [
+                                                {
+                                                    "disabled": false,
+                                                    "type": "any",
+                                                    "value": "<integer>",
+                                                    "key": "documentId",
+                                                    "description": "(Required) the id of a specific document"
+                                                }
+                                            ]
+                                        },
+                                        "header": [
+                                            {
+                                                "key": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        "method": "PATCH",
+                                        "body": {
+                                            "mode": "raw",
+                                            "raw": "{\n  \"id\": 1,\n  \"text\": \"<string>\"\n}",
+                                            "options": {
+                                                "raw": {
+                                                    "language": "json"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "status": "Bad Request",
+                                    "code": 400,
+                                    "header": [
+                                        {
+                                            "key": "Content-Type",
+                                            "value": "application/json"
+                                        }
+                                    ],
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
+                                    "cookie": [],
+                                    "_postman_previewlanguage": "json"
+                                }
+                            ],
+                            "event": [],
+                            "protocolProfileBehavior": {
+                                "disableBodyPruning": true
+                            }
+                        }
+                    ],
+                    "event": []
+                }
+            ],
+            "event": []
+        },
+        {
+            "id": "776b381a-5ee6-4599-9d0f-730d154b6280",
             "name": "tools",
             "item": [
                 {
-                    "id": "92d03657-1bcc-4f71-b241-c1597898d02c",
+                    "id": "6b3963ca-8ce7-4fe2-a9fb-8fdb34ffb903",
                     "name": "Returns tool based on query parameters",
                     "request": {
                         "name": "Returns tool based on query parameters",
@@ -254,7 +1094,7 @@
                     },
                     "response": [
                         {
-                            "id": "5b8199cd-f7f3-4599-92db-3b3f8efe6436",
+                            "id": "d6054297-a15c-428f-8116-0a5213045d45",
                             "name": "includes the results matching query string criteria",
                             "originalRequest": {
                                 "url": {
@@ -289,7 +1129,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "1c258a70-e391-42cc-a555-4312e6a6f340",
+                            "id": "65449a75-4604-4552-9189-c51e5d332618",
                             "name": "bad input parameter",
                             "originalRequest": {
                                 "url": {
@@ -319,12 +1159,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "f6739dd0-2b02-4b50-8baa-d0919f2d2e39",
+                            "id": "bee14999-46ea-40b0-a649-f13b2d833058",
                             "name": "default response if no query string parameters are sent",
                             "originalRequest": {
                                 "url": {
@@ -354,7 +1194,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -365,7 +1205,7 @@
                     }
                 },
                 {
-                    "id": "3933a04c-996c-4148-8e6b-dbac62e95375",
+                    "id": "75c9080d-2408-4244-b7c5-86b6c190611f",
                     "name": "adds a new tool",
                     "request": {
                         "name": "adds a new tool",
@@ -407,7 +1247,7 @@
                     },
                     "response": [
                         {
-                            "id": "824d1e4a-071b-4c8a-9b5c-b59f27d865f7",
+                            "id": "781dd1fe-b0e5-4e3e-b17b-dcb0adceaf56",
                             "name": "Tool created.",
                             "originalRequest": {
                                 "url": {
@@ -429,7 +1269,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"tool_calls\": [\n    {\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"arguments\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"arguments\": \"<string>\"\n      }\n    }\n  ]\n}",
+                                    "raw": "{\n  \"id\": \"call_1\",\n  \"type\": \"function\",\n  \"function\": {\n    \"name\": \"get_current_weather\",\n    \"arguments\": \"{\\\"location\\\": \\\"San Francisco, CA\\\",\\\"unit\\\": \\\"celsius\\\"}\"\n  }\n}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -450,7 +1290,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "83bfc6fe-e380-43b6-986a-5f92cdaf4593",
+                            "id": "df6a7095-51d4-41b8-8008-38bb4796b0bf",
                             "name": "invalid input, object invalid",
                             "originalRequest": {
                                 "url": {
@@ -472,7 +1312,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"tool_calls\": [\n    {\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"arguments\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"arguments\": \"<string>\"\n      }\n    }\n  ]\n}",
+                                    "raw": "{\n  \"id\": \"call_1\",\n  \"type\": \"function\",\n  \"function\": {\n    \"name\": \"get_current_weather\",\n    \"arguments\": \"{\\\"location\\\": \\\"San Francisco, CA\\\",\\\"unit\\\": \\\"celsius\\\"}\"\n  }\n}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -488,12 +1328,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "c8a2f597-6fb1-4bf0-90c3-26a20f537c84",
+                            "id": "c794f150-af0e-4c04-abfd-61535bdef3d1",
                             "name": "that tool already exists",
                             "originalRequest": {
                                 "url": {
@@ -515,7 +1355,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"tool_calls\": [\n    {\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"arguments\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"arguments\": \"<string>\"\n      }\n    }\n  ]\n}",
+                                    "raw": "{\n  \"id\": \"call_1\",\n  \"type\": \"function\",\n  \"function\": {\n    \"name\": \"get_current_weather\",\n    \"arguments\": \"{\\\"location\\\": \\\"San Francisco, CA\\\",\\\"unit\\\": \\\"celsius\\\"}\"\n  }\n}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -531,12 +1371,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "01d07a30-72ad-457a-8811-a54b7a922117",
+                            "id": "8a60a9b4-b944-4cf9-ad11-7f27b33c0cfd",
                             "name": "unexpected error",
                             "originalRequest": {
                                 "url": {
@@ -558,7 +1398,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"tool_calls\": [\n    {\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"arguments\": \"<string>\"\n      }\n    },\n    {\n      \"id\": \"<string>\",\n      \"type\": \"<string>\",\n      \"function\": {\n        \"name\": \"<string>\",\n        \"arguments\": \"<string>\"\n      }\n    }\n  ]\n}",
+                                    "raw": "{\n  \"id\": \"call_1\",\n  \"type\": \"function\",\n  \"function\": {\n    \"name\": \"get_current_weather\",\n    \"arguments\": \"{\\\"location\\\": \\\"San Francisco, CA\\\",\\\"unit\\\": \\\"celsius\\\"}\"\n  }\n}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -574,7 +1414,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -588,11 +1428,11 @@
             "event": []
         },
         {
-            "id": "474c8b51-8c74-478d-bba5-f905f3cc1f51",
+            "id": "09d0ed26-df53-428c-8dde-e458499bd6bb",
             "name": "users",
             "item": [
                 {
-                    "id": "3fc7eb59-20f7-4461-9900-0252c108bb5d",
+                    "id": "23cbb276-e53d-49f3-b963-7e310ddfae8b",
                     "name": "Returns user based on query parameters",
                     "request": {
                         "name": "Returns user based on query parameters",
@@ -621,7 +1461,7 @@
                     },
                     "response": [
                         {
-                            "id": "32f92131-1f81-4d03-8441-1f3cd2f80f93",
+                            "id": "9d282bbf-48cc-4944-a8d5-78c9c182d1b1",
                             "name": "includes the results matching query string criteria",
                             "originalRequest": {
                                 "url": {
@@ -656,7 +1496,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "52f38166-c57a-4813-ac2a-3dd59cf1705b",
+                            "id": "44704918-e178-4567-9d58-1c0f95f9e245",
                             "name": "bad input parameter",
                             "originalRequest": {
                                 "url": {
@@ -686,12 +1526,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "5f997971-8f5b-451e-8d5b-f01493e05889",
+                            "id": "23d12d7f-d9ed-4dc2-ac4e-60bace8ae407",
                             "name": "default response if no query string parameters are sent",
                             "originalRequest": {
                                 "url": {
@@ -721,7 +1561,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -732,7 +1572,7 @@
                     }
                 },
                 {
-                    "id": "d1f9119f-994c-4d99-a6ac-eba681c489a4",
+                    "id": "3e96864d-34f0-478a-9c04-c83ab95e2e8a",
                     "name": "adds a new user",
                     "request": {
                         "name": "adds a new user",
@@ -774,7 +1614,7 @@
                     },
                     "response": [
                         {
-                            "id": "450fe1cb-0b09-4098-8ca4-4c8ce7d765e7",
+                            "id": "7a366811-3685-4ca0-81f9-a51fe7119a6c",
                             "name": "User created.",
                             "originalRequest": {
                                 "url": {
@@ -796,7 +1636,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"id\": 1,\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                                    "raw": "{}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -817,7 +1657,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "869f9ba3-e6ec-4d1e-ad6e-29ebc62f424e",
+                            "id": "b662cc84-c648-4ae8-9a24-f706f9a85431",
                             "name": "invalid input, object invalid",
                             "originalRequest": {
                                 "url": {
@@ -839,7 +1679,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"id\": 1,\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                                    "raw": "{}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -855,12 +1695,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "b1864489-7d2f-42c4-95fc-592ad3aa2d7a",
+                            "id": "71a97871-4e2f-4710-8e2e-31eaa368b254",
                             "name": "that user already exists",
                             "originalRequest": {
                                 "url": {
@@ -882,7 +1722,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"id\": 1,\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                                    "raw": "{}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -898,12 +1738,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "bb4e096a-de59-4e34-a213-16aeb251feea",
+                            "id": "3d15f1c4-aade-4230-a29b-13a0a965c654",
                             "name": "unexpected error",
                             "originalRequest": {
                                 "url": {
@@ -925,7 +1765,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"id\": 1,\n  \"email\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+                                    "raw": "{}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -941,7 +1781,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -952,11 +1792,11 @@
                     }
                 },
                 {
-                    "id": "c79b789a-8663-4a86-b580-66df1cba9560",
+                    "id": "d5da1b8e-9a74-41d7-ace9-64247d9e483b",
                     "name": "{userId}",
                     "item": [
                         {
-                            "id": "3656e78e-0580-4bb2-a99c-c164a7dab3dc",
+                            "id": "d095b5ac-a32f-44e1-8de4-58019b9b4c84",
                             "name": "Returns user based id",
                             "request": {
                                 "name": "Returns user based id",
@@ -994,7 +1834,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "aeefb8aa-bca6-4112-b59c-8a5cc28ac862",
+                                    "id": "194e8ea0-8f85-4589-ab87-ec1d64810d10",
                                     "name": "includes the results matching query string criteria",
                                     "originalRequest": {
                                         "url": {
@@ -1038,7 +1878,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "b58ba8e4-373b-4187-b612-af95df478662",
+                                    "id": "92faaa26-b282-4aab-a838-c95a2687dbd2",
                                     "name": "unexpected error",
                                     "originalRequest": {
                                         "url": {
@@ -1077,7 +1917,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1088,7 +1928,7 @@
                             }
                         },
                         {
-                            "id": "722c8c2c-2759-4ca0-8c12-7ba646fcc7ca",
+                            "id": "1ea222a0-5a10-49a0-aa6a-0cdf573eadeb",
                             "name": "soft deletes multiple users",
                             "request": {
                                 "name": "soft deletes multiple users",
@@ -1123,7 +1963,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "815fb47a-405a-491b-a022-51c1ba673e0d",
+                                    "id": "a5f79807-b7da-4633-aaee-0406707d9040",
                                     "name": "User deleted.",
                                     "originalRequest": {
                                         "url": {
@@ -1167,7 +2007,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "93d8f90d-fba1-4481-9fc3-23656ac67a55",
+                                    "id": "4fe011a1-63fa-4e12-9997-43b3abaffeec",
                                     "name": "multiple deletes not allowed",
                                     "originalRequest": {
                                         "url": {
@@ -1206,12 +2046,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "a18eb6a5-11c1-4bff-b8b6-5d062959103f",
+                                    "id": "dfdfc175-e5a0-4b36-8d99-61550a1b75fd",
                                     "name": "unexpected error",
                                     "originalRequest": {
                                         "url": {
@@ -1250,7 +2090,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1261,7 +2101,7 @@
                             }
                         },
                         {
-                            "id": "20f51b60-72ad-41a7-b516-dc1fbdd3292e",
+                            "id": "0fd3d4f6-133d-49e7-9434-2c66c90049f8",
                             "name": "patches a subset of fields on a user",
                             "request": {
                                 "name": "patches a subset of fields on a user",
@@ -1312,7 +2152,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "1f064aaa-1d18-4605-8886-1b0df536ccc1",
+                                    "id": "6843f61d-1550-4d0b-8af4-54532998056d",
                                     "name": "user patched",
                                     "originalRequest": {
                                         "url": {
@@ -1364,7 +2204,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "90c0eeb0-52aa-4bcd-9765-36de0a34903d",
+                                    "id": "6d5aa1eb-3142-4443-bb75-09ec85f9dd91",
                                     "name": "invalid input, object invalid",
                                     "originalRequest": {
                                         "url": {
@@ -1411,7 +2251,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1428,11 +2268,11 @@
             "event": []
         },
         {
-            "id": "6cdefec2-cb5e-419c-894a-bf63236f9b24",
+            "id": "d465d119-1e23-4f3d-ba14-408988cea458",
             "name": "uploads",
             "item": [
                 {
-                    "id": "a046bcbb-24fd-4e02-b2cd-5a74ef6d7dc2",
+                    "id": "523b9123-1a85-400c-8df0-e9e416151772",
                     "name": "Returns upload based on query parameters",
                     "request": {
                         "name": "Returns upload based on query parameters",
@@ -1461,7 +2301,7 @@
                     },
                     "response": [
                         {
-                            "id": "7ac37330-3238-4553-815c-838cdc1cd883",
+                            "id": "a05432e3-df16-475d-b7aa-cb88b144144f",
                             "name": "includes the results matching query string criteria",
                             "originalRequest": {
                                 "url": {
@@ -1496,7 +2336,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "7e3a0855-e87b-418c-bbb1-a6f4b6d43c3e",
+                            "id": "f907cc38-7b99-4675-b5e4-04d1d8b6e45c",
                             "name": "bad input parameter",
                             "originalRequest": {
                                 "url": {
@@ -1526,12 +2366,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "08abb901-22b6-4520-8868-4d1b43a12e57",
+                            "id": "cda73dee-c8d1-48f0-a471-0564f85a046d",
                             "name": "default response if no query string parameters are sent",
                             "originalRequest": {
                                 "url": {
@@ -1561,7 +2401,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1572,7 +2412,7 @@
                     }
                 },
                 {
-                    "id": "bc0038e6-9f0e-46e8-bd67-fbcba23136f9",
+                    "id": "38382e33-1be6-4ba5-860a-6e83652b2d80",
                     "name": "adds a new upload",
                     "request": {
                         "name": "adds a new upload",
@@ -1614,7 +2454,7 @@
                     },
                     "response": [
                         {
-                            "id": "a1ce5929-7928-4156-ba16-ada00d38b4bc",
+                            "id": "c9e9fe24-e263-4b65-b6cf-c323d34e2d04",
                             "name": "Upload created.",
                             "originalRequest": {
                                 "url": {
@@ -1636,7 +2476,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"id\": 1,\n  \"text\": \"<string>\"\n}",
+                                    "raw": "{}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -1657,7 +2497,7 @@
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "4e839265-5db3-4263-a5cc-39dad7ebdec6",
+                            "id": "bab49c7c-a1f5-47a9-b5b3-ea93d8850df2",
                             "name": "invalid input, object invalid",
                             "originalRequest": {
                                 "url": {
@@ -1679,7 +2519,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"id\": 1,\n  \"text\": \"<string>\"\n}",
+                                    "raw": "{}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -1695,12 +2535,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "39035a07-929d-46a6-ae8c-12863b3d1cee",
+                            "id": "12d34d40-5824-4fec-990b-002d878abe18",
                             "name": "that upload already exists",
                             "originalRequest": {
                                 "url": {
@@ -1722,7 +2562,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"id\": 1,\n  \"text\": \"<string>\"\n}",
+                                    "raw": "{}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -1738,12 +2578,12 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         },
                         {
-                            "id": "bc1d7f3d-9e3c-409b-b8a2-832276cc5e2f",
+                            "id": "d5f24b74-27cc-4cea-be26-efdc400a4814",
                             "name": "unexpected error",
                             "originalRequest": {
                                 "url": {
@@ -1765,7 +2605,7 @@
                                 "method": "POST",
                                 "body": {
                                     "mode": "raw",
-                                    "raw": "{\n  \"id\": 1,\n  \"text\": \"<string>\"\n}",
+                                    "raw": "{}",
                                     "options": {
                                         "raw": {
                                             "language": "json"
@@ -1781,7 +2621,7 @@
                                     "value": "application/json"
                                 }
                             ],
-                            "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                            "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                             "cookie": [],
                             "_postman_previewlanguage": "json"
                         }
@@ -1792,11 +2632,11 @@
                     }
                 },
                 {
-                    "id": "af84df21-6837-445b-9277-e3ff7f4fb393",
+                    "id": "20459e85-3d02-4892-a96a-ad96f4dff3b6",
                     "name": "{uploadId}",
                     "item": [
                         {
-                            "id": "3121b54c-e465-42cd-b1d1-6f4edbe5e439",
+                            "id": "7da8b02c-db0b-4a78-ae61-0bea5a468c94",
                             "name": "Returns upload based id",
                             "request": {
                                 "name": "Returns upload based id",
@@ -1834,7 +2674,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "dddd24ab-ed1e-4c04-b085-b7133c84a46e",
+                                    "id": "77c5b2cb-29eb-4ccf-95c6-b292035f7201",
                                     "name": "includes the results matching query string criteria",
                                     "originalRequest": {
                                         "url": {
@@ -1878,7 +2718,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "b8cfaef7-24b7-45b7-9319-5841f5f86aea",
+                                    "id": "2ae88bec-e4ec-4e26-94d4-76af37385a8e",
                                     "name": "unexpected error",
                                     "originalRequest": {
                                         "url": {
@@ -1917,7 +2757,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -1928,7 +2768,7 @@
                             }
                         },
                         {
-                            "id": "48d14502-527c-4ea0-af65-358abf64f34e",
+                            "id": "15d95ba6-77df-49b8-9e44-c05198dd6e9b",
                             "name": "soft deletes multiple uploads",
                             "request": {
                                 "name": "soft deletes multiple uploads",
@@ -1963,7 +2803,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "5870bf61-5ba1-4e63-8866-fa820af6a1de",
+                                    "id": "1d8b5650-b2a6-44fe-8af8-42b279846782",
                                     "name": "Upload deleted.",
                                     "originalRequest": {
                                         "url": {
@@ -2007,7 +2847,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "88d16be2-86d4-4467-8991-00748d08428a",
+                                    "id": "a21e744f-b9f8-4bc2-b956-0b51afc18516",
                                     "name": "multiple deletes not allowed",
                                     "originalRequest": {
                                         "url": {
@@ -2046,12 +2886,12 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "858466ed-e8f1-4a09-be78-8adc1c069dc7",
+                                    "id": "5d50dc0f-983c-4887-96e1-4862039d19ee",
                                     "name": "unexpected error",
                                     "originalRequest": {
                                         "url": {
@@ -2090,7 +2930,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -2101,7 +2941,7 @@
                             }
                         },
                         {
-                            "id": "cd881636-989c-46ab-81fc-0b1e8fffe065",
+                            "id": "fab31991-fb8c-4eb0-a079-f3a453d42303",
                             "name": "patches a subset of fields on a upload",
                             "request": {
                                 "name": "patches a subset of fields on a upload",
@@ -2152,7 +2992,7 @@
                             },
                             "response": [
                                 {
-                                    "id": "bfc7d48a-af54-425c-82b3-daad210af660",
+                                    "id": "da22b92b-369b-453e-93f3-390315069ce3",
                                     "name": "upload patched",
                                     "originalRequest": {
                                         "url": {
@@ -2204,7 +3044,7 @@
                                     "_postman_previewlanguage": "json"
                                 },
                                 {
-                                    "id": "d8ec9b98-4937-4e69-892d-53eb255cca34",
+                                    "id": "87225666-fa5e-4f4d-8329-54caffd0b9c2",
                                     "name": "invalid input, object invalid",
                                     "originalRequest": {
                                         "url": {
@@ -2251,7 +3091,7 @@
                                             "value": "application/json"
                                         }
                                     ],
-                                    "body": "{\n  \"code\": 9895499,\n  \"message\": \"sit aliqua adipisicing cupidatat\",\n  \"name\": \"Lorem id reprehenderit\",\n  \"className\": \"eiusmod culpa\"\n}",
+                                    "body": "{\n  \"code\": 55681125,\n  \"message\": \"amet ex voluptate id\",\n  \"name\": \"nulla non dolor quis\",\n  \"className\": \"cupid\"\n}",
                                     "cookie": [],
                                     "_postman_previewlanguage": "json"
                                 }
@@ -2277,7 +3117,7 @@
         }
     ],
     "info": {
-        "_postman_id": "bc8a03bf-a92d-4517-8956-1dbe37a75cdb",
+        "_postman_id": "52b66945-9908-4583-be62-f731e6405561",
         "name": "Imported from OpenAPI",
         "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
         "description": {
