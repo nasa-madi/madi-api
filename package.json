@@ -41,6 +41,7 @@
     "dev:src": "nodemon src/",
     "dev": "concurrently \"npm run dev:db\" \"npm run dev:src\"",
     "foas:generate": "npx foas generate",
+    "test:contract": "npx newman run ./specifications/contract.postman_collection.json --folder setup --folder chunks",
     "spec:build": "npm run spec:generate; npm run spec:merge; npm run spec:validate; npm run spec:swagger",
     "spec:merge": "npx foas merge",
     "spec:generate": "npx foas generate",
@@ -72,17 +73,20 @@
     "node-fetch": "^3.3.2",
     "openai": "^4.20.0",
     "pg": "^8.11.3",
+    "pgvector": "^0.1.7",
     "winston": "^3.11.0"
   },
   "devDependencies": {
     "@feathersjs/cli": "^5.0.11",
     "@feathersjs/rest-client": "^5.0.11",
+    "@stoplight/prism-cli": "^5.5.2",
     "axios": "^1.6.2",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "feathers-oas": "^0.0.2",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
-    "prettier": "^3.1.0"
+    "prettier": "^3.1.0",
+    "prism": "^4.1.2"
   }
 }

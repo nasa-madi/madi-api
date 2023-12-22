@@ -16,6 +16,7 @@ postgresql:
     password: magical_password
     database: rainbow_database
     port: 5432
+  debug: true
 
 # API KEYS
 openai: 
@@ -26,7 +27,7 @@ openai:
   proxy_port: 8888
 
 # TESTING
-debug: true
+debug: false
 verbose: false
 
 authentication:

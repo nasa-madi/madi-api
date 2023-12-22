@@ -1,6 +1,7 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
 
+
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
   documentDataValidator,
@@ -10,8 +11,10 @@ import {
   documentExternalResolver,
   documentDataResolver,
   documentPatchResolver,
-  documentQueryResolver
+  documentQueryResolver,
+  documentVectorResolver
 } from './documents.schema.js'
+
 import { DocumentService, getOptions } from './documents.class.js'
 
 export const documentPath = 'documents'
@@ -33,9 +36,9 @@ export const document = (app) => {
   app.service(documentPath).hooks({
     around: {
       all: [
-        authenticate('jwt'),
+        // authenticate('jwt'),
         schemaHooks.resolveExternal(documentExternalResolver),
-        schemaHooks.resolveResult(documentResolver)
+        schemaHooks.resolveResult(documentResolver),
       ]
     },
     before: {
@@ -47,7 +50,9 @@ export const document = (app) => {
       get: [],
       create: [
         schemaHooks.validateData(documentDataValidator),
-        schemaHooks.resolveData(documentDataResolver)
+        schemaHooks.resolveData(documentDataResolver),
+        // must be after the main doc resolver
+        schemaHooks.resolveData(documentVectorResolver)
       ],
       patch: [
         schemaHooks.validateData(documentPatchValidator),

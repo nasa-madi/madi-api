@@ -1,4 +1,4 @@
-import openai from "./cacheProxy.js";
+import openai from "../utils/cacheProxy.js";
 
 
 

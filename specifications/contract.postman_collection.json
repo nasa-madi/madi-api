@@ -1,0 +1,1928 @@
+{
+	"info": {
+		"_postman_id": "89bc54bd-a6ec-420c-b784-b85e353ebe3c",
+		"name": "Madi API v2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35357"
+	},
+	"item": [
+		{
+			"name": "setup",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"    // Structure is correct",
+									"    pm.collectionVariables.set(\"userId\", (result.id))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test@example.com\",\n    \"password\":\"magicalpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Duplicate User (FAIL)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"    // Code is correct",
+									"    pm.response.to.have.status(400);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "{{adminKey}}",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "{{adminSecret}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "prefer",
+								"value": "example=keys_duplicate_key",
+								"type": "text"
+							},
+							{
+								"key": "prefer",
+								"value": "code=400",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test@example.com\",\n    \"password\":\"magicalpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"    // Structure is correct",
+									"    pm.collectionVariables.set(\"userId\", result.user.id);",
+									"    pm.collectionVariables.set(\"accesstoken\", result.accessToken);",
+									"    pm.collectionVariables.set(\"plugins\", result.user.plugins);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"strategy\":\"local\",\n    \"email\":\"test@example.com\",\n    \"password\":\"magicalpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/authentication",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"authentication"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('email');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accesstoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/{{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User Again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"    // Structure is correct",
+									"    pm.collectionVariables.set(\"userId\", (result.id))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test@example.com\",\n    \"password\":\"magicalpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate User Again",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"    // Structure is correct",
+									"    pm.collectionVariables.set(\"userId\", result.user.id);",
+									"    pm.collectionVariables.set(\"accesstoken\", result.accessToken);",
+									"    pm.collectionVariables.set(\"plugins\", result.user.plugins);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"strategy\":\"local\",\n    \"email\":\"test@example.com\",\n    \"password\":\"magicalpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/authentication",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"authentication"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tools",
+			"item": [
+				{
+					"name": "List Tools",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('data');",
+									"    pm.expect(result?.data).to.have.lengthOf.at.least(1)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3030/tools",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"tools"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tool",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('function');",
+									"    pm.collectionVariables.set(\"tool_desc\", JSON.stringify(result))",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3030/tools/{{tool_name}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"tools",
+								"{{tool_name}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Run Tool",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"tool_calls\": [\n        {\n            \"id\": \"call_1\",\n            \"type\": \"function\",\n            \"function\": {\n                \"name\": \"get_current_weather\",\n                \"arguments\": \"{\\\"location\\\": \\\"San Francisco, CA\\\",\\\"unit\\\": \\\"celsius\\\"}\"\n            }\n        },\n        {\n            \"id\": \"call_2\",\n            \"type\": \"function\",\n            \"function\": {\n                \"name\": \"get_current_weather\",\n                \"arguments\": {\n                    \"location\": \"San Francisco, CA\",\n                    \"unit\": \"celsius\"\n                    }\n            }\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3030/tools/",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"tools",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chats",
+			"item": [
+				{
+					"name": "Chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(201);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('object');",
+									"    pm.expect(result).to.have.property('created');",
+									"    pm.expect(result).to.have.property('choices');",
+									"    pm.expect(result?.choices).to.be.an('array');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"Hello!\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat with 1 Function",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(201);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('object');",
+									"    pm.expect(result).to.have.property('created');",
+									"    pm.expect(result).to.have.property('choices');",
+									"    pm.expect(result?.choices).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.role).to.equal('assistant');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.be.an('array');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"What's the weather like in San Francisco?\"\n        }\n    ],\n    \"tools\":[{{tool_desc}}],\n    \"tool_choice\":\"auto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat with Multi Functions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(201);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('object');",
+									"    pm.expect(result).to.have.property('created');",
+									"    pm.expect(result).to.have.property('choices');",
+									"    pm.expect(result?.choices).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.role).to.equal('assistant');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.have.lengthOf.at.least(3)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"What's the weather like in San Francisco, Tokyo, and Paris?\"\n        }\n    ],\n    \"tools\":[{{tool_desc}}],\n    \"tool_choice\":\"auto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat Function Wrapup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(201);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('object');",
+									"    pm.expect(result).to.have.property('created');",
+									"    pm.expect(result).to.have.property('choices');",
+									"    pm.expect(result?.choices).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.role).to.equal('assistant');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.have.lengthOf.at.least(3)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"What's the weather like in San Francisco, Tokyo, and Paris?\"\n        }\n    ],\n    \"tools\":[{{tool_desc}}],\n    \"tool_choice\":\"auto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chats",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chats Stream=False",
+			"item": [
+				{
+					"name": "Chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(201);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('object');",
+									"    pm.expect(result).to.have.property('created');",
+									"    pm.expect(result).to.have.property('choices');",
+									"    pm.expect(result?.choices).to.be.an('array');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"Hello!\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chats?stream=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chats"
+							],
+							"query": [
+								{
+									"key": "stream",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat with 1 Function",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(201);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('object');",
+									"    pm.expect(result).to.have.property('created');",
+									"    pm.expect(result).to.have.property('choices');",
+									"    pm.expect(result?.choices).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.role).to.equal('assistant');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.be.an('array');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"What's the weather like in San Francisco?\"\n        }\n    ],\n    \"tools\":[{{tool_desc}}],\n    \"tool_choice\":\"auto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chats?stream=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chats"
+							],
+							"query": [
+								{
+									"key": "stream",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat with Multi Functions",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(201);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('object');",
+									"    pm.expect(result).to.have.property('created');",
+									"    pm.expect(result).to.have.property('choices');",
+									"    pm.expect(result?.choices).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.role).to.equal('assistant');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.have.lengthOf.at.least(3)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"What's the weather like in San Francisco, Tokyo, and Paris?\"\n        }\n    ],\n    \"tools\":[{{tool_desc}}],\n    \"tool_choice\":\"auto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chats?stream=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chats"
+							],
+							"query": [
+								{
+									"key": "stream",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat Function Wrapup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(201);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('object');",
+									"    pm.expect(result).to.have.property('created');",
+									"    pm.expect(result).to.have.property('choices');",
+									"    pm.expect(result?.choices).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.role).to.equal('assistant');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.be.an('array');",
+									"    pm.expect(result?.choices?.[0]?.message?.tool_calls).to.have.lengthOf.at.least(3)",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"What's the weather like in San Francisco, Tokyo, and Paris?\"\n        }\n    ],\n    \"tools\":[{{tool_desc}}],\n    \"tool_choice\":\"auto\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chats?stream=false",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chats"
+							],
+							"query": [
+								{
+									"key": "stream",
+									"value": "false"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "documents",
+			"item": [
+				{
+					"name": "doc",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pageContent\":\"this is my content\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/documents",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Short Document",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/documents",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Long Document (Split) Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/documents",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Long Document (Error)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/documents",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/documents/{{docId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"documents",
+								"{{docId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Document with Chunks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/documents/{{docId}}?chunks=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"documents",
+								"{{docId}}"
+							],
+							"query": [
+								{
+									"key": "chunks",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/documents",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"documents"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Document",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/documents?search='this is the text I want to search by'",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"documents"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "'this is the text I want to search by'"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chunks",
+			"item": [
+				{
+					"name": "Create Short Chunk",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(201);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('pageContent');",
+									"    pm.expect(result).to.have.property('metadata');",
+									"    pm.collectionVariables.set(\"chunkId_0\", (result.id))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\":1,\n    \"documentIndex\":0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Duplicate Chunk (Error)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"    // Code is correct",
+									"    pm.response.to.have.status(400);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\":1,\n    \"documentIndex\":0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Chunk",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('pageContent');",
+									"    pm.expect(result).to.have.property('metadata');",
+									"    pm.expect(result.metadata).to.have.property('int');",
+									"    pm.expect(result.metadata.int).to.equal(2);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"metadata\":{\n        \"int\":2\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks",
+								"{{chunkId_0}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Chunk with pageContent",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('pageContent');",
+									"    pm.expect(result).to.have.property('metadata');",
+									"    pm.expect(result).to.have.property('hash');",
+									"    pm.expect(result.metadata).to.have.property('int');",
+									"    pm.expect(result.metadata.int).to.equal(2);",
+									"    pm.collectionVariables.set(\"chunkHash_0\", (result.hash))",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pageContent\": \"Now principles discovered off increasing how reasonably middletons men. Add seems out man met plate court sense. His joy she worth truth given. All year feet led view went sake. You agreeable breakfast his set perceived immediate. Stimulated man are projecting favourable middletons can cultivated.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks",
+								"{{chunkId_0}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch Chunk with duplicate pageContent (Error)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('pageContent');",
+									"    pm.expect(result).to.have.property('metadata');",
+									"    pm.expect(result.metadata).to.have.property('int');",
+									"    pm.expect(result.metadata.int).to.equal(2);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pageContent\": \"Now principles discovered off increasing how reasonably middletons men. Add seems out man met plate court sense. His joy she worth truth given. All year feet led view went sake. You agreeable breakfast his set perceived immediate. Stimulated man are projecting favourable middletons can cultivated.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks",
+								"{{chunkId_0}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Long Chunk 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(201);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('pageContent');",
+									"    pm.expect(result).to.have.property('metadata');",
+									"    pm.collectionVariables.set(\"chunkId_1\", (result.id))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The interior walls behind an arrow loop are often cut away at an oblique angle so that the archer has a wide field of view and field of fire. Arrow slits come in a variety of forms. A common one is the cross, accommodating the use of both the longbow and the crossbow. The narrow vertical aperture permits the archer large degrees of freedom to vary the elevation and direction of their bowshot but makes it difficult for attackers to harm the archer since there is only a small target at which to aim.\",\n    \"documentId\":2,\n    \"documentIndex\":0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Long Chunk 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(201);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('pageContent');",
+									"    pm.expect(result).to.have.property('metadata');",
+									"    pm.collectionVariables.set(\"chunkId_2\", (result.id))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The invention of the arrowslit is attributed to Archimedes during the siege of Syracuse in 214–212 BC (although archaeological evidence supports their existence in Egyptian Middle Kingdom forts around 1860 BC).[3]\",\n    \"documentId\":2,\n    \"documentIndex\":1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Long Chunk 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(201);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('pageContent');",
+									"    pm.expect(result).to.have.property('metadata');",
+									"    pm.collectionVariables.set(\"chunkId_3\", (result.id))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The Benz Patent-Motorwagen was a motor tricycle with a rear-mounted engine. The vehicle contained many new inventions. It was constructed of steel tubing with woodwork panels. The steel-spoked wheels and solid rubber tires were Benz's own design. Steering was by way of a toothed rack that pivoted the unsprung front wheel. Fully elliptic springs were used at the back along with a beam axle and chain drive on both sides. A simple belt system served as a single-speed transmission, varying torque between an open disc and drive disc.\",\n    \"documentId\":2,\n    \"documentIndex\":2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chunk",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('pageContent');",
+									"    pm.expect(result).to.have.property('metadata');",
+									"    pm.expect(result.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_0\")))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks",
+								"{{chunkId_0}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Chunk by Hash",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('data');",
+									"    pm.expect(result?.data).to.have.lengthOf.at.least(1)",
+									"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_0\")))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/chunks?hash={{chunkHash_0}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							],
+							"query": [
+								{
+									"key": "hash",
+									"value": "{{chunkHash_0}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Chunk return Embedding",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('data');",
+									"    pm.expect(result?.data).to.have.lengthOf.at.least(1)",
+									"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_3\")))",
+									"    ",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/chunks?$search=\"arrowslit\"&$select[]=embedding&$select[]=id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							],
+							"query": [
+								{
+									"key": "$search",
+									"value": "\"arrowslit\""
+								},
+								{
+									"key": "$select[]",
+									"value": "embedding"
+								},
+								{
+									"key": "$select[]",
+									"value": "id"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Chunk by Embedding",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('data');",
+									"    pm.expect(result?.data.length).to.equal(4)",
+									"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_3\")))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks?$search=\"arrowslit\"",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							],
+							"query": [
+								{
+									"key": "$search",
+									"value": "\"arrowslit\""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search and Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    var result = pm.response.json()",
+									"",
+									"    pm.response.to.have.status(200);",
+									"    // Structure is correct",
+									"    pm.expect(result).to.have.property('data');",
+									"    pm.expect(result?.data.length).to.equal(3)",
+									"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_3\")))",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/chunks?$search=\"arrowslit\"&documentId=2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks"
+							],
+							"query": [
+								{
+									"key": "$search",
+									"value": "\"arrowslit\""
+								},
+								{
+									"key": "documentId",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Chunk",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks",
+								"{{chunkId_0}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Chunk 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks/{{chunkId_1}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks",
+								"{{chunkId_1}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Chunk 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks/{{chunkId_2}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks",
+								"{{chunkId_2}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Chunk 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function(){",
+									"    pm.response.to.have.status(200);",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/chunks/{{chunkId_3}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"chunks",
+								"{{chunkId_3}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "teardown",
+			"item": [
+				{
+					"name": "Delete User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(pm.info.requestName, function() {",
+									"    var result = pm.response.json();",
+									"    pm.response.to.have.status(200);",
+									"    pm.expect(result).to.have.property('id');",
+									"    pm.expect(result).to.have.property('email');",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accesstoken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/{{userId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CLI-streamTest",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/plain",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accesstoken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userId",
+			"value": "1"
+		},
+		{
+			"key": "accesstoken",
+			"value": ""
+		},
+		{
+			"key": "plugins",
+			"value": ""
+		},
+		{
+			"key": "tool_name",
+			"value": "get_current_weather",
+			"type": "string"
+		},
+		{
+			"key": "weather_function",
+			"value": ""
+		},
+		{
+			"key": "tool_desc",
+			"value": ""
+		},
+		{
+			"key": "chunkId",
+			"value": "5"
+		},
+		{
+			"key": "chunkHash",
+			"value": "c12f2c2d82b6c0b578c4364b437aea8ddf909544"
+		},
+		{
+			"key": "chunkId_0",
+			"value": ""
+		},
+		{
+			"key": "chunkId_1",
+			"value": ""
+		},
+		{
+			"key": "chunkId_3",
+			"value": ""
+		},
+		{
+			"key": "chunkId_2",
+			"value": ""
+		},
+		{
+			"key": "chunkHash_0",
+			"value": ""
+		},
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3030",
+			"type": "string"
+		}
+	]
+}
