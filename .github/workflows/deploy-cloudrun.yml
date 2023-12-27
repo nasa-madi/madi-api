@@ -55,6 +55,22 @@ env:
   REGION: ${{ vars.REGION }} # TODO: update Cloud Run service region
 
 jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Outputs 
+        run: |
+          echo "env Project ID: ${{ env.PROJECT_ID }}"
+          echo "env Artifact Registry Location: ${{ env.GAR_LOCATION }}"
+          echo "env Service: ${{ env.SERVICE }}"
+          echo "env Region: ${{ env.REGION }}"
+          echo "var Project ID: ${{ vars.PROJECT_ID }}"
+          echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
+          echo "var Service: ${{ vars.SERVICE }}"
+          echo "var Region: ${{ vars.REGION }}"
+          echo "var : ${{ vars }}"
+          echo "var : ${{ env }}"
+  
   deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
