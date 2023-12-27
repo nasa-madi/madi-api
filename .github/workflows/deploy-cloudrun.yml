@@ -70,7 +70,7 @@ jobs:
           echo "var Region: ${{ vars.REGION }}"
           echo "var : ${{ toJson(vars) }}"
           echo "envs : ${{ toJson(env) }}"
-          cho "envs : ${{ toJson(github) }}"
+          echo "envs : ${{ toJson(github) }}"
   
   deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
