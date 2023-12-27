@@ -80,19 +80,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # NOTE: Alternative option - authentication via credentials json
-      - name: Google Auth
-        id: auth
-        uses: 'google-github-actions/auth@v2.0.0'
-        with:
-          # project_id: ${{ vars.PROJECT_ID }}
-          credentials_json: '${{ vars.GCP_CREDENTIALS2 }}'
+      # # NOTE: Alternative option - authentication via credentials json
+      # - name: Google Auth
+      #   id: auth
+      #   uses: 'google-github-actions/auth@v2.0.0'
+      #   with:
+      #     # project_id: ${{ vars.PROJECT_ID }}
+      #     credentials_json: '${{ vars.GCP_CREDENTIALS2 }}'
 
 
-      # Debug: Print access_token
-      - name: Print access_token
-        run: |-
-          echo "Access Token: ${{ toJson(steps.auth) }}"
+      # # Debug: Print access_token
+      # - name: Print access_token
+      #   run: |-
+      #     echo "Access Token: ${{ toJson(steps.auth) }}"
 
       # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
 
@@ -103,8 +103,8 @@ jobs:
         uses: 'docker/login-action@v3.0.0'
         with:
           registry: ${{ vars.GAR_LOCATION }}-docker.pkg.dev
-          username: oauth2accesstoken
-          password: ${{ steps.auth.outputs.auth_token }}
+          username: _json_key
+          password: ${{ vars.GCP_CREDENTIALS2 }}
     
         # Error: Error: Username and password required
 
