@@ -32,7 +32,7 @@
 #
 # 5. Change the values for the GAR_LOCATION, SERVICE and REGION environment variables (below).
 #
-# NOTE: To use Google Container Registry instead, replace ${{ env.GAR_LOCATION }}-docker.pkg.dev with gcr.io
+# NOTE: To use Google Container Registry instead, replace ${{ vars.GAR_LOCATION }}-docker.pkg.dev with gcr.io
 #
 # For more support on how to run this workflow, please visit https://github.com/marketplace/actions/deploy-to-cloud-run
 #
@@ -48,35 +48,29 @@ on:
   push:
     branches: [ "main", "develop", "test" ]
 
-# env:
-#   PROJECT_ID: $PROJECT_ID # TODO: update Google Cloud project id
-#   GAR_LOCATION: ${{ vars.GAR_LOCATION }} # TODO: update Artifact Registry location
-#   SERVICE: $SERVICE # TODO: update Cloud Run service name
-#   REGION: ${{ vars.REGION }} # TODO: update Cloud Run service region
-
-
 jobs:
-  debug:
-    environment: ${{ github.ref_name }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug Outputs 
-        run: |
-          echo "env Project ID: ${{ env.PROJECT_ID }}"
-          echo "env Artifact Registry Location: ${{ env.GAR_LOCATION }}"
-          echo "env Service: ${{ env.SERVICE }}"
-          echo "env Region: ${{ env.REGION }}"
-          echo "var Project ID: ${{ vars.PROJECT_ID }}"
-          echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
-          echo "var Service: ${{ vars.SERVICE }}"
-          echo "var Region: ${{ vars.REGION }}"
-          echo "vars : ${{ toJson(vars) }}"
-          echo "env : ${{ toJson(env) }}"
-          echo "secrets : ${{ toJson(secrets) }}"
+  # debug:
+  #   environment: ${{ github.ref_name }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Debug Outputs 
+  #       run: |
+  #         echo "env Project ID: ${{ env.PROJECT_ID }}"
+  #         echo "env Artifact Registry Location: ${{ env.GAR_LOCATION }}"
+  #         echo "env Service: ${{ env.SERVICE }}"
+  #         echo "env Region: ${{ env.REGION }}"
+  #         echo "var Project ID: ${{ vars.PROJECT_ID }}"
+  #         echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
+  #         echo "var Service: ${{ vars.SERVICE }}"
+  #         echo "var Region: ${{ vars.REGION }}"
+  #         echo "vars : ${{ toJson(vars) }}"
+  #         echo "env : ${{ toJson(env) }}"
+  #         echo "secrets : ${{ toJson(secrets) }}"
   
-    # echo "envs : ${{ toJson(github) }}"
+  #   # echo "envs : ${{ toJson(github) }}"
   deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
+    environment: ${{ github.ref_name }}
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -100,14 +94,14 @@ jobs:
         id: docker-auth
         uses: 'docker/login-action@v3.0.0'
         with:
-          registry: ${{ env.GAR_LOCATION }}-docker.pkg.dev
+          registry: ${{ vars.GAR_LOCATION }}-docker.pkg.dev
           username: oauth2accesstoken
           password: ${{ steps.auth.outputs.access_token }}
     
       - name: Build and Push Container
         run: |-
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}" ./
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
+          docker build -t "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}:${{ github.sha }}" ./
+          docker push "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}:${{ github.sha }}"
 
       # END - Docker auth and build
 
@@ -115,10 +109,10 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0
         with:
-          service: ${{ env.SERVICE }}
-          region: ${{ env.REGION }}
+          service: ${{ vars.SERVICE }}
+          region: ${{ vars.REGION }}
           # NOTE: If using a pre-built image, update the image name here
-          image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}
+          image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}:${{ github.sha }}
 
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
