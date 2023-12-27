@@ -7,8 +7,8 @@ import crypto from 'crypto';
 dotenv.config()
 
 let openai 
-const openaiProxy = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+const openaiProxy = (app)=> new OpenAI({
+  apiKey: app.get('openai').key,
   fetch: async (url, options)=>{
 
     const md5 = crypto.createHash('md5');
@@ -43,7 +43,7 @@ export const openaiConfig = (app)=>{
     // process.env.OPENAI_API_KEY = app.get('openai').key
     if(app.get('openai').use_proxy){
         // console.log('Cache Enabled')
-        openai = openaiProxy
+        openai = openaiProxy(app)
     }else{
         // console.log('Cache Disabled')
         const openaiNormal = new OpenAI({
