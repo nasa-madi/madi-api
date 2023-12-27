@@ -103,6 +103,7 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2.0.0
         with:
+          project_id: ${{ vars.PROJECT_ID }}
           service: ${{ vars.SERVICE }}
           region: ${{ vars.REGION }}
           # NOTE: If using a pre-built image, update the image name here
