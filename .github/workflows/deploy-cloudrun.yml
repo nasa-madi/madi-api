@@ -1,47 +1,3 @@
-# This workflow build and push a Docker container to Google Artifact Registry and deploy it on Cloud Run when a commit is pushed to the "main" branch
-#
-# Overview:
-#
-# 1. Authenticate to Google Cloud
-# 2. Authenticate Docker to Artifact Registry
-# 3. Build a docker container
-# 4. Publish it to Google Artifact Registry
-# 5. Deploy it to Cloud Run
-#
-# To configure this workflow:
-#
-# 1. Ensure the required Google Cloud APIs are enabled:
-#
-#    Cloud Run            run.googleapis.com
-#    Artifact Registry    artifactregistry.googleapis.com
-#
-# 2. Create and configure Workload Identity Federation for GitHub (https://github.com/google-github-actions/auth#setting-up-workload-identity-federation)
-#
-# 3. Ensure the required IAM permissions are granted
-#
-#    Cloud Run
-#      roles/run.admin
-#      roles/iam.serviceAccountUser     (to act as the Cloud Run runtime service account)
-#
-#    Artifact Registry
-#      roles/artifactregistry.admin     (project or repository level)
-#
-#    NOTE: You should always follow the principle of least privilege when assigning IAM roles
-#
-# 4. Create GitHub secrets for WIF_PROVIDER and WIF_SERVICE_ACCOUNT
-#
-# 5. Change the values for the GAR_LOCATION, SERVICE and REGION environment variables (below).
-#
-# NOTE: To use Google Container Registry instead, replace ${{ vars.GAR_LOCATION }}-docker.pkg.dev with gcr.io
-#
-# For more support on how to run this workflow, please visit https://github.com/marketplace/actions/deploy-to-cloud-run
-#
-# Further reading:
-#   Cloud Run IAM permissions                 - https://cloud.google.com/run/docs/deploying
-#   Artifact Registry IAM permissions         - https://cloud.google.com/artifact-registry/docs/access-control#roles
-#   Container Registry vs Artifact Registry   - https://cloud.google.com/blog/products/application-development/understanding-artifact-registry-vs-container-registry
-#   Principle of least privilege              - https://cloud.google.com/blog/products/identity-security/dont-get-pwned-practicing-the-principle-of-least-privilege
-
 name: Build and Deploy to Cloud Run
 
 on:
@@ -49,25 +5,6 @@ on:
     branches: [ "main", "develop", "test" ]
 
 jobs:
-  # debug:
-  #   environment: ${{ github.ref_name }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Debug Outputs 
-  #       run: |
-  #         echo "env Project ID: ${{ env.PROJECT_ID }}"
-  #         echo "env Artifact Registry Location: ${{ env.GAR_LOCATION }}"
-  #         echo "env Service: ${{ env.SERVICE }}"
-  #         echo "env Region: ${{ env.REGION }}"
-  #         echo "var Project ID: ${{ vars.PROJECT_ID }}"
-  #         echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
-  #         echo "var Service: ${{ vars.SERVICE }}"
-  #         echo "var Region: ${{ vars.REGION }}"
-  #         echo "vars : ${{ toJson(vars) }}"
-  #         echo "env : ${{ toJson(env) }}"
-  #         echo "secrets : ${{ vars.GCP_CREDENTIALS2 }}"
-  
-  #   # echo "envs : ${{ toJson(github) }}"
   deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
     environment: ${{ github.ref_name }}
@@ -95,6 +32,13 @@ jobs:
           project_id: ${{ vars.PROJECT_ID }}
           credentials_json: ${{ vars.GCP_CREDENTIALS2 }}
 
+      - name: Inject Google Secret
+        uses: google-github-actions/get-secretmanager-secrets@v2.0.0
+        with:
+          secrets: |-
+            develop-env-overrides:./config/local.yml
+          run: 'echo "${{ secrets.develop-env-overrides }}" > ./config/local.yml'
+        
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2.0.0

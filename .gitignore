@@ -47,6 +47,10 @@ packages/**/lib
 docs/.vitepress/cache
 
 config/local.*
+config/develop.*
+config/production.*
+config/test.*
+
 cache/*
 
 #####
