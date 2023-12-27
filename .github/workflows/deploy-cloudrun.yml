@@ -92,7 +92,7 @@ jobs:
       # Debug: Print access_token
       - name: Print access_token
         run: |-
-          echo "Access Token: ${{ steps.auth.outputs.access_token }}"
+          echo "Access Token: ${{ toJson(steps.auth) }}"
 
       # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
 
