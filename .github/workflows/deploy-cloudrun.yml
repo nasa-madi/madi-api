@@ -54,8 +54,10 @@ on:
 #   SERVICE: $SERVICE # TODO: update Cloud Run service name
 #   REGION: ${{ vars.REGION }} # TODO: update Cloud Run service region
 
+
 jobs:
   debug:
+    environment: ${{ github.ref_name }}
     runs-on: ubuntu-latest
     steps:
       - name: Debug Outputs 
