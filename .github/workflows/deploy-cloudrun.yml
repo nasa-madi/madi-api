@@ -49,23 +49,23 @@ on:
     branches: [ "main", "develop", "test" ]
 
 jobs:
-  debug:
-    environment: ${{ github.ref_name }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Debug Outputs 
-        run: |
-          echo "env Project ID: ${{ env.PROJECT_ID }}"
-          echo "env Artifact Registry Location: ${{ env.GAR_LOCATION }}"
-          echo "env Service: ${{ env.SERVICE }}"
-          echo "env Region: ${{ env.REGION }}"
-          echo "var Project ID: ${{ vars.PROJECT_ID }}"
-          echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
-          echo "var Service: ${{ vars.SERVICE }}"
-          echo "var Region: ${{ vars.REGION }}"
-          echo "vars : ${{ toJson(vars) }}"
-          echo "env : ${{ toJson(env) }}"
-          echo "secrets : ${{ vars.GCP_CREDENTIALS2 }}"
+  # debug:
+  #   environment: ${{ github.ref_name }}
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Debug Outputs 
+  #       run: |
+  #         echo "env Project ID: ${{ env.PROJECT_ID }}"
+  #         echo "env Artifact Registry Location: ${{ env.GAR_LOCATION }}"
+  #         echo "env Service: ${{ env.SERVICE }}"
+  #         echo "env Region: ${{ env.REGION }}"
+  #         echo "var Project ID: ${{ vars.PROJECT_ID }}"
+  #         echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
+  #         echo "var Service: ${{ vars.SERVICE }}"
+  #         echo "var Region: ${{ vars.REGION }}"
+  #         echo "vars : ${{ toJson(vars) }}"
+  #         echo "env : ${{ toJson(env) }}"
+  #         echo "secrets : ${{ vars.GCP_CREDENTIALS2 }}"
   
   #   # echo "envs : ${{ toJson(github) }}"
   deploy:
@@ -79,22 +79,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      # # NOTE: Alternative option - authentication via credentials json
-      # - name: Google Auth
-      #   id: auth
-      #   uses: 'google-github-actions/auth@v2.0.0'
-      #   with:
-      #     # project_id: ${{ vars.PROJECT_ID }}
-      #     credentials_json: '${{ vars.GCP_CREDENTIALS2 }}'
-
-
-      # # Debug: Print access_token
-      # - name: Print access_token
-      #   run: |-
-      #     echo "Access Token: ${{ toJson(steps.auth) }}"
-
-      # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
 
       
       # Authenticate Docker to Google Cloud Artifact Registry
@@ -110,8 +94,8 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -t "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}:${{ github.sha }}" ./
-          docker push "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}:${{ github.sha }}"
+          docker build -t "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}" ./
+          docker push     "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}"
 
       # END - Docker auth and build
 
