@@ -1,10 +1,8 @@
 import { KnexService } from '@feathersjs/knex'
 import { fetchEmbedding } from '../utils/fetchEmbedding.js'
-// const commons_1 = require("@feathersjs/commons");
 
 
 
-import commons from "@feathersjs/feathers/node_modules/@feathersjs/commons/lib/index.js"
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class ChunksService extends KnexService {
 
