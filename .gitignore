@@ -48,3 +48,10 @@ docs/.vitepress/cache
 
 config/local.*
 cache/*
+
+#####
+client_secret*
+dev-credentials.json
+gcloud_scratch.sh
+test.sh
+test.groovy
