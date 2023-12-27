@@ -17,14 +17,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build and Push Container
-        uses: whoan/docker-build-with-cache-action@v5
-        with:
-          username: _json_key
-          password: ${{ vars.GCP_CREDENTIALS2 }}
-          registry: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}
-          image_name: ${{ vars.SERVICE }}
-          image_tag: ${{ github.sha }}
+      # - name: Build and Push Container
+      #   uses: whoan/docker-build-with-cache-action@v5
+      #   with:
+      #     username: _json_key
+      #     password: ${{ vars.GCP_CREDENTIALS2 }}
+      #     registry: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}
+      #     image_name: ${{ vars.SERVICE }}
+      #     image_tag: ${{ github.sha }}
 
       - name: Authenticate with Google
         uses: 'google-github-actions/auth@v2'
@@ -32,21 +32,20 @@ jobs:
           project_id: ${{ vars.PROJECT_ID }}
           credentials_json: ${{ vars.GCP_CREDENTIALS2 }}
 
+          
       - name: Inject Google Secret
-        uses: google-github-actions/get-secretmanager-secrets@v2.0.0
-        with:
-          secrets: |-
-            develop-env-overrides:./config/local.yml
-          run: 'echo "${{ secrets.develop-env-overrides }}" > ./config/local.yml'
-        
-      - name: Deploy to Cloud Run
-        id: deploy
-        uses: google-github-actions/deploy-cloudrun@v2.0.0
-        with:
-          project_id: ${{ vars.PROJECT_ID }}
-          service: ${{ vars.SERVICE }}
-          region: ${{ vars.REGION }}
-          image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
+        run: |-
+          gcloud secrets versions access latest --secret "develop-env-overrides" > ./config/local.yml;
+          ls -la;
+
+      # - name: Deploy to Cloud Run
+      #   id: deploy
+      #   uses: google-github-actions/deploy-cloudrun@v2.0.0
+      #   with:
+      #     project_id: ${{ vars.PROJECT_ID }}
+      #     service: ${{ vars.SERVICE }}
+      #     region: ${{ vars.REGION }}
+      #     image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           
 
           
