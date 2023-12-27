@@ -97,7 +97,7 @@ jobs:
       #     docker build -t "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}" ./
       #     docker push     "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}"
 
-      
+      # gcloud run deploy api-hq-madi-dev-4ebd7d92 --quiet --image us-east4-docker.pkg.dev/hq-madi-dev-4ebd7d92/docker-images/api-hq-madi-dev-4ebd7d92:0cbf65055b3a63be43f60fdad44efb035610358f --update-labels managed-by=github-actions,commit-sha=0cbf65055b3a63be43f60fdad44efb035610358f --platform managed --format json --region us-east4 --project hq-madi-dev-4ebd7d92
 
       # END - Docker auth and build
 
@@ -108,7 +108,8 @@ jobs:
           password: ${{ vars.GCP_CREDENTIALS2 }}
           registry: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}
           image_name: ${{ vars.SERVICE }}
-          push_image_and_stages: false
+          image_tag: ${{ github.sha }}
+          # push_image_and_stages: false
 
 
       - uses: 'google-github-actions/auth@v2'
