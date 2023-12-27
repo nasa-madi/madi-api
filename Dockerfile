@@ -8,6 +8,4 @@ RUN npm install
 
 COPY . ./
 
-ENV PORT 3030
-
 CMD ["npm", "start"]
