@@ -108,6 +108,7 @@ jobs:
           password: ${{ vars.GCP_CREDENTIALS2 }}
           registry: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}
           image_name: ${{ vars.SERVICE }}
+          push_image_and_stages: false
 
 
       - uses: 'google-github-actions/auth@v2'
