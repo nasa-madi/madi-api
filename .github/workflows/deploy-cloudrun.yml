@@ -97,6 +97,12 @@ jobs:
       #     docker build -t "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}" ./
       #     docker push     "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}"
 
+      
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: ${{ vars.PROJECT_ID }}
+          credentials_json: ${{ vars.GCP_CREDENTIALS2 }}
+
       - name: Build and Push Container
         uses: whoan/docker-build-with-cache-action@v5
         with:
