@@ -36,7 +36,10 @@ jobs:
       - name: Inject Google Secret
         run: |-
           gcloud secrets versions access latest --secret "develop-env-overrides" > ./config/local.yml;
+          cd config;
           ls -la;
+          echo "Contents of local.yml";
+          cat local.yml;
 
       # - name: Deploy to Cloud Run
       #   id: deploy
