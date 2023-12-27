@@ -105,5 +105,6 @@ jobs:
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           secrets: |
             ${{ vars.KEYS }}
+          
 
           
