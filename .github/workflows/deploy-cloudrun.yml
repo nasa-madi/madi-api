@@ -85,6 +85,7 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v2.0.0'
         with:
+          # project_id: ${{ vars.PROJECT_ID }}
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
 
