@@ -49,9 +49,9 @@ on:
     branches: [ "main", "develop", "test" ]
 
 env:
-  PROJECT_ID: ${{ vars.PROJECT_ID }} # TODO: update Google Cloud project id
+  PROJECT_ID: $PROJECT_ID # TODO: update Google Cloud project id
   GAR_LOCATION: ${{ vars.GAR_LOCATION }} # TODO: update Artifact Registry location
-  SERVICE: ${{ vars.SERVICE }} # TODO: update Cloud Run service name
+  SERVICE: $SERVICE # TODO: update Cloud Run service name
   REGION: ${{ vars.REGION }} # TODO: update Cloud Run service region
 
 jobs:
