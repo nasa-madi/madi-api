@@ -13,6 +13,9 @@ import { services } from './services/index.js'
 
 const app = koa(feathers())
 
+import { openaiConfig } from './services/utils/cacheProxy.js'
+
+
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))
 
@@ -23,6 +26,8 @@ app.use(serveStatic('specifications/build'))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser())
+app.configure(openaiConfig)
+
 
 // Configure services and transports
 app.configure(rest())

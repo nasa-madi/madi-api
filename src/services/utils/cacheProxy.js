@@ -7,20 +7,6 @@ import crypto from 'crypto';
 dotenv.config()
 
 let openai 
-
-const getOpenai = (app)=>{
-
-  process.env.OPENAI_API_KEY = app.get('openai').key
-  
-  if(app.get('openai').use_proxy){
-      // console.log('Cache Enabled')
-      openai = openaiProxy
-  }else{
-      // console.log('Cache Disabled')
-      openai = openaiNormal
-  }
-}
-
 const openaiProxy = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   fetch: async (url, options)=>{
@@ -53,11 +39,18 @@ const openaiProxy = new OpenAI({
   }
 });
 
-const openaiNormal = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-})
+export const openaiConfig = (app)=>{
+    // process.env.OPENAI_API_KEY = app.get('openai').key
+    if(app.get('openai').use_proxy){
+        // console.log('Cache Enabled')
+        openai = openaiProxy
+    }else{
+        // console.log('Cache Disabled')
+        const openaiNormal = new OpenAI({
+          apiKey: app.get('openai').key
+        })
+        openai = openaiNormal
+    }
+}
 
-
-
-
-export default getOpenai
+export default openai
