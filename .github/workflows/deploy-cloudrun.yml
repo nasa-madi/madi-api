@@ -103,5 +103,3 @@ jobs:
           service: ${{ vars.SERVICE }}
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
-          env_vars:
-            PORT=3030
