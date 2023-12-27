@@ -68,10 +68,11 @@ jobs:
           echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
           echo "var Service: ${{ vars.SERVICE }}"
           echo "var Region: ${{ vars.REGION }}"
-          echo "var : ${{ toJson(vars) }}"
-          echo "envs : ${{ toJson(env) }}"
-          echo "envs : ${{ toJson(github) }}"
+          echo "vars : ${{ toJson(vars) }}"
+          echo "env : ${{ toJson(env) }}"
+          echo "secrets : ${{ toJson(secrets) }}"
   
+    # echo "envs : ${{ toJson(github) }}"
   deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
