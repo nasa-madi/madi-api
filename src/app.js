@@ -30,7 +30,7 @@ app.configure(openaiConfig)
 
 
 // Configure services and transports
-app.configure(rest())
+app.configure(rest(app.get('baseUrl')))
 
 app.configure(postgresql)
 
