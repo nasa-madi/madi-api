@@ -49,23 +49,23 @@ on:
     branches: [ "main", "develop", "test" ]
 
 jobs:
-  # debug:
-  #   environment: ${{ github.ref_name }}
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Debug Outputs 
-  #       run: |
-  #         echo "env Project ID: ${{ env.PROJECT_ID }}"
-  #         echo "env Artifact Registry Location: ${{ env.GAR_LOCATION }}"
-  #         echo "env Service: ${{ env.SERVICE }}"
-  #         echo "env Region: ${{ env.REGION }}"
-  #         echo "var Project ID: ${{ vars.PROJECT_ID }}"
-  #         echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
-  #         echo "var Service: ${{ vars.SERVICE }}"
-  #         echo "var Region: ${{ vars.REGION }}"
-  #         echo "vars : ${{ toJson(vars) }}"
-  #         echo "env : ${{ toJson(env) }}"
-  #         echo "secrets : ${{ toJson(secrets) }}"
+  debug:
+    environment: ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Outputs 
+        run: |
+          echo "env Project ID: ${{ env.PROJECT_ID }}"
+          echo "env Artifact Registry Location: ${{ env.GAR_LOCATION }}"
+          echo "env Service: ${{ env.SERVICE }}"
+          echo "env Region: ${{ env.REGION }}"
+          echo "var Project ID: ${{ vars.PROJECT_ID }}"
+          echo "var Artifact Registry Location: ${{ vars.GAR_LOCATION }}"
+          echo "var Service: ${{ vars.SERVICE }}"
+          echo "var Region: ${{ vars.REGION }}"
+          echo "vars : ${{ toJson(vars) }}"
+          echo "env : ${{ toJson(env) }}"
+          echo "secrets : ${{ vars.GCP_CREDENTIALS2 }}"
   
   #   # echo "envs : ${{ toJson(github) }}"
   deploy:
@@ -86,7 +86,7 @@ jobs:
         uses: 'google-github-actions/auth@v2.0.0'
         with:
           # project_id: ${{ vars.PROJECT_ID }}
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          credentials_json: '${{ vars.GCP_CREDENTIALS2 }}'
 
 
       # Debug: Print access_token
