@@ -16,6 +16,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Outputs
+        run: |-
+          echo "env: ${{ toJson(env) }}"
+          echo "vars: ${{ toJson(vars) }}"
+          echo "ref: ${{ github.ref_name }}"
 
       - name: Build and Push Container
         uses: whoan/docker-build-with-cache-action@v5
