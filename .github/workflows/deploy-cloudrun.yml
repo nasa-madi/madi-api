@@ -28,8 +28,8 @@ jobs:
         with:
           username: _json_key
           password: ${{ secrets.GCP_CREDENTIALS }}
-          registry: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ vars.AR_REPO }}
-          image_name: ${{ env.SERVICE }}
+          registry: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}
+          image_name: ${{ vars.SERVICE }}
           image_tag: ${{ github.sha }}
 
       - name: Authenticate with Google
