@@ -46,10 +46,9 @@ packages/**/lib
 *.sqlite
 docs/.vitepress/cache
 
-config/local.*
-config/develop.*
-config/production.*
-config/test.*
+config/*
+!config/default.yml
+!config/custom-environment-variables.json
 
 cache/*
 

@@ -32,7 +32,7 @@
     window.onload = function() {
         var xhr = new XMLHttpRequest();
 
-        xhr.open('GET', './spec.json');
+        xhr.open('GET', '/api/spec.json');
         xhr.onload = () => {
             if (xhr.status >= 200 && xhr.status < 300) {
                 var spec = JSON.parse(xhr.response);
