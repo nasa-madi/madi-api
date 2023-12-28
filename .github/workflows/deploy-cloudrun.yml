@@ -7,7 +7,7 @@ on:
 jobs:
   deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
-    environment: ${{ github.ref_name }}
+    environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name }}
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -17,11 +17,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Outputs
-        run: |-
-          echo "env: ${{ toJson(env) }}"
-          echo "vars: ${{ toJson(vars) }}"
-          echo "ref: ${{ github.ref_name }}"
+      # - name: Outputs
+      #   run: |-
+      #     echo "env: ${{ toJson(env) }}"
+      #     echo "vars: ${{ toJson(vars) }}"
+      #     echo "ref: ${{ github.ref_name }}"
 
       - name: Build and Push Container
         uses: whoan/docker-build-with-cache-action@v5
