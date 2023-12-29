@@ -23,7 +23,7 @@ export const chatSchema = Type.Object(
     stream: Type.Optional(Type.Boolean()),
     temperature: Type.Optional(Type.Number({ minimum: 0, maximum: 2 })),
     top_p: Type.Optional(Type.Number()),
-    tools: Type.Optional(Type.Array(Type.String())),
+    tools: Type.Optional(Type.Array(Type.Object({}))),
     tool_choice: Type.Optional(Type.RegEx(/^none|auto|(0|[1-9]\d{0,}|)$/)),
   },
   { $id: 'Chat', additionalProperties: false }

@@ -1,6 +1,3 @@
-import openai from "../utils/cacheProxy.js";
-
-
 // /*******************************
 //  * MERGING
 //  *******************************/
@@ -48,9 +45,6 @@ import openai from "../utils/cacheProxy.js";
 
 
 
-export const makeRequest = async (options)=>{
-  return openai.chat.completions.create(options);
-}
 
 
 
@@ -95,6 +89,11 @@ export class ChatService {
     this.options = options
   }
 
+  async makeRequest(options){
+    let openai = this.options?.app?.openai
+    return openai.chat.completions.create(options);
+  }
+  
 
   async create(data, params) {
     console.log('\n\n************ CHAT SERVICE CREATE')
@@ -111,7 +110,7 @@ export class ChatService {
       tool_choice
     }
     // return data
-    return makeRequest(options)
+    return this.makeRequest(options)
     // let writeFunc = (text)=>console.log(text)
     // return await processConversation(messages, tools, tool_choice, writeFunc)
   }

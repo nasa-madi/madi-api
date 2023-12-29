@@ -4,10 +4,9 @@ import fs from 'fs';
 import {default as fetch, Response } from 'node-fetch';
 import crypto from 'crypto';
 
-dotenv.config()
+// dotenv.config()
 
-let openai 
-const openaiProxy = (app)=> new OpenAI({
+const openaiProxy = (app) => new OpenAI({
   apiKey: app.get('openai').key,
   fetch: async (url, options)=>{
 
@@ -39,18 +38,20 @@ const openaiProxy = (app)=> new OpenAI({
   }
 });
 
+
 export const openaiConfig = (app)=>{
-    // process.env.OPENAI_API_KEY = app.get('openai').key
+    let openai;
     if(app.get('openai').use_proxy){
-        // console.log('Cache Enabled')
+        console.log('Cache Enabled')
         openai = openaiProxy(app)
     }else{
-        // console.log('Cache Disabled')
+        console.log('Cache Disabled')
         const openaiNormal = new OpenAI({
           apiKey: app.get('openai').key
         })
         openai = openaiNormal
     }
+    app.openai = openai
 }
 
-export default openai
+export default openaiConfig

@@ -3,7 +3,8 @@ import { authenticate } from '@feathersjs/authentication'
 import { PassThrough } from 'stream';
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { Transform } from 'stream'
-
+// import { iff } from 'feathers-hooks-common'
+import { logger } from '../../logger.js';
 import {
   chatDataValidator,
   chatQueryValidator,
@@ -13,12 +14,15 @@ import {
   chatQueryResolver
 } from './chats.schema.js'
 import { ChatService, getOptions } from './chats.class.js'
-
+import fs from 'fs'
+import messageReducer from '../utils/deltaReducer.js';
 export const chatPath = 'chats'
 export const chatMethods = ['create']
 
 export * from './chats.class.js'
 export * from './chats.schema.js'
+
+const ARTIFICIAL_DELAY_MS = 0;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -42,51 +46,58 @@ export const chat = (app) => {
           "Cache-Control": "no-cache",
           "Connection": "keep-alive",
         });
-    
-        const stream = new PassThrough();
-    
-        ctx.status = 200;
-        ctx.body = stream;
-    
-        let counter = 0
-        const interval = setInterval(() => {
-            console.log('counter', counter)
-            counter++;
-            if(counter > 20){
-              clearInterval(interval)
+        ctx.res.flushHeaders()
+
+        let chunkStream = ctx.body;
+        ctx.body = new PassThrough();
+        let message = {}
+
+        let writeData = async () => {
+            for await (let chunk of chunkStream) {
+                message = messageReducer(message, chunk)
+                ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
+                await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
+                console.log(chunk)
+                if(chunk?.choices?.[0]?.finish_reason === 'stop'){
+                    ctx.body.end();
+                    return
+                }
             }
-            stream.write(`data: ${new Date()}\n\n`);
-          }, 1000);
-          
-        stream.on("close", () => {
-            clearInterval(interval);
-        });
+        };
+        writeData()
+        .then(()=>{
+          logger.info(JSON.stringify(message))
+        })
+       
       }]
     }
   })
+ 
+  const iff = (condition, hook) =>async (context, next) => {
+    const isCondition = typeof condition == 'function' ? condition(context) : !!condition;
+    return isCondition ? hook(context, next) : next()
+  }
+
+        
   // Initialize hooks=
   app.service(chatPath).hooks({
     around: {
       all: [
         // authenticate('jwt'),
-        // schemaHooks.resolveExternal(chatExternalResolver),
-        // schemaHooks.resolveResult(chatResolver)
+        iff(!app.get('openai').stream,schemaHooks.resolveExternal(chatExternalResolver)),
+        iff(!app.get('openai').stream,schemaHooks.resolveResult(chatResolver)) 
       ]
     },
     before: {
       all: [
-        // schemaHooks.validateQuery(chatQueryValidator), schemaHooks.resolveQuery(chatQueryResolver)
+        schemaHooks.validateQuery(chatQueryValidator), schemaHooks.resolveQuery(chatQueryResolver)
       ],
       create: [
-        // schemaHooks.validateData(chatDataValidator), schemaHooks.resolveData(chatDataResolver)
+        schemaHooks.validateData(chatDataValidator), schemaHooks.resolveData(chatDataResolver)
       ],
     },
     after: {
-      all: [
-        (ctx,a,b)=>{
-          console.log('in the hook')
-        }
-      ]
+      all: []
     },
     error: {
       all: []
