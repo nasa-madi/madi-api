@@ -7,11 +7,14 @@ security:
 servers:
   - url: http://localhost:3030
     description: test server locally
+  - url: http://localhost:4010
+    description: Prism local server
 paths:
   /chunks:
     post:
       summary: Your POST endpoint
       tags: []
+      operationId: post-chunks
       responses:
         "201":
           description: a set of chunks
@@ -20,9 +23,6 @@ paths:
               schema:
                 type: string
                 description: what prism should use to pick the example
-                examples:
-                  - example_chunk_post_res_0:
-                      value: example_chunk_post_res_0
           content:
             application/json:
               schema:
@@ -39,7 +39,6 @@ paths:
               examples:
                 example_chunk_post_res_0_error:
                   $ref: '#/components/examples/example_chunk_post_res_0_error'
-      operationId: post-chunks
       requestBody:
         content:
           application/json:
@@ -48,7 +47,6 @@ paths:
             examples:
               example_chunk_post_req_0:
                 $ref: '#/components/examples/example_chunk_post_req_0'
-
 components:
   examples:
     example_chunk_post_req_0:
@@ -61,7 +59,7 @@ components:
         pageContent: content
         documentId: 1
         documentIndex: 0
-        toolName: "{{tool_name}}"
+        toolName: "get_current_weather"
     example_chunk_post_res_0:
       summary: 'Chunk created'
       value:
@@ -75,7 +73,7 @@ components:
         documentId: 1
         documentIndex: 0
         toolName: get_current_weather
-        userId: 1
+        userId: "1"
     example_chunk_post_res_0_error:
       summary: 'Error - Duplicate pageContent'
       value:
@@ -133,19 +131,6 @@ components:
       example: "2017-07-21T17:32:28.000Z"
     Chunk:
       type: object
-      x-examples:
-        Example 1:
-          id: 55
-          hash: 040f06fd774092478d450774f5ba30c5da78acc8
-          metadata:
-            int: 1
-            bool: true
-            string: this is the text
-          pageContent: content
-          documentId: 1
-          documentIndex: 0
-          toolName: get_current_weather
-          userId: 1
       properties:
         id:
           type: integer

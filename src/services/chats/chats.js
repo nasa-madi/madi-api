@@ -37,38 +37,40 @@ export const chat = (app) => {
     events: [],
     koa: {
       after: [async (ctx, next) => {    
-        ctx.request.socket.setTimeout(0);
-        ctx.req.socket.setNoDelay(true);
-        ctx.req.socket.setKeepAlive(true);
-    
-        ctx.set({
-          "Content-Type": "text/event-stream",
-          "Cache-Control": "no-cache",
-          "Connection": "keep-alive",
-        });
-        ctx.res.flushHeaders()
+        if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
+          // ctx.body is an async iterable
+          ctx.request.socket.setTimeout(0);
+          ctx.req.socket.setNoDelay(true);
+          ctx.req.socket.setKeepAlive(true);
+      
+          ctx.set({
+            "Content-Type": "text/event-stream",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+          });
+          ctx.res.flushHeaders()
 
-        let chunkStream = ctx.body;
-        ctx.body = new PassThrough();
-        let message = {}
+          let chunkStream = ctx.body;
+          ctx.body = new PassThrough();
+          let message = {}
 
-        let writeData = async () => {
-            for await (let chunk of chunkStream) {
-                message = messageReducer(message, chunk)
-                ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
-                await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
-                console.log(chunk)
-                if(chunk?.choices?.[0]?.finish_reason === 'stop'){
-                    ctx.body.end();
-                    return
-                }
-            }
-        };
-        writeData()
-        .then(()=>{
-          logger.info(JSON.stringify(message))
-        })
-       
+          let writeData = async () => {
+              for await (let chunk of chunkStream) {
+                  message = messageReducer(message, chunk)
+                  ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
+                  await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
+                  console.log(chunk)
+                  if(chunk?.choices?.[0]?.finish_reason === 'stop'){
+                      ctx.body.end();
+                      return
+                  }
+              }
+          };
+          writeData()
+          .then(()=>{
+            logger.info(JSON.stringify(message))
+          })
+        }
       }]
     }
   })

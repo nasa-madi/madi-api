@@ -1,30 +1,33 @@
+tags:
+  - name: Tool
+    description: Tools available to the authenticated user that will be included with their chat completion requests.
 paths:
   /tools:
     get:
       tags:
-        - tools
+        - Tool
       summary: Returns tool based on query parameters
       operationId: getTools
-      description: By including the appropriate query string parameters, search &
-        return relevant tools records.
+      description: By including the appropriate query string parameters, search &return relevant tools records.
       responses:
         "200":
-          $ref: "#/components/responses/Tool_FJS_Array"
+          description: includes the results matching query string criteria
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ToolResponseArray"
+              examples:
+                "example_tool_get_res_0":
+                  $ref: "#/components/examples/example_tool_get_res_0"
         "400":
           description: bad input parameter
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        default:
-          description: default response if no query string parameters are sent
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
     post:
       tags:
-        - tools
+        - Tool
       summary: adds a new tool
       operationId: postTool
       description: Creates a new tool
@@ -32,16 +35,10 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
-                - $ref: "#/components/schemas/Tool"
-                - type: array
-                  items:
-                    $ref: "#/components/schemas/Tool"
+              $ref: "#/components/schemas/Tool"
             examples:
-              "${names}_post_default":
-                $ref: "#/components/examples/tools_post_default"
-              "${names}_post_array":
-                $ref: "#/components/examples/tools_post_array"
+              "example_tool_post_req_0":
+                $ref: "#/components/examples/example_tool_post_req_0"
       responses:
         "201":
           description: Tool created.
@@ -54,10 +51,9 @@ paths:
                     items:
                       $ref: "#/components/schemas/Tool"
               examples:
-                "${names}_post_default":
-                  $ref: "#/components/examples/tools_post_default"
-                "${names}_post_array":
-                  $ref: "#/components/examples/tools_post_array"
+                example_tool_post_res_0:
+                  $ref: "#/components/examples/example_tool_post_res_0"
+                  
         "400":
           description: invalid input, object invalid
           content:
@@ -70,42 +66,55 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        default:
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
 components:
-  responses:
-    Tool_FJS_Array:
-      description: includes the results matching query string criteria
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - total
-              - limit
-              - skip
-              - data
-            properties:
-              total:
-                type: integer
-              limit:
-                type: integer
-              skip:
-                type: integer
-              data:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Tool"
-          examples:
-            tools_default:
-              $ref: "#/components/examples/tools_default"
-            tools_zero:
-              $ref: "#/components/examples/tools_zero"
   schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: false
+        param:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: false
+      required:
+        - type
+        - message
+        - param
+        - code
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/Error"
+      required:
+        - error
+    
+    ToolResponseArray:
+      type: object
+      required:
+        - total
+        - limit
+        - skip
+        - data
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        skip:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tool"
+    
     Tool:
       type: object
       properties:
@@ -138,45 +147,44 @@ components:
               - id
               - type
               - function
+
+
   examples:
-    tools_zero:
+    example_tool_get_res_0:
       value:
-        total: 0
+        total: 1
         limit: 10
         skip: 0
-        data: []
-    tools_default:
+        data: 
+          - type: function
+            function:
+              name: get_current_weather
+              description: Get the current weather in a given location
+              parameters:
+                type: object
+                properties:
+                  location:
+                    type: string
+                    description: The city and state, e.g. San Francisco, CA
+                  unit:
+                    type: string
+                    enum:
+                    - celsius
+                    - fahrenheit
+                required:
+                - location
+    
+    example_tool_post_req_0:
       value:
-        total: 2
-        limit: 10
-        skip: 0
-        data: tools_default
-    tools_post_default:
-      value:
-        id: call_1
+        id: call_XXXXIYR0JNTemNUCW8oBcxzpD
         type: function
         function:
           name: get_current_weather
           arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
-    tools_post_array:
+
+    example_tool_post_res_0:
       value:
-        - id: call_1
-          type: function
-          function:
-            name: get_current_weather
-            arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
-        - id: call_2
-          type: function
-          function:
-            name: get_current_weather
-            arguments:
-              location: San Francisco, CA
-              unit: celsius
-    tools_id_default:
-      $ref: "#/components/examples/tools_post_default"
-    tools_id_patch_default:
-      value: {}
-    tools_id_put_default:
-      value: null
-    tools_id_delete_default:
-      value: null
+        role: tool
+        tool_call_id: call_JWCIYR0JNTemNUCW8oBcxzpD
+        name: get_current_weather
+        content: '{"location": "San Francisco, CA", "temperature": "10", "unit": "celsius" }'

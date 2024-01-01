@@ -9,7 +9,7 @@ export const chatSchema = Type.Object(
     messages: Type.Array(
       Type.Object({
         role:Type.String(),
-        content:Type.String()
+        content:Type.Union([Type.Null(), Type.String()])
       })),
     model: Type.Optional(Type.String()),
     frequency_penalty: Type.Optional(Type.Number()),

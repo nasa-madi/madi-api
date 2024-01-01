@@ -1,34 +1,42 @@
-openapi: 3.0.0
+openapi: 3.1.0
 info:
   title: ""
   version: 0.0.1
-security: []
+security:
+  - bearerAuth: []
+tags:
+  $ref#chats: ../../src/services/chats/chats.spec.yml#tags
+  # $ref#documents: ../../src/services/documents/documents.spec.yml#tags
+  $ref#tool: ../../src/services/tools/tools.spec.yml#tags
+  # $ref#user: ../../src/services/users/users.spec.yml#tags
+  # $ref#upload: ../../src/services/uploads/uploads.spec.yml#tags
 paths:
   $ref#chat: ../../src/services/chats/chats.spec.yml#paths
-  $ref#document: ../../src/services/documents/documents.spec.yml#paths
+  # $ref#document: ../../src/services/documents/documents.spec.yml#paths
   $ref#tool: ../../src/services/tools/tools.spec.yml#paths
-  $ref#user: ../../src/services/users/users.spec.yml#paths
-  $ref#upload: ../../src/services/uploads/uploads.spec.yml#paths
+  # $ref#user: ../../src/services/users/users.spec.yml#paths
+  # $ref#upload: ../../src/services/uploads/uploads.spec.yml#paths
 components:
   securitySchemes: {}
   requestBodies: {}
   responses:
     $ref#chat: ../../src/services/chats/chats.spec.yml#/components/responses
-    $ref#document: ../../src/services/documents/documents.spec.yml#/components/responses
+    # $ref#document: ../../src/services/documents/documents.spec.yml#/components/responses
     $ref#tool: ../../src/services/tools/tools.spec.yml#/components/responses
-    $ref#user: ../../src/services/users/users.spec.yml#/components/responses
-    $ref#upload: ../../src/services/uploads/uploads.spec.yml#/components/responses
+    # $ref#user: ../../src/services/users/users.spec.yml#/components/responses
+    # $ref#upload: ../../src/services/uploads/uploads.spec.yml#/components/responses
   examples:
     $ref#chat: ../../src/services/chats/chats.spec.yml#/components/examples
-    $ref#document: ../../src/services/documents/documents.spec.yml#/components/examples
+    # $ref#document: ../../src/services/documents/documents.spec.yml#/components/examples
     $ref#tool: ../../src/services/tools/tools.spec.yml#/components/examples
-    $ref#user: ../../src/services/users/users.spec.yml#/components/examples
-    $ref#upload: ../../src/services/uploads/uploads.spec.yml#/components/examples
+    # $ref#user: ../../src/services/users/users.spec.yml#/components/examples
+    # $ref#upload: ../../src/services/uploads/uploads.spec.yml#/components/examples
   schemas:
     $ref#errors: ./errors.yml#/components/schemas
     $ref#shared: ./shared.yml#/components/schemas
     $ref#chat: ../../src/services/chats/chats.spec.yml#/components/schemas
-    $ref#document: ../../src/services/documents/documents.spec.yml#/components/schemas
+    # $ref#document: ../../src/services/documents/documents.spec.yml#/components/schemas
     $ref#tool: ../../src/services/tools/tools.spec.yml#/components/schemas
-    $ref#user: ../../src/services/users/users.spec.yml#/components/schemas
-    $ref#upload: ../../src/services/uploads/uploads.spec.yml#/components/schemas
+    # $ref#user: ../../src/services/users/users.spec.yml#/components/schemas
+    # $ref#upload: ../../src/services/uploads/uploads.spec.yml#/components/schemas
+

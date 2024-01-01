@@ -27,9 +27,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -447,7 +444,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"Hello!\"\n        }\n    ]\n}",
+							"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"Hello\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -464,7 +461,68 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Chat",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"messages\": [\n        {\n            \"role\": \"user\",\n            \"content\": \"Hello?\"\n        }\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/chats",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"chats"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/event-stream"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 29 Dec 2023 14:55:20 GMT"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "data: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"role\":\"assistant\",\"content\":\"\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"Hello\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"!\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" How\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" can\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" I\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" assist\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" you\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\" today\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{\"content\":\"?\"},\"logprobs\":null,\"finish_reason\":null}]}\n\ndata: {\"id\":\"chatcmpl-8b8YZGHwA2W5lHlvFLjDXIgIpKJ15\",\"object\":\"chat.completion.chunk\",\"created\":1703861719,\"model\":\"gpt-4-1106-preview\",\"system_fingerprint\":\"fp_3905aa4f79\",\"choices\":[{\"index\":0,\"delta\":{},\"logprobs\":null,\"finish_reason\":\"stop\"}]}\n\n"
+						}
+					]
 				},
 				{
 					"name": "Chat with 1 Function",
@@ -1022,7 +1080,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\":1,\n    \"documentIndex\":0\n}",
+							"raw": "{\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0,\n    \"toolName\": \"{{tool_name}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1039,7 +1097,128 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Create Short Chunk",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0,\n    \"toolName\": \"{{tool_name}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/chunks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"chunks"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "224"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 20 Dec 2023 14:36:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 56,\n    \"hash\": \"040f06fd774092478d450774f5ba30c5da78acc8\",\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0,\n    \"toolName\": \"get_current_weather\",\n    \"userId\": \"19\"\n}"
+						},
+						{
+							"name": "Create Duplicate Chunk (Error)",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/chunks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"chunks"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "269"
+								},
+								{
+									"key": "Date",
+									"value": "Wed, 20 Dec 2023 14:36:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"BadRequest\",\n    \"message\": \"Error resolving data\",\n    \"code\": 400,\n    \"className\": \"bad-request\",\n    \"data\": {\n        \"embedding\": {\n            \"name\": \"BadRequest\",\n            \"message\": \"Hash 040f06fd774092478d450774f5ba30c5da78acc8 is not unique. Document already exists.\",\n            \"code\": 400,\n            \"className\": \"bad-request\"\n        }\n    }\n}"
+						}
+					]
 				},
 				{
 					"name": "Create Duplicate Chunk (Error)",

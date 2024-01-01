@@ -9,7 +9,7 @@ export async function up(knex) {
     table.integer('documentIndex')
     table.text('toolName')
     table.text('userId')
-    table.specificType('embedding','vector')
+    table.specificType('embedding','vector(1536)')
     table.index(knex.raw('embedding vector_cosine_ops'), 'embedding_index', 'hnsw');
   })
 }
