@@ -1,4 +1,11 @@
-
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+security:
+  - bearerAuth: []
 tags:
   - name: Chat
     description: Given a list of messages comprising a conversation, the model will return a response.
@@ -17,15 +24,15 @@ paths:
               $ref: "#/components/schemas/ChatRequest"
             examples:
               example_chat_post_req_0:
-                $ref: '#/components/examples/example_chat_post_req_0'
+                $ref: "#/components/examples/example_chat_post_req_0"
               example_chat_post_req_1:
-                $ref: '#/components/examples/example_chat_post_req_1'
+                $ref: "#/components/examples/example_chat_post_req_1"
               example_chat_post_req_2:
-                $ref: '#/components/examples/example_chat_post_req_2'
+                $ref: "#/components/examples/example_chat_post_req_2"
               example_chat_post_req_3:
-                $ref: '#/components/examples/example_chat_post_req_3'
+                $ref: "#/components/examples/example_chat_post_req_3"
               example_chat_post_req_4:
-                $ref: '#/components/examples/example_chat_post_req_4'
+                $ref: "#/components/examples/example_chat_post_req_4"
       responses:
         "201":
           description: Chat created.
@@ -40,19 +47,19 @@ paths:
                 $ref: "#/components/schemas/ChatResponse"
               examples:
                 example_chat_post_res_0:
-                  $ref: '#/components/examples/example_chat_post_res_0'
+                  $ref: "#/components/examples/example_chat_post_res_0"
                 example_chat_post_res_1:
-                  $ref: '#/components/examples/example_chat_post_res_1'
+                  $ref: "#/components/examples/example_chat_post_res_1"
                 example_chat_post_res_2:
-                  $ref: '#/components/examples/example_chat_post_res_2'
+                  $ref: "#/components/examples/example_chat_post_res_2"
                 example_chat_post_res_3:
-                  $ref: '#/components/examples/example_chat_post_res_3'
+                  $ref: "#/components/examples/example_chat_post_res_3"
             text/event-stream:
               schema:
                 $ref: "#/components/schemas/ChatResponse"
               examples:
                 example_chat_post_res_4:
-                  $ref: '#/components/examples/example_chat_post_res_4'
+                  $ref: "#/components/examples/example_chat_post_res_4"
         "400":
           description: invalid input, object invalid
           content:
@@ -148,7 +155,7 @@ components:
           - role: user
             content: Hello!
     tool_desc_0:
-      summary: 'Tool Description'
+      summary: Tool Description
       value:
         type: function
         function:
@@ -437,7 +444,7 @@ components:
               message:
                 $ref: "#/components/schemas/ChatResponseMessage"
         usage:
-            $ref: '#/components/schemas/ChatResponseUsage'
+            $ref: "#/components/schemas/ChatResponseUsage"
         system_fingerprint:
           type: string
           description: |

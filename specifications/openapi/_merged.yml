@@ -1,0 +1,1938 @@
+openapi: 3.1.0
+info:
+  title: ''
+  version: 0.0.1
+security:
+  - bearerAuth: []
+tags:
+  - name: Chat
+    description: >-
+      Given a list of messages comprising a conversation, the model will return
+      a response.
+  - name: Tool
+    description: >-
+      Tools available to the authenticated user that will be included with their
+      chat completion requests.
+paths:
+  /chats:
+    post:
+      tags:
+        - Chat
+      summary: adds a new chat
+      operationId: postChat
+      description: Creates a new chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role:
+                        type: string
+                      content:
+                        type: string
+                    required:
+                      - role
+                      - content
+                stream:
+                  type: boolean
+                  description: >
+                    If set, partial message deltas will be sent, like in
+                    ChatGPT. Tokens will be sent as data-only [server-sent
+                    events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
+                    as they become available, with the stream terminated by a
+                    `data: [DONE]` message.
+                temperature:
+                  description: >
+                    How much variance to allow in how the model generates new
+                    text.  Two is the max variance.  Zero nears deterministic
+                    results.
+                  minimum: 0
+                  maximum: 2
+                  type: number
+                tools:
+                  type: array
+                  description: >
+                    A list of tools the model may call. Currently, only
+                    functions are supported as a tool. Use this to provide a
+                    list of functions the model may generate JSON inputs for.
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                          - function
+                        description: >-
+                          The type of the tool. Currently, only `function` is
+                          supported.
+                      function:
+                        type: object
+                        properties:
+                          description:
+                            type: string
+                            description: >-
+                              A description of what the tool does, used by the
+                              model to choose when and how to call the tool.
+                          name:
+                            type: string
+                            description: >-
+                              The name of the tool to be called. Must be a-z,
+                              A-Z, 0-9, or contain underscores and dashes, with
+                              a maximum length of 64.
+                          parameters:
+                            type: object
+                            description: >-
+                              The parameters the functions accepts, described as
+                              a JSON Schema object. See the
+                              [guide](/docs/guides/text-generation/function-calling)
+                              for examples, and the [JSON Schema
+                              reference](https://json-schema.org/understanding-json-schema/)
+                              for documentation about the format. 
+
+
+                              Omitting `parameters` defines a function with an
+                              empty parameter list.
+                            additionalProperties: true
+                        required:
+                          - name
+                    required:
+                      - type
+                      - function
+                tool_choice:
+                  description: >
+                    Controls which (if any) function is called by the model.
+                    `none` means the model will not call a function and instead
+                    generates a message. `auto` means the model can pick between
+                    generating a message or calling a function. Specifying a
+                    particular function via `{"type: "function", "function":
+                    {"name": "my_function"}}` forces the model to call that
+                    function.
+
+                    `none` is the default when no functions are present. `auto`
+                    is the default if functions are present.
+                  type: string
+                  pattern: ^none|auto|(0|[1-9]\d{0,}|)$
+              required:
+                - messages
+            examples:
+              example_chat_post_req_0:
+                summary: Create a chat
+                value:
+                  messages:
+                    - role: user
+                      content: Hello!
+              example_chat_post_req_1:
+                summary: Chat with 1 Function
+                value:
+                  messages:
+                    - role: user
+                      content: What's the weather like in San Francisco?
+                  tools:
+                    - summary: Tool Description
+                      value:
+                        type: function
+                        function:
+                          name: get_current_weather
+                          description: Get the current weather in a given location
+                          parameters:
+                            type: object
+                            properties:
+                              location:
+                                type: string
+                                description: The city and state, e.g. San Francisco, CA
+                              unit:
+                                type: string
+                                enum:
+                                  - celsius
+                                  - fahrenheit
+                            required:
+                              - location
+                  tool_choice: auto
+              example_chat_post_req_2:
+                summary: Chat with Multiple Function Calls
+                value:
+                  messages:
+                    - role: user
+                      content: >-
+                        What's the weather like in San Francisco, Tokyo, and
+                        Paris?
+                  tools:
+                    - summary: Tool Description
+                      value:
+                        type: function
+                        function:
+                          name: get_current_weather
+                          description: Get the current weather in a given location
+                          parameters:
+                            type: object
+                            properties:
+                              location:
+                                type: string
+                                description: The city and state, e.g. San Francisco, CA
+                              unit:
+                                type: string
+                                enum:
+                                  - celsius
+                                  - fahrenheit
+                            required:
+                              - location
+                  tool_choice: auto
+              example_chat_post_req_3:
+                summary: Chat with tool responses
+                value:
+                  messages:
+                    - role: user
+                      content: >-
+                        What's the weather like in San Francisco, Tokyo, and
+                        Paris?
+                    - role: assistant
+                      content: null
+                      tool_calls:
+                        - id: call_JWCIYR0JNTemNUCW8oBcxzpD
+                          type: function
+                          function:
+                            name: get_current_weather
+                            arguments: >-
+                              {"location": "San Francisco, CA", "unit":
+                              "fahrenheit"}
+                        - id: call_lDt6SOByBTN9wzsvB1ZmQoi2
+                          type: function
+                          function:
+                            name: get_current_weather
+                            arguments: '{"location": "Tokyo, Japan", "unit": "celsius"}'
+                        - id: call_cm0OKeliN5yr8qrsQ1kchtmM
+                          type: function
+                          function:
+                            name: get_current_weather
+                            arguments: '{"location": "Paris, France", "unit": "celsius"}'
+                    - role: tool
+                      tool_call_id: call_JWCIYR0JNTemNUCW8oBcxzpD
+                      name: get_current_weather
+                      content: >-
+                        {"location": "San Francisco, CA", "temperature": "10",
+                        "unit": "celsius" }
+                    - role: tool
+                      tool_call_id: call_lDt6SOByBTN9wzsvB1ZmQoi2
+                      name: get_current_weather
+                      content: >-
+                        {"location": "Tokyo, Japan", "temperature": "10",
+                        "unit": "celsius" }
+                    - role: tool
+                      tool_call_id: call_cm0OKeliN5yr8qrsQ1kchtmM
+                      name: get_current_weather
+                      content: >-
+                        {"location": "Paris, France", "temperature": "10",
+                        "unit": "celsius" }
+                  tools:
+                    - summary: Tool Description
+                      value:
+                        type: function
+                        function:
+                          name: get_current_weather
+                          description: Get the current weather in a given location
+                          parameters:
+                            type: object
+                            properties:
+                              location:
+                                type: string
+                                description: The city and state, e.g. San Francisco, CA
+                              unit:
+                                type: string
+                                enum:
+                                  - celsius
+                                  - fahrenheit
+                            required:
+                              - location
+                  tool_choice: auto
+              example_chat_post_req_4:
+                summary: Create a chat and stream response
+                value:
+                  stream: true
+                  messages:
+                    - role: user
+                      content: Hello!
+      responses:
+        '201':
+          description: Chat created.
+          headers:
+            Prefer:
+              schema:
+                type: string
+                description: what prism should use to pick the example
+          content:
+            application/json:
+              schema:
+                type: object
+                description: >-
+                  Represents a chat completion response returned by model, based
+                  on the provided input.
+                properties:
+                  model:
+                    type: string
+                    description: The model used for the chat completion.
+                  object:
+                    type: string
+                    description: The object type, which is always `chat.completion`.
+                    enum:
+                      - chat.completion
+                  created:
+                    type: integer
+                    description: >-
+                      The Unix timestamp (in seconds) of when the chat
+                      completion was created.
+                  id:
+                    type: string
+                    description: A unique identifier for the chat completion.
+                  choices:
+                    type: array
+                    description: >-
+                      A list of chat completion choices. Can be more than one if
+                      `n` is greater than 1.
+                    items:
+                      type: object
+                      required:
+                        - finish_reason
+                        - index
+                        - message
+                        - logprobs
+                      properties:
+                        finish_reason:
+                          type: string
+                          description: >
+                            The reason the model stopped generating tokens. This
+                            will be `stop` if the model hit a natural stop point
+                            or a provided stop sequence,
+
+                            `length` if the maximum number of tokens specified
+                            in the request was reached,
+
+                            `content_filter` if content was omitted due to a
+                            flag from our content filters,
+
+                            `tool_calls` if the model called a tool, or
+                            `function_call` (deprecated) if the model called a
+                            function.
+                          enum:
+                            - stop
+                            - length
+                            - tool_calls
+                            - content_filter
+                            - function_call
+                        index:
+                          type: integer
+                          description: The index of the choice in the list of choices.
+                        message:
+                          type: object
+                          description: A chat completion message generated by the model.
+                          properties:
+                            content:
+                              type: string
+                              description: The contents of the message.
+                              nullable: true
+                            tool_calls:
+                              type: array
+                              description: >-
+                                The tool calls generated by the model, such as
+                                function calls.
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                    description: The ID of the tool call.
+                                  type:
+                                    type: string
+                                    enum:
+                                      - function
+                                    description: >-
+                                      The type of the tool. Currently, only
+                                      `function` is supported.
+                                  function:
+                                    type: object
+                                    description: The function that the model called.
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: The name of the function to call.
+                                      arguments:
+                                        type: string
+                                        description: >-
+                                          The arguments to call the function with,
+                                          as generated by the model in JSON
+                                          format. Note that the model does not
+                                          always generate valid JSON, and may
+                                          hallucinate parameters not defined by
+                                          your function schema. Validate the
+                                          arguments in your code before calling
+                                          your function.
+                                    required:
+                                      - name
+                                      - arguments
+                                required:
+                                  - id
+                                  - type
+                                  - function
+                            role:
+                              type: string
+                              enum:
+                                - assistant
+                              description: The role of the author of this message.
+                          required:
+                            - role
+                            - content
+                  usage:
+                    type: object
+                    properties:
+                      prompt_tokens:
+                        type: integer
+                      completion_tokens:
+                        type: integer
+                      total_tokens:
+                        type: integer
+                  system_fingerprint:
+                    type: string
+                    description: >
+                      This fingerprint represents the backend configuration that
+                      the model runs with.
+
+
+                      Can be used in conjunction with the `seed` request
+                      parameter to understand when backend changes have been
+                      made that might impact determinism.
+                required:
+                  - choices
+                  - created
+                  - id
+                  - model
+                  - object
+              examples:
+                example_chat_post_res_0:
+                  summary: Respond to Chat
+                  value:
+                    id: chatcmpl-8bhzwKbG8q0qYnNW0DmJx9f77y3IL
+                    object: chat.completion
+                    created: 1703997956
+                    model: gpt-4-1106-preview
+                    choices:
+                      - index: 0
+                        message:
+                          role: assistant
+                          content: Hello! How can I assist you today?
+                        logprobs: null
+                        finish_reason: stop
+                    usage:
+                      prompt_tokens: 8
+                      completion_tokens: 9
+                      total_tokens: 17
+                    system_fingerprint: fp_3905aa4f79
+                example_chat_post_res_1:
+                  summary: Respond with 1 Function Call
+                  value:
+                    id: chatcmpl-8bi1tPqKo4sQYhsLfxitBwU63gIRC
+                    object: chat.completion
+                    created: 1703998077
+                    model: gpt-4-1106-preview
+                    choices:
+                      - index: 0
+                        message:
+                          role: assistant
+                          content: null
+                          tool_calls:
+                            - id: call_fbS3elUtrWV5xubND3NaDpSS
+                              type: function
+                              function:
+                                name: get_current_weather
+                                arguments: >-
+                                  {"location":"San Francisco,
+                                  CA","unit":"celsius"}
+                        logprobs: null
+                        finish_reason: tool_calls
+                    usage:
+                      prompt_tokens: 83
+                      completion_tokens: 23
+                      total_tokens: 106
+                    system_fingerprint: fp_3905aa4f79
+                example_chat_post_res_2:
+                  summary: Respond with Multiple Function Calls
+                  value:
+                    id: chatcmpl-8bi3MzWBnOeVnZJYfOOyVAd978C6j
+                    object: chat.completion
+                    created: 1703998168
+                    model: gpt-4-1106-preview
+                    choices:
+                      - index: 0
+                        message:
+                          role: assistant
+                          content: null
+                          tool_calls:
+                            - id: call_k3YLTd4jC5gTFwXneuTakbSv
+                              type: function
+                              function:
+                                name: get_current_weather
+                                arguments: '{"location": "San Francisco, CA"}'
+                            - id: call_RRE9R9AuhtLvqoHEVmywhMiJ
+                              type: function
+                              function:
+                                name: get_current_weather
+                                arguments: '{"location": "Tokyo"}'
+                            - id: call_CQWPfgIyY78pv7VKwA01Sgs1
+                              type: function
+                              function:
+                                name: get_current_weather
+                                arguments: '{"location": "Paris"}'
+                        logprobs: null
+                        finish_reason: tool_calls
+                    usage:
+                      prompt_tokens: 88
+                      completion_tokens: 112
+                      total_tokens: 200
+                    system_fingerprint: fp_3905aa4f79
+                example_chat_post_res_3:
+                  summary: Respond with Tool Answer
+                  value:
+                    id: chatcmpl-8buKKGPdv9U2lAs9Y8qmXXhShHe8Z
+                    object: chat.completion
+                    created: 1704045348
+                    model: gpt-4-1106-preview
+                    choices:
+                      - index: 0
+                        message:
+                          role: assistant
+                          content: |-
+                            Here is the current weather in the three cities:
+
+                            - San Francisco, CA: **50°F** (10°C)
+                            - Tokyo, Japan: **10°C**
+                            - Paris, France: **10°C**
+                        logprobs: null
+                        finish_reason: stop
+                    usage:
+                      prompt_tokens: 248
+                      completion_tokens: 43
+                      total_tokens: 291
+                    system_fingerprint: fp_3905aa4f79
+            text/event-stream:
+              schema:
+                type: object
+                description: >-
+                  Represents a chat completion response returned by model, based
+                  on the provided input.
+                properties:
+                  model:
+                    type: string
+                    description: The model used for the chat completion.
+                  object:
+                    type: string
+                    description: The object type, which is always `chat.completion`.
+                    enum:
+                      - chat.completion
+                  created:
+                    type: integer
+                    description: >-
+                      The Unix timestamp (in seconds) of when the chat
+                      completion was created.
+                  id:
+                    type: string
+                    description: A unique identifier for the chat completion.
+                  choices:
+                    type: array
+                    description: >-
+                      A list of chat completion choices. Can be more than one if
+                      `n` is greater than 1.
+                    items:
+                      type: object
+                      required:
+                        - finish_reason
+                        - index
+                        - message
+                        - logprobs
+                      properties:
+                        finish_reason:
+                          type: string
+                          description: >
+                            The reason the model stopped generating tokens. This
+                            will be `stop` if the model hit a natural stop point
+                            or a provided stop sequence,
+
+                            `length` if the maximum number of tokens specified
+                            in the request was reached,
+
+                            `content_filter` if content was omitted due to a
+                            flag from our content filters,
+
+                            `tool_calls` if the model called a tool, or
+                            `function_call` (deprecated) if the model called a
+                            function.
+                          enum:
+                            - stop
+                            - length
+                            - tool_calls
+                            - content_filter
+                            - function_call
+                        index:
+                          type: integer
+                          description: The index of the choice in the list of choices.
+                        message:
+                          type: object
+                          description: A chat completion message generated by the model.
+                          properties:
+                            content:
+                              type: string
+                              description: The contents of the message.
+                              nullable: true
+                            tool_calls:
+                              type: array
+                              description: >-
+                                The tool calls generated by the model, such as
+                                function calls.
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                    description: The ID of the tool call.
+                                  type:
+                                    type: string
+                                    enum:
+                                      - function
+                                    description: >-
+                                      The type of the tool. Currently, only
+                                      `function` is supported.
+                                  function:
+                                    type: object
+                                    description: The function that the model called.
+                                    properties:
+                                      name:
+                                        type: string
+                                        description: The name of the function to call.
+                                      arguments:
+                                        type: string
+                                        description: >-
+                                          The arguments to call the function with,
+                                          as generated by the model in JSON
+                                          format. Note that the model does not
+                                          always generate valid JSON, and may
+                                          hallucinate parameters not defined by
+                                          your function schema. Validate the
+                                          arguments in your code before calling
+                                          your function.
+                                    required:
+                                      - name
+                                      - arguments
+                                required:
+                                  - id
+                                  - type
+                                  - function
+                            role:
+                              type: string
+                              enum:
+                                - assistant
+                              description: The role of the author of this message.
+                          required:
+                            - role
+                            - content
+                  usage:
+                    type: object
+                    properties:
+                      prompt_tokens:
+                        type: integer
+                      completion_tokens:
+                        type: integer
+                      total_tokens:
+                        type: integer
+                  system_fingerprint:
+                    type: string
+                    description: >
+                      This fingerprint represents the backend configuration that
+                      the model runs with.
+
+
+                      Can be used in conjunction with the `seed` request
+                      parameter to understand when backend changes have been
+                      made that might impact determinism.
+                required:
+                  - choices
+                  - created
+                  - id
+                  - model
+                  - object
+              examples:
+                example_chat_post_res_4:
+                  summary: Respond with Streaming Answer
+                  value: >-
+                    data:{"id":"chatcmpl-8b8pAlYDB3sWFnRG1tpPqpF56XUHY","object":"chat.completion.chunk","created":1703862748,"model":"gpt-4-1106-preview","system_fingerprint":"fp_3905aa4f79","choices":[{"index":0,"delta":{"role":"assistant","content":""},"logprobs":null,"finish_reason":null}]}
+
+
+                    data:{"id":"chatcmpl-8b8pAlYDB3sWFnRG1tpPqpF56XUHY","object":"chat.completion.chunk","created":1703862748,"model":"gpt-4-1106-preview","system_fingerprint":"fp_3905aa4f79","choices":[{"index":0,"delta":{"content":"Hello"},"logprobs":null,"finish_reason":null}]}
+
+
+                    data:{"id":"chatcmpl-8b8pAlYDB3sWFnRG1tpPqpF56XUHY","object":"chat.completion.chunk","created":1703862748,"model":"gpt-4-1106-preview","system_fingerprint":"fp_3905aa4f79","choices":[{"index":0,"delta":{"content":"!"},"logprobs":null,"finish_reason":null}]}
+        '400':
+          description: invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    nullable: true
+                  message:
+                    type: string
+                    nullable: false
+                  param:
+                    type: string
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: false
+                required:
+                  - type
+                  - message
+                  - param
+                  - code
+        '409':
+          description: that chat already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    nullable: true
+                  message:
+                    type: string
+                    nullable: false
+                  param:
+                    type: string
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: false
+                required:
+                  - type
+                  - message
+                  - param
+                  - code
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    nullable: true
+                  message:
+                    type: string
+                    nullable: false
+                  param:
+                    type: string
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: false
+                required:
+                  - type
+                  - message
+                  - param
+                  - code
+  /tools:
+    get:
+      tags:
+        - Tool
+      summary: Returns tool based on query parameters
+      operationId: getTools
+      description: >-
+        By including the appropriate query string parameters, search &return
+        relevant tools records.
+      responses:
+        '200':
+          description: includes the results matching query string criteria
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - total
+                  - limit
+                  - skip
+                  - data
+                properties:
+                  total:
+                    type: integer
+                  limit:
+                    type: integer
+                  skip:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tool_calls:
+                          type: array
+                          items:
+                            additionalProperties: false
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              type:
+                                type: string
+                              function:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                  arguments:
+                                    anyOf:
+                                      - type: string
+                                      - type: object
+                                        properties: {}
+                                required:
+                                  - name
+                                  - arguments
+                            required:
+                              - id
+                              - type
+                              - function
+              examples:
+                example_tool_get_res_0:
+                  value:
+                    total: 1
+                    limit: 10
+                    skip: 0
+                    data:
+                      - type: function
+                        function:
+                          name: get_current_weather
+                          description: Get the current weather in a given location
+                          parameters:
+                            type: object
+                            properties:
+                              location:
+                                type: string
+                                description: The city and state, e.g. San Francisco, CA
+                              unit:
+                                type: string
+                                enum:
+                                  - celsius
+                                  - fahrenheit
+                            required:
+                              - location
+        '400':
+          description: bad input parameter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    nullable: true
+                  message:
+                    type: string
+                    nullable: false
+                  param:
+                    type: string
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: false
+                required:
+                  - type
+                  - message
+                  - param
+                  - code
+    post:
+      tags:
+        - Tool
+      summary: adds a new tool
+      operationId: postTool
+      description: Creates a new tool
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tool_calls:
+                  type: array
+                  items:
+                    additionalProperties: false
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                      function:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                          arguments:
+                            anyOf:
+                              - type: string
+                              - type: object
+                                properties: {}
+                        required:
+                          - name
+                          - arguments
+                    required:
+                      - id
+                      - type
+                      - function
+            examples:
+              example_tool_post_req_0:
+                value:
+                  id: call_XXXXIYR0JNTemNUCW8oBcxzpD
+                  type: function
+                  function:
+                    name: get_current_weather
+                    arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
+      responses:
+        '201':
+          description: Tool created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      tool_calls:
+                        type: array
+                        items:
+                          additionalProperties: false
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            type:
+                              type: string
+                            function:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                arguments:
+                                  anyOf:
+                                    - type: string
+                                    - type: object
+                                      properties: {}
+                              required:
+                                - name
+                                - arguments
+                          required:
+                            - id
+                            - type
+                            - function
+                  - type: array
+                    items:
+                      type: object
+                      properties:
+                        tool_calls:
+                          type: array
+                          items:
+                            additionalProperties: false
+                            type: object
+                            properties:
+                              id:
+                                type: string
+                              type:
+                                type: string
+                              function:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                  arguments:
+                                    anyOf:
+                                      - type: string
+                                      - type: object
+                                        properties: {}
+                                required:
+                                  - name
+                                  - arguments
+                            required:
+                              - id
+                              - type
+                              - function
+              examples:
+                example_tool_post_res_0:
+                  value:
+                    role: tool
+                    tool_call_id: call_JWCIYR0JNTemNUCW8oBcxzpD
+                    name: get_current_weather
+                    content: >-
+                      {"location": "San Francisco, CA", "temperature": "10",
+                      "unit": "celsius"}
+        '400':
+          description: invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    nullable: true
+                  message:
+                    type: string
+                    nullable: false
+                  param:
+                    type: string
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: false
+                required:
+                  - type
+                  - message
+                  - param
+                  - code
+        '409':
+          description: that tool already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    nullable: true
+                  message:
+                    type: string
+                    nullable: false
+                  param:
+                    type: string
+                    nullable: true
+                  type:
+                    type: string
+                    nullable: false
+                required:
+                  - type
+                  - message
+                  - param
+                  - code
+components:
+  securitySchemes: {}
+  requestBodies: {}
+  responses:
+    $ref#chat: ../../src/services/chats/chats.spec.yml#/components/responses
+    $ref#tool: ../../src/services/tools/tools.spec.yml#/components/responses
+  examples:
+    example_chat_post_req_0:
+      summary: Create a chat
+      value:
+        messages:
+          - role: user
+            content: Hello!
+    example_chat_post_req_1:
+      summary: Chat with 1 Function
+      value:
+        messages:
+          - role: user
+            content: What's the weather like in San Francisco?
+        tools:
+          - summary: Tool Description
+            value:
+              type: function
+              function:
+                name: get_current_weather
+                description: Get the current weather in a given location
+                parameters:
+                  type: object
+                  properties:
+                    location:
+                      type: string
+                      description: The city and state, e.g. San Francisco, CA
+                    unit:
+                      type: string
+                      enum:
+                        - celsius
+                        - fahrenheit
+                  required:
+                    - location
+        tool_choice: auto
+    example_chat_post_req_2:
+      summary: Chat with Multiple Function Calls
+      value:
+        messages:
+          - role: user
+            content: What's the weather like in San Francisco, Tokyo, and Paris?
+        tools:
+          - summary: Tool Description
+            value:
+              type: function
+              function:
+                name: get_current_weather
+                description: Get the current weather in a given location
+                parameters:
+                  type: object
+                  properties:
+                    location:
+                      type: string
+                      description: The city and state, e.g. San Francisco, CA
+                    unit:
+                      type: string
+                      enum:
+                        - celsius
+                        - fahrenheit
+                  required:
+                    - location
+        tool_choice: auto
+    example_chat_post_req_3:
+      summary: Chat with tool responses
+      value:
+        messages:
+          - role: user
+            content: What's the weather like in San Francisco, Tokyo, and Paris?
+          - role: assistant
+            content: null
+            tool_calls:
+              - id: call_JWCIYR0JNTemNUCW8oBcxzpD
+                type: function
+                function:
+                  name: get_current_weather
+                  arguments: '{"location": "San Francisco, CA", "unit": "fahrenheit"}'
+              - id: call_lDt6SOByBTN9wzsvB1ZmQoi2
+                type: function
+                function:
+                  name: get_current_weather
+                  arguments: '{"location": "Tokyo, Japan", "unit": "celsius"}'
+              - id: call_cm0OKeliN5yr8qrsQ1kchtmM
+                type: function
+                function:
+                  name: get_current_weather
+                  arguments: '{"location": "Paris, France", "unit": "celsius"}'
+          - role: tool
+            tool_call_id: call_JWCIYR0JNTemNUCW8oBcxzpD
+            name: get_current_weather
+            content: >-
+              {"location": "San Francisco, CA", "temperature": "10", "unit":
+              "celsius" }
+          - role: tool
+            tool_call_id: call_lDt6SOByBTN9wzsvB1ZmQoi2
+            name: get_current_weather
+            content: >-
+              {"location": "Tokyo, Japan", "temperature": "10", "unit":
+              "celsius" }
+          - role: tool
+            tool_call_id: call_cm0OKeliN5yr8qrsQ1kchtmM
+            name: get_current_weather
+            content: >-
+              {"location": "Paris, France", "temperature": "10", "unit":
+              "celsius" }
+        tools:
+          - summary: Tool Description
+            value:
+              type: function
+              function:
+                name: get_current_weather
+                description: Get the current weather in a given location
+                parameters:
+                  type: object
+                  properties:
+                    location:
+                      type: string
+                      description: The city and state, e.g. San Francisco, CA
+                    unit:
+                      type: string
+                      enum:
+                        - celsius
+                        - fahrenheit
+                  required:
+                    - location
+        tool_choice: auto
+    example_chat_post_req_4:
+      summary: Create a chat and stream response
+      value:
+        stream: true
+        messages:
+          - role: user
+            content: Hello!
+    tool_desc_0:
+      summary: Tool Description
+      value:
+        type: function
+        function:
+          name: get_current_weather
+          description: Get the current weather in a given location
+          parameters:
+            type: object
+            properties:
+              location:
+                type: string
+                description: The city and state, e.g. San Francisco, CA
+              unit:
+                type: string
+                enum:
+                  - celsius
+                  - fahrenheit
+            required:
+              - location
+    example_chat_post_res_0:
+      summary: Respond to Chat
+      value:
+        id: chatcmpl-8bhzwKbG8q0qYnNW0DmJx9f77y3IL
+        object: chat.completion
+        created: 1703997956
+        model: gpt-4-1106-preview
+        choices:
+          - index: 0
+            message:
+              role: assistant
+              content: Hello! How can I assist you today?
+            logprobs: null
+            finish_reason: stop
+        usage:
+          prompt_tokens: 8
+          completion_tokens: 9
+          total_tokens: 17
+        system_fingerprint: fp_3905aa4f79
+    example_chat_post_res_1:
+      summary: Respond with 1 Function Call
+      value:
+        id: chatcmpl-8bi1tPqKo4sQYhsLfxitBwU63gIRC
+        object: chat.completion
+        created: 1703998077
+        model: gpt-4-1106-preview
+        choices:
+          - index: 0
+            message:
+              role: assistant
+              content: null
+              tool_calls:
+                - id: call_fbS3elUtrWV5xubND3NaDpSS
+                  type: function
+                  function:
+                    name: get_current_weather
+                    arguments: '{"location":"San Francisco, CA","unit":"celsius"}'
+            logprobs: null
+            finish_reason: tool_calls
+        usage:
+          prompt_tokens: 83
+          completion_tokens: 23
+          total_tokens: 106
+        system_fingerprint: fp_3905aa4f79
+    example_chat_post_res_2:
+      summary: Respond with Multiple Function Calls
+      value:
+        id: chatcmpl-8bi3MzWBnOeVnZJYfOOyVAd978C6j
+        object: chat.completion
+        created: 1703998168
+        model: gpt-4-1106-preview
+        choices:
+          - index: 0
+            message:
+              role: assistant
+              content: null
+              tool_calls:
+                - id: call_k3YLTd4jC5gTFwXneuTakbSv
+                  type: function
+                  function:
+                    name: get_current_weather
+                    arguments: '{"location": "San Francisco, CA"}'
+                - id: call_RRE9R9AuhtLvqoHEVmywhMiJ
+                  type: function
+                  function:
+                    name: get_current_weather
+                    arguments: '{"location": "Tokyo"}'
+                - id: call_CQWPfgIyY78pv7VKwA01Sgs1
+                  type: function
+                  function:
+                    name: get_current_weather
+                    arguments: '{"location": "Paris"}'
+            logprobs: null
+            finish_reason: tool_calls
+        usage:
+          prompt_tokens: 88
+          completion_tokens: 112
+          total_tokens: 200
+        system_fingerprint: fp_3905aa4f79
+    example_chat_post_res_3:
+      summary: Respond with Tool Answer
+      value:
+        id: chatcmpl-8buKKGPdv9U2lAs9Y8qmXXhShHe8Z
+        object: chat.completion
+        created: 1704045348
+        model: gpt-4-1106-preview
+        choices:
+          - index: 0
+            message:
+              role: assistant
+              content: |-
+                Here is the current weather in the three cities:
+
+                - San Francisco, CA: **50°F** (10°C)
+                - Tokyo, Japan: **10°C**
+                - Paris, France: **10°C**
+            logprobs: null
+            finish_reason: stop
+        usage:
+          prompt_tokens: 248
+          completion_tokens: 43
+          total_tokens: 291
+        system_fingerprint: fp_3905aa4f79
+    example_chat_post_res_4:
+      summary: Respond with Streaming Answer
+      value: >-
+        data:{"id":"chatcmpl-8b8pAlYDB3sWFnRG1tpPqpF56XUHY","object":"chat.completion.chunk","created":1703862748,"model":"gpt-4-1106-preview","system_fingerprint":"fp_3905aa4f79","choices":[{"index":0,"delta":{"role":"assistant","content":""},"logprobs":null,"finish_reason":null}]}
+
+
+        data:{"id":"chatcmpl-8b8pAlYDB3sWFnRG1tpPqpF56XUHY","object":"chat.completion.chunk","created":1703862748,"model":"gpt-4-1106-preview","system_fingerprint":"fp_3905aa4f79","choices":[{"index":0,"delta":{"content":"Hello"},"logprobs":null,"finish_reason":null}]}
+
+
+        data:{"id":"chatcmpl-8b8pAlYDB3sWFnRG1tpPqpF56XUHY","object":"chat.completion.chunk","created":1703862748,"model":"gpt-4-1106-preview","system_fingerprint":"fp_3905aa4f79","choices":[{"index":0,"delta":{"content":"!"},"logprobs":null,"finish_reason":null}]}
+    example_tool_get_res_0:
+      value:
+        total: 1
+        limit: 10
+        skip: 0
+        data:
+          - type: function
+            function:
+              name: get_current_weather
+              description: Get the current weather in a given location
+              parameters:
+                type: object
+                properties:
+                  location:
+                    type: string
+                    description: The city and state, e.g. San Francisco, CA
+                  unit:
+                    type: string
+                    enum:
+                      - celsius
+                      - fahrenheit
+                required:
+                  - location
+    example_tool_post_req_0:
+      value:
+        id: call_XXXXIYR0JNTemNUCW8oBcxzpD
+        type: function
+        function:
+          name: get_current_weather
+          arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
+    example_tool_post_res_0:
+      value:
+        role: tool
+        tool_call_id: call_JWCIYR0JNTemNUCW8oBcxzpD
+        name: get_current_weather
+        content: >-
+          {"location": "San Francisco, CA", "temperature": "10", "unit":
+          "celsius"}
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: false
+        param:
+          type: string
+          nullable: true
+        type:
+          type: string
+          nullable: false
+      required:
+        - type
+        - message
+        - param
+        - code
+    IntegerId:
+      type: integer
+      readOnly: true
+      minimum: 0
+      maximum: 100000000
+      example: 1
+    Uuid:
+      type: string
+      format: uuid
+      example: 74738ff5-5367-5958-9aee-98fffdcd1876
+    ObjectId:
+      anyOf:
+        - type: string
+          example: 74738ff5-5367-5958-9aee-98fffdcd1876
+        - type: object
+          properties: {}
+          additionalProperties: false
+    ISODate:
+      type: string
+      format: date-time
+      example: '2017-07-21T17:32:28.000Z'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              nullable: true
+            message:
+              type: string
+              nullable: false
+            param:
+              type: string
+              nullable: true
+            type:
+              type: string
+              nullable: false
+          required:
+            - type
+            - message
+            - param
+            - code
+      required:
+        - error
+    ChatRequest:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+              content:
+                type: string
+            required:
+              - role
+              - content
+        stream:
+          type: boolean
+          description: >
+            If set, partial message deltas will be sent, like in ChatGPT. Tokens
+            will be sent as data-only [server-sent
+            events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format)
+            as they become available, with the stream terminated by a `data:
+            [DONE]` message.
+        temperature:
+          description: >
+            How much variance to allow in how the model generates new text.  Two
+            is the max variance.  Zero nears deterministic results.
+          minimum: 0
+          maximum: 2
+          type: number
+        tools:
+          type: array
+          description: >
+            A list of tools the model may call. Currently, only functions are
+            supported as a tool. Use this to provide a list of functions the
+            model may generate JSON inputs for.
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum:
+                  - function
+                description: The type of the tool. Currently, only `function` is supported.
+              function:
+                type: object
+                properties:
+                  description:
+                    type: string
+                    description: >-
+                      A description of what the tool does, used by the model to
+                      choose when and how to call the tool.
+                  name:
+                    type: string
+                    description: >-
+                      The name of the tool to be called. Must be a-z, A-Z, 0-9,
+                      or contain underscores and dashes, with a maximum length
+                      of 64.
+                  parameters:
+                    type: object
+                    description: >-
+                      The parameters the functions accepts, described as a JSON
+                      Schema object. See the
+                      [guide](/docs/guides/text-generation/function-calling) for
+                      examples, and the [JSON Schema
+                      reference](https://json-schema.org/understanding-json-schema/)
+                      for documentation about the format. 
+
+
+                      Omitting `parameters` defines a function with an empty
+                      parameter list.
+                    additionalProperties: true
+                required:
+                  - name
+            required:
+              - type
+              - function
+        tool_choice:
+          description: >
+            Controls which (if any) function is called by the model. `none`
+            means the model will not call a function and instead generates a
+            message. `auto` means the model can pick between generating a
+            message or calling a function. Specifying a particular function via
+            `{"type: "function", "function": {"name": "my_function"}}` forces
+            the model to call that function.
+
+            `none` is the default when no functions are present. `auto` is the
+            default if functions are present.
+          type: string
+          pattern: ^none|auto|(0|[1-9]\d{0,}|)$
+      required:
+        - messages
+    ChatRequestTool:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - function
+          description: The type of the tool. Currently, only `function` is supported.
+        function:
+          type: object
+          properties:
+            description:
+              type: string
+              description: >-
+                A description of what the tool does, used by the model to choose
+                when and how to call the tool.
+            name:
+              type: string
+              description: >-
+                The name of the tool to be called. Must be a-z, A-Z, 0-9, or
+                contain underscores and dashes, with a maximum length of 64.
+            parameters:
+              type: object
+              description: >-
+                The parameters the functions accepts, described as a JSON Schema
+                object. See the
+                [guide](/docs/guides/text-generation/function-calling) for
+                examples, and the [JSON Schema
+                reference](https://json-schema.org/understanding-json-schema/)
+                for documentation about the format. 
+
+
+                Omitting `parameters` defines a function with an empty parameter
+                list.
+              additionalProperties: true
+          required:
+            - name
+      required:
+        - type
+        - function
+    ChatRequestToolObject:
+      type: object
+      properties:
+        description:
+          type: string
+          description: >-
+            A description of what the tool does, used by the model to choose
+            when and how to call the tool.
+        name:
+          type: string
+          description: >-
+            The name of the tool to be called. Must be a-z, A-Z, 0-9, or contain
+            underscores and dashes, with a maximum length of 64.
+        parameters:
+          type: object
+          description: >-
+            The parameters the functions accepts, described as a JSON Schema
+            object. See the
+            [guide](/docs/guides/text-generation/function-calling) for examples,
+            and the [JSON Schema
+            reference](https://json-schema.org/understanding-json-schema/) for
+            documentation about the format. 
+
+
+            Omitting `parameters` defines a function with an empty parameter
+            list.
+          additionalProperties: true
+      required:
+        - name
+    ChatResponse:
+      type: object
+      description: >-
+        Represents a chat completion response returned by model, based on the
+        provided input.
+      properties:
+        model:
+          type: string
+          description: The model used for the chat completion.
+        object:
+          type: string
+          description: The object type, which is always `chat.completion`.
+          enum:
+            - chat.completion
+        created:
+          type: integer
+          description: >-
+            The Unix timestamp (in seconds) of when the chat completion was
+            created.
+        id:
+          type: string
+          description: A unique identifier for the chat completion.
+        choices:
+          type: array
+          description: >-
+            A list of chat completion choices. Can be more than one if `n` is
+            greater than 1.
+          items:
+            type: object
+            required:
+              - finish_reason
+              - index
+              - message
+              - logprobs
+            properties:
+              finish_reason:
+                type: string
+                description: >
+                  The reason the model stopped generating tokens. This will be
+                  `stop` if the model hit a natural stop point or a provided
+                  stop sequence,
+
+                  `length` if the maximum number of tokens specified in the
+                  request was reached,
+
+                  `content_filter` if content was omitted due to a flag from our
+                  content filters,
+
+                  `tool_calls` if the model called a tool, or `function_call`
+                  (deprecated) if the model called a function.
+                enum:
+                  - stop
+                  - length
+                  - tool_calls
+                  - content_filter
+                  - function_call
+              index:
+                type: integer
+                description: The index of the choice in the list of choices.
+              message:
+                type: object
+                description: A chat completion message generated by the model.
+                properties:
+                  content:
+                    type: string
+                    description: The contents of the message.
+                    nullable: true
+                  tool_calls:
+                    type: array
+                    description: >-
+                      The tool calls generated by the model, such as function
+                      calls.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the tool call.
+                        type:
+                          type: string
+                          enum:
+                            - function
+                          description: >-
+                            The type of the tool. Currently, only `function` is
+                            supported.
+                        function:
+                          type: object
+                          description: The function that the model called.
+                          properties:
+                            name:
+                              type: string
+                              description: The name of the function to call.
+                            arguments:
+                              type: string
+                              description: >-
+                                The arguments to call the function with, as
+                                generated by the model in JSON format. Note that
+                                the model does not always generate valid JSON,
+                                and may hallucinate parameters not defined by
+                                your function schema. Validate the arguments in
+                                your code before calling your function.
+                          required:
+                            - name
+                            - arguments
+                      required:
+                        - id
+                        - type
+                        - function
+                  role:
+                    type: string
+                    enum:
+                      - assistant
+                    description: The role of the author of this message.
+                required:
+                  - role
+                  - content
+        usage:
+          type: object
+          properties:
+            prompt_tokens:
+              type: integer
+            completion_tokens:
+              type: integer
+            total_tokens:
+              type: integer
+        system_fingerprint:
+          type: string
+          description: >
+            This fingerprint represents the backend configuration that the model
+            runs with.
+
+
+            Can be used in conjunction with the `seed` request parameter to
+            understand when backend changes have been made that might impact
+            determinism.
+      required:
+        - choices
+        - created
+        - id
+        - model
+        - object
+    ChatResponseMessage:
+      type: object
+      description: A chat completion message generated by the model.
+      properties:
+        content:
+          type: string
+          description: The contents of the message.
+          nullable: true
+        tool_calls:
+          type: array
+          description: The tool calls generated by the model, such as function calls.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the tool call.
+              type:
+                type: string
+                enum:
+                  - function
+                description: The type of the tool. Currently, only `function` is supported.
+              function:
+                type: object
+                description: The function that the model called.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the function to call.
+                  arguments:
+                    type: string
+                    description: >-
+                      The arguments to call the function with, as generated by
+                      the model in JSON format. Note that the model does not
+                      always generate valid JSON, and may hallucinate parameters
+                      not defined by your function schema. Validate the
+                      arguments in your code before calling your function.
+                required:
+                  - name
+                  - arguments
+            required:
+              - id
+              - type
+              - function
+        role:
+          type: string
+          enum:
+            - assistant
+          description: The role of the author of this message.
+      required:
+        - role
+        - content
+    ChatResponseMessageToolCalls:
+      type: array
+      description: The tool calls generated by the model, such as function calls.
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            description: The ID of the tool call.
+          type:
+            type: string
+            enum:
+              - function
+            description: The type of the tool. Currently, only `function` is supported.
+          function:
+            type: object
+            description: The function that the model called.
+            properties:
+              name:
+                type: string
+                description: The name of the function to call.
+              arguments:
+                type: string
+                description: >-
+                  The arguments to call the function with, as generated by the
+                  model in JSON format. Note that the model does not always
+                  generate valid JSON, and may hallucinate parameters not
+                  defined by your function schema. Validate the arguments in
+                  your code before calling your function.
+            required:
+              - name
+              - arguments
+        required:
+          - id
+          - type
+          - function
+    ChatResponseMessageToolCall:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the tool call.
+        type:
+          type: string
+          enum:
+            - function
+          description: The type of the tool. Currently, only `function` is supported.
+        function:
+          type: object
+          description: The function that the model called.
+          properties:
+            name:
+              type: string
+              description: The name of the function to call.
+            arguments:
+              type: string
+              description: >-
+                The arguments to call the function with, as generated by the
+                model in JSON format. Note that the model does not always
+                generate valid JSON, and may hallucinate parameters not defined
+                by your function schema. Validate the arguments in your code
+                before calling your function.
+          required:
+            - name
+            - arguments
+      required:
+        - id
+        - type
+        - function
+    ChatResponseMessageToolCallChunk:
+      type: object
+      properties:
+        index:
+          type: integer
+        id:
+          type: string
+          description: The ID of the tool call.
+        type:
+          type: string
+          enum:
+            - function
+          description: The type of the tool. Currently, only `function` is supported.
+        function:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the function to call.
+            arguments:
+              type: string
+              description: >-
+                The arguments to call the function with, as generated by the
+                model in JSON format. Note that the model does not always
+                generate valid JSON, and may hallucinate parameters not defined
+                by your function schema. Validate the arguments in your code
+                before calling your function.
+      required:
+        - index
+    ChatResponseUsage:
+      type: object
+      properties:
+        prompt_tokens:
+          type: integer
+        completion_tokens:
+          type: integer
+        total_tokens:
+          type: integer
+    ToolResponseArray:
+      type: object
+      required:
+        - total
+        - limit
+        - skip
+        - data
+      properties:
+        total:
+          type: integer
+        limit:
+          type: integer
+        skip:
+          type: integer
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              tool_calls:
+                type: array
+                items:
+                  additionalProperties: false
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    type:
+                      type: string
+                    function:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        arguments:
+                          anyOf:
+                            - type: string
+                            - type: object
+                              properties: {}
+                      required:
+                        - name
+                        - arguments
+                  required:
+                    - id
+                    - type
+                    - function
+    Tool:
+      type: object
+      properties:
+        tool_calls:
+          type: array
+          items:
+            additionalProperties: false
+            type: object
+            properties:
+              id:
+                type: string
+              type:
+                type: string
+              function:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  arguments:
+                    anyOf:
+                      - type: string
+                      - type: object
+                        properties: {}
+                required:
+                  - name
+                  - arguments
+            required:
+              - id
+              - type
+              - function

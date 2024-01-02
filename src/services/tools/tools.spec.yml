@@ -1,3 +1,11 @@
+openapi: '3.0.2'
+info:
+  title: API Title
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+security:
+  - bearerAuth: []
 tags:
   - name: Tool
     description: Tools available to the authenticated user that will be included with their chat completion requests.
@@ -51,7 +59,7 @@ paths:
                     items:
                       $ref: "#/components/schemas/Tool"
               examples:
-                example_tool_post_res_0:
+                "example_tool_post_res_0":
                   $ref: "#/components/examples/example_tool_post_res_0"
                   
         "400":
@@ -127,9 +135,7 @@ components:
               id:
                 type: string
               type:
-                anyOf:
-                  - const: function
-                    type: string
+                type: string
               function:
                 type: object
                 properties:
@@ -187,4 +193,4 @@ components:
         role: tool
         tool_call_id: call_JWCIYR0JNTemNUCW8oBcxzpD
         name: get_current_weather
-        content: '{"location": "San Francisco, CA", "temperature": "10", "unit": "celsius" }'
+        content: '{"location": "San Francisco, CA", "temperature": "10", "unit": "celsius"}'
