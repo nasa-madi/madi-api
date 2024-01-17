@@ -34,7 +34,7 @@ export const tool = (app) => {
   app.service(toolPath).hooks({
     around: {
       all: [
-        authenticate('jwt'),
+        // authenticate('jwt'),
         schemaHooks.resolveExternal(toolExternalResolver),
         schemaHooks.resolveResult(toolResolver)
       ]

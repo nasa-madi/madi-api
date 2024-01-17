@@ -47,7 +47,8 @@
     "spec:generate": "npx foas generate",
     "spec:validate": "npx @redocly/cli lint --extends=minimal ./specifications/openapi/_merged.yml",
     "spec:mock": "npx @stoplight/prism-cli mock ./specifications/openapi/_merged.yml",
-    "spec:swagger": "node ./node_modules/feathers-oas/node_modules/swagger-to-static/index.js ./specifications/openapi/_merged.yml ./specifications/build"
+    "spec:swagger": "node ./node_modules/feathers-oas/node_modules/swagger-to-static/index.js ./specifications/openapi/_merged.yml ./specifications/build",
+    "bru-yml": "bru run ./src/services/chats/chats.spec.yml"
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.11",
@@ -67,6 +68,7 @@
     "dotenv": "^16.3.1",
     "feathers-blob": "^2.6.0",
     "feathers-hooks-common": "^8.1.1",
+    "flat": "^6.0.1",
     "fs-blob-store": "^6.0.0",
     "js-yaml": "^4.1.0",
     "knex": "^3.0.1",
@@ -80,16 +82,27 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
+    "@endo/compartment-mapper": "^1.0.1",
+    "@endo/static-module-record": "^1.0.1",
     "@feathersjs/cli": "^5.0.11",
     "@feathersjs/rest-client": "^5.0.11",
     "@stoplight/prism-cli": "^5.5.2",
+    "@tootallnate/quickjs-emscripten": "^0.23.0",
+    "@usebruno/cli": "^1.3.0",
     "axios": "^1.6.2",
+    "chai": "^5.0.0",
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
+    "esbuild": "^0.19.11",
     "feathers-oas": "^0.0.2",
+    "isolated-vm": "^4.6.0",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
+    "patch-package": "^8.0.0",
     "prettier": "^3.1.0",
-    "prism": "^4.1.2"
+    "prism": "^4.1.2",
+    "ses": "^1.0.1",
+    "stacktracey": "^2.1.8",
+    "vm2": "^3.9.19"
   }
 }

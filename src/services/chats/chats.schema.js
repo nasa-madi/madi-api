@@ -24,7 +24,18 @@ export const chatSchema = Type.Object(
     temperature: Type.Optional(Type.Number({ minimum: 0, maximum: 2 })),
     top_p: Type.Optional(Type.Number()),
     tools: Type.Optional(Type.Array(Type.Object({}))),
-    tool_choice: Type.Optional(Type.RegEx(/^none|auto|(0|[1-9]\d{0,}|)$/)),
+    tool_choice: Type.Optional(Type.Union([
+      Type.Union([
+        Type.Literal('auto'),
+        Type.Literal('none'),
+      ]),
+      Type.Object({
+        type: Type.Literal('function'),
+        function: Type.Object({
+          name: Type.String(),
+        }, { required: ['name'] }),
+      }),
+    ]))
   },
   { $id: 'Chat', additionalProperties: false }
 )
