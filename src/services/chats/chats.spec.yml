@@ -3,12 +3,56 @@ info:
   title: API Title
   version: '1.0'
 servers:
-  - url: https://api.server.test/v1
-security:
-  - bearerAuth: []
+  - url: http://localhost:3030
 tags:
   - name: Chat
     description: Given a list of messages comprising a conversation, the model will return a response.
+x-Bru:
+  config:
+    name: bruno-testbench
+    type: collection
+    proxy:
+      enabled: false
+      protocol: http
+      hostname: "{{proxyHostname}}"
+      port: 4000
+      auth:
+        enabled: false
+        username: anoop
+        password: password
+      bypassProxy: ''
+    scripts:
+      moduleWhitelist:
+      - crypto
+      filesystemAccess:
+        allow: true
+    clientCertificates:
+      enabled: true
+      certs: []
+    presets:
+      requestType: http
+      requestUrl: http://localhost:6000
+
+  requests:
+    - body: 
+        $ref: '#/components/examples/example_chat_post_req_0'
+      query: null
+      headers: 
+        Prefer: example_chat_post_res_0
+      script:pre-request: ''
+      script:post-response: ''
+      test: ''
+    - body:
+        $ref: '#/components/examples/example_chat_post_req_1'
+      query: null
+      headers: 
+        Prefer: example_chat_post_res_0
+      script:pre-request: |
+        expect(res.status).to.equal(200);
+      script:post-response: ''
+      tests: |
+        expect(res.status).to.equal(200);
+    
 paths:
   /chats:
     post:
@@ -17,6 +61,7 @@ paths:
       summary: adds a new chat
       operationId: postChat
       description: Creates a new chat
+
       requestBody:
         content:
           application/json:
@@ -25,6 +70,13 @@ paths:
             examples:
               example_chat_post_req_0:
                 $ref: "#/components/examples/example_chat_post_req_0"
+                x-Bru: 
+                  query: null
+                  headers: 
+                    Prefer: example_chat_post_res_0
+                  script:pre-request: ''
+                  script:post-response: ''
+                  test: ''
               example_chat_post_req_1:
                 $ref: "#/components/examples/example_chat_post_req_1"
               example_chat_post_req_2:
@@ -36,11 +88,6 @@ paths:
       responses:
         "201":
           description: Chat created.
-          headers:
-            Prefer:
-              schema:
-                type: string
-                description: what prism should use to pick the example
           content:
             application/json:
               schema:
@@ -351,15 +398,15 @@ components:
           items:
             $ref: "#/components/schemas/ChatRequestTool"
         tool_choice:
-          description: >
-            Controls which (if any) function is called by the model.
-            `none` means the model will not call a function and instead generates a message.
-            `auto` means the model can pick between generating a message or calling a function.
-            Specifying a particular function via `{"type: "function", "function": {"name": "my_function"}}` forces the model to call that function.
-
-            `none` is the default when no functions are present. `auto` is the default if functions are present.
-          type: string
-          pattern: ^none|auto|(0|[1-9]\d{0,}|)$
+          oneOf:
+            - type: string
+              description: >
+                Controls which (if any) function is called by the model.
+                `none` means the model will not call a function and instead generates a message.
+                `auto` means the model can pick between generating a message or calling a function.
+                Specifying a particular function via `{"type: "function", "function": {"name": "my_function"}}` forces the model to call that function.
+              enum: [none, auto]
+            - $ref: "#/components/schemas/ChatCompletionNamedToolChoice"
       required:
         - messages
     
@@ -392,6 +439,25 @@ components:
       required:
         - name
 
+    ChatRequestToolChoice:
+      type: object
+      description: Specifies a tool the model should use. Use to force the model to call a specific function.
+      properties:
+        type:
+          type: string
+          enum: ["function"]
+          description: The type of the tool. Currently, only `function` is supported.
+        function:
+          type: object
+          properties:
+            name:
+              type: string
+              description: The name of the function to call.
+          required:
+            - name
+      required:
+        - type
+        - function
 
 
 

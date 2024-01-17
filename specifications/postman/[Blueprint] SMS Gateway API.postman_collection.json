@@ -1,0 +1,4604 @@
+{
+	"info": {
+		"_postman_id": "48d83307-c02f-467e-b11f-a041486eaad5",
+		"name": "[Blueprint] SMS Gateway API",
+		"description": "This is a rough draft of the SMS Gateway project's external API specification.  Only the /messages endpoint will be exposed to customers.\n\n\nContact Support:\n Email: engineering@cipherhealth.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "35357"
+	},
+	"item": [
+		{
+			"name": "v1",
+			"item": [
+				{
+					"name": "setup (authentication)",
+					"item": [
+						{
+							"name": "GET key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    // Structure is correct",
+											"    pm.collectionVariables.set(\"keyId\", ((result.data || [])[0] || {}).id);",
+											"})",
+											"",
+											"if (!pm.collectionVariables.get(\"keyId\")) { ",
+											"    postman.setNextRequest(\"CREATE key 2\"); ",
+											"};"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/keys?clientKey={{disneyClientKey}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"keys"
+									],
+									"query": [
+										{
+											"key": "clientKey",
+											"value": "{{disneyClientKey}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/keys/{{keyId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"keys",
+										"{{keyId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE key 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    // Code is correct",
+											"    pm.response.to.have.status(201);",
+											"",
+											"    // Structure is correct",
+											"    pm.expect(result).to.have.property('id')",
+											"    pm.expect(result).to.have.property('clientKey')",
+											"    pm.expect(result).to.have.property('orgId')",
+											"    pm.expect(result).to.have.property('updatedAt')",
+											"    pm.expect(result).to.have.property('createdAt')",
+											"    pm.expect(result).to.not.have.property('clientSecret')",
+											"    pm.collectionVariables.set(\"loginKey\", result.clientKey);",
+											"    pm.collectionVariables.set(\"loginKeyId\", result.id);",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": {{keyId}},\n    \"clientKey\": \"{{disneyClientKey}}\",\n    \"clientSecret\": \"{{disneyClientSecret}}\",\n    \"orgId\": \"{{disneyOrgId}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/keys",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"keys"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE duplicate key fails",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    // Code is correct",
+											"    pm.response.to.have.status(400);",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=keys_duplicate_key",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=400",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": 2,\n    \"clientKey\": \"{{disneyClientKey}}\",\n    \"clientSecret\": \"{{disneyClientSecret}}\",\n    \"orgId\": \"{{disneyOrgId}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/keys",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"keys"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "configurations",
+					"item": [
+						{
+							"name": "Check for existing configuration",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.response.to.have.status(200);",
+											"    pm.collectionVariables.set(\"configuration-id-1\", ((result.data || [])[0] || {}).id);",
+											"})",
+											"",
+											"if (pm.collectionVariables.get(\"configuration-id-1\")) { ",
+											"    postman.setNextRequest(\"CREATE configuration 2\"); ",
+											"};",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations?clientKey={{disneyClientKey}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations"
+									],
+									"query": [
+										{
+											"key": "clientKey",
+											"value": "{{disneyClientKey}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE configuration 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.response.to.have.status(201);",
+											"    pm.expect(result).to.have.property('id');",
+											"    pm.expect(result).to.have.property('clientKey');",
+											"    pm.expect(result).to.have.property('name');",
+											"    pm.expect(result).to.have.property('config');",
+											"    pm.expect(result).to.have.property('orgId');",
+											"    pm.expect(result).to.have.property('updatedAt');",
+											"    pm.expect(result).to.have.property('createdAt');",
+											"    pm.collectionVariables.set(\"configuration-id-1\", result.id);",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"config\": { \n        \"responseMessage\": \"Ugh!\",\n        \"from\": \"{{disneyPhoneNumber}}\",\n        \"messagingServiceSid\": \"{{disneyMessagingService}} \"\n    },\n    \"clientKey\": \"{{disneyClientKey}}\",\n    \"name\": \"Disney Hospital\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE configuration 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.response.to.have.status(201);",
+											"    pm.expect(result).to.have.property('id');",
+											"    pm.expect(result).to.have.property('clientKey');",
+											"    pm.expect(result).to.have.property('name');",
+											"    pm.expect(result).to.have.property('config');",
+											"    pm.expect(result).to.have.property('orgId');",
+											"    pm.expect(result).to.have.property('updatedAt');",
+											"    pm.expect(result).to.have.property('createdAt');",
+											"    pm.collectionVariables.set(\"configuration-id-2\", result.id);",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"config\": { \n        \"responseMessage\": \"Other config\",\n        \"from\": \"+15556667777\",\n        \"messagingServiceSid\": \"FAKE_SID \"\n    },\n    \"clientKey\": \"clientKey2\",\n    \"name\": \"testName\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CREATE configuration 3 as non-admin (disallowed)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.response.to.have.status(405);  ",
+											"    pm.expect(result).to.have.property('name')",
+											"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{disneyClientKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{disneyClientSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Prefer",
+										"value": "example=configurations_method_not_allowed",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"type": "text",
+										"value": "code=405"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"config\": { \n        \"responseMessage\": \"Other config\",\n        \"from\": \"+15556667777\",\n        \"messagingServiceSid\": \"FAKE_SID \"\n    },\n    \"clientKey\": \"clientKey3\",\n    \"name\": \"nonAdminConfiguration\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PATCH configuration",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.expect(result).to.have.property('name')",
+											"    pm.expect(result.name).to.equal('test2')",
+											"    pm.response.to.have.status(200);  ",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=configurations_patch",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"test2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations/{{configuration-id-2}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations",
+										"{{configuration-id-2}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PATCH configuration",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.expect(result).to.have.property('name')",
+											"    pm.expect(result).to.have.property('clientKey')",
+											"    pm.expect(result).to.have.property('config')",
+											"    pm.expect(result.name).to.equal('test3')",
+											"    pm.expect(result.clientKey).to.equal('user2')",
+											"    pm.expect(result.config.messagingServiceSid).to.equal(\"FAKE_SID_2\")",
+											"    pm.response.to.have.status(200);  ",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Prefer",
+										"value": "example=configurations_put",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"config\": { \n        \"responseMessage\": \"Other config\",\n        \"from\": \"+15556667777\",\n        \"messagingServiceSid\": \"FAKE_SID_2\"\n    },\n    \"clientKey\": \"user2\",\n    \"name\": \"test3\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations/{{configuration-id-2}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations",
+										"{{configuration-id-2}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET configuration by configurationId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(result).to.have.property('id');",
+											"    pm.expect(result.id).to.eq(pm.collectionVariables.get('configuration-id-1'));",
+											"    pm.expect(result).to.have.property('clientKey');",
+											"    pm.expect(result).to.have.property('name');",
+											"    pm.expect(result).to.have.property('config');",
+											"    pm.expect(result).to.have.property('updatedAt');",
+											"    pm.expect(result).to.have.property('createdAt');",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations/{{configuration-id-1}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations",
+										"{{configuration-id-1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET configurations",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(result).to.have.property('total');",
+											"    pm.expect(result).to.have.property('limit');",
+											"    pm.expect(result).to.have.property('skip');",
+											"    pm.expect(result).to.have.property('data');",
+											"    pm.expect(result.total).to.eq(2);",
+											"    if(result.data.length > 0) {",
+											"        pm.expect(result.data[0]).to.have.property('id');",
+											"        pm.expect(result.data[0]).to.have.property('clientKey');",
+											"        pm.expect(result.data[0]).to.have.property('name');",
+											"        pm.expect(result.data[0]).to.have.property('config');",
+											"        pm.expect(result.data[0]).to.have.property('updatedAt');",
+											"        pm.expect(result.data[0]).to.have.property('createdAt');",
+											"    }",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Prefer",
+										"value": "example=configurations_find",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET configurations as non-admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(result).to.have.property('total');",
+											"    pm.expect(result).to.have.property('limit');",
+											"    pm.expect(result).to.have.property('skip');",
+											"    pm.expect(result).to.have.property('data');",
+											"    pm.expect(result.total).to.eq(0);",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{disneyClientSecret}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{disneyClientKey}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Prefer",
+										"value": "example=configurations_find_non_admin",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE configuration 2 by configurationId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function() {",
+											"    var result = pm.response.json();",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(result).to.have.property('id');",
+											"    pm.expect(result).to.have.property('clientKey');",
+											"    pm.expect(result).to.have.property('name');",
+											"    pm.expect(result).to.have.property('config');",
+											"    pm.expect(result).to.have.property('updatedAt');",
+											"    pm.expect(result).to.have.property('createdAt');",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations/{{configuration-id-2}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations",
+										"{{configuration-id-2}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "messages",
+					"item": [
+						{
+							"name": "Disallowed Methods",
+							"item": [
+								{
+									"name": "get Message",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "put Message",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"test\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "delete Message",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "patch Message",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"name\":\"test\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Pipe-Delimited Messages",
+							"item": [
+								{
+									"name": "CREATE a pipe-delimited message",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    // Code is correct",
+													"    pm.response.to.have.status(201);",
+													"    pm.collectionVariables.set(\"message-1-id\", result.id);",
+													"",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('to');",
+													"    pm.expect(result).to.have.property('from');",
+													"    pm.expect(result).to.have.property('type');",
+													"    pm.expect(result.body).to.eq('Good news, everyone!');",
+													"",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"auth": {
+											"type": "basic",
+											"basic": [
+												{
+													"key": "username",
+													"value": "{{adminKey}}",
+													"type": "string"
+												},
+												{
+													"key": "password",
+													"value": "{{adminSecret}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "prefer",
+												"value": "example=messages_pipe_delimited",
+												"type": "text"
+											},
+											{
+												"key": "prefer",
+												"value": "code=201",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"{{disneyPhoneNumber}}\",\n    \"messageBody\": \"type|fastpass|name|Philip J Fry|job|Delivery Boy|messageBody|Good%20news,%20everyone!\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "successful response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": 234567890,\n    \"to\": \"+15555556666\",\n    \"from\": \"+16666665555\",\n    \"type\": \"fastpass\",\n    \"name\": \"Philip J Fry\",\n    \"job\": \"Delivery Boy\",\n    \"body\": \"Good news, everyone!\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Attempt to send p-d message with no type field",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('BadRequest')",
+													"    pm.response.to.have.status(400);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "prefer",
+												"value": "example=messages_invalid_post_response",
+												"type": "text"
+											},
+											{
+												"key": "prefer",
+												"value": "code=400",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"{{disneyPhoneNumber}}\",\n    \"messageBody\": \"name|Philip J Fry|job|Delivery Boy|messageBody|Good news, everyone!\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "successful response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"BadRequest\",\n    \"message\": \"invalid or incomplete message format\",\n    \"code\": 400,\n    \"className\": \"bad-request\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "Attempt to send p-d message with invalid type value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('BadRequest')",
+													"    pm.response.to.have.status(400);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "prefer",
+												"value": "example=messages_invalid_post_response",
+												"type": "text"
+											},
+											{
+												"key": "prefer",
+												"value": "code=400",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"{{disneyPhoneNumber}}\",\n    \"messageBody\": \"type|invalid type|name|Philip J Fry|job|Delivery Boy|messageBody|Good news, everyone!\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "successful response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"BadRequest\",\n    \"message\": \"invalid or incomplete message format\",\n    \"code\": 400,\n    \"className\": \"bad-request\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "Attempt to send p-d message with invalid field format",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('BadRequest')",
+													"    pm.response.to.have.status(400);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "prefer",
+												"value": "example=messages_invalid_post_response",
+												"type": "text"
+											},
+											{
+												"key": "prefer",
+												"value": "code=400",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"{{disneyPhoneNumber}}\",\n    \"messageBody\": \"type|fastpass|invalid field|Philip J Fry|job|Delivery Boy|messageBody|Good news, everyone!\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "successful response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"BadRequest\",\n    \"message\": \"invalid or incomplete message format\",\n    \"code\": 400,\n    \"className\": \"bad-request\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "Attempt to send p-d message with missing field or value",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('BadRequest')",
+													"    pm.response.to.have.status(400);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "prefer",
+												"value": "example=messages_invalid_post_response",
+												"type": "text"
+											},
+											{
+												"key": "prefer",
+												"value": "code=400",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"{{disneyPhoneNumber}}\",\n    \"messageBody\": \"type|fastpass|name|Philip J Fry|job|Delivery Boy|messageBody\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "successful response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"BadRequest\",\n    \"message\": \"invalid or incomplete message format\",\n    \"code\": 400,\n    \"className\": \"bad-request\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "Attempt to send p-d message without messageBody field",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('BadRequest')",
+													"    pm.response.to.have.status(400);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "prefer",
+												"value": "example=messages_invalid_post_response",
+												"type": "text"
+											},
+											{
+												"key": "prefer",
+												"value": "code=400",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"{{disneyPhoneNumber}}\",\n    \"messageBody\": \"type|fastpass|name|Philip J Fry|job|Delivery Boy\"\n}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "successful response",
+											"originalRequest": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"BadRequest\",\n    \"message\": \"invalid or incomplete message format\",\n    \"code\": 400,\n    \"className\": \"bad-request\",\n    \"errors\": {}\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Nested Request Bodies",
+							"item": [
+								{
+									"name": "Send data body with default parent node",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    // Code is correct",
+													"    pm.response.to.have.status(201);",
+													"    // pm.collectionVariables.set(\"message-1-id\", result.id);",
+													"",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('to');",
+													"    pm.expect(result).to.have.property('from');",
+													"    pm.expect(result.body).to.eq('Good news, everyone!');",
+													"",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"Message\": {\n        \"to\": \"{{toPhoneNumber}}\",\n        \"from\": \"{{disneyPhoneNumber}}\",\n        \"messageBody\": \"Good%20news,%20everyone!\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "PUT disney configuration with non-default parent node",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.response.to.have.status(200);",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('clientKey');",
+													"    pm.expect(result).to.have.property('name');",
+													"    pm.expect(result).to.have.property('config');",
+													"    pm.expect(result).to.have.property('updatedAt');",
+													"    pm.expect(result).to.have.property('createdAt');",
+													"    pm.collectionVariables.set('nested-configuration-id', result.id)",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"clientKey\": \"{{disneyClientKey}}\",\n    \"name\": \"testName\",\n    \"config\": { \n        \"a\": 1, \n        \"from\": \"{{disneyPhoneNumber}}\",\n        \"messageKey\": \"requestBody\" \n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/configurations/{{configuration-id-1}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"configurations",
+												"{{configuration-id-1}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Send data body with custom parent node",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    // Code is correct",
+													"    pm.response.to.have.status(201);",
+													"    // pm.collectionVariables.set(\"message-1-id\", result.id);",
+													"",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('to');",
+													"    pm.expect(result).to.have.property('from');",
+													"    pm.expect(result.body).to.eq('Good news, everyone!');",
+													"",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"requestBody\": {\n        \"to\": \"{{toPhoneNumber}}\",\n        \"from\": \"{{disneyPhoneNumber}}\",\n        \"messageBody\": \"Good%20news,%20everyone!\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "RESET disney configuration to default settings",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.response.to.have.status(200);",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('clientKey');",
+													"    pm.expect(result).to.have.property('name');",
+													"    pm.expect(result).to.have.property('config');",
+													"    pm.expect(result).to.have.property('updatedAt');",
+													"    pm.expect(result).to.have.property('createdAt');",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"config\": { \n        \"responseMessage\": \"Ugh!\",\n        \"from\": \"{{disneyPhoneNumber}}\",\n        \"messagingServiceSid\": \"{{disneyMessagingService}}\"\n    },\n    \"clientKey\": \"{{disneyClientKey}}\",\n    \"name\": \"Disney Hospital\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/configurations/{{configuration-id-1}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"configurations",
+												"{{configuration-id-1}}"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Send an SMS message via the CipherHealth SMS Gateway",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    // Code is correct",
+											"    pm.response.to.have.status(201);",
+											"    // pm.collectionVariables.set(\"message-1-id\", result.id);",
+											"",
+											"    // Structure is correct",
+											"    pm.expect(result).to.have.property('id');",
+											"    pm.expect(result).to.have.property('to');",
+											"    pm.expect(result).to.have.property('from');",
+											"    pm.expect(result).to.have.property('body');",
+											"    pm.expect(result.from).to.equal(pm.variables.get('disneyPhoneNumber'));",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "prefer",
+										"value": "example=messages_post_default",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=201",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"+15555555555\",\n    \"messageBody\": \"Good news, everyone!\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/messages",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 12345678,\n    \"to\": \"+15555556666\",\n    \"from\": \"+16666665555\",\n    \"body\": \"Good news, everyone!\",\n    \"createdAt\": \"2012-11-11T23:36:55.994Z\",\n    \"updatedAt\": \"2005-01-02T10:54:59.531Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Attempt to send an SMS message with missing message body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.expect(result).to.have.property('name')",
+											"    pm.expect(result.name).to.equal('BadRequest')",
+											"    pm.response.to.have.status(400);  ",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "prefer",
+										"value": "example=messages_invalid_post_response",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=400",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"{{disneyPhoneNumber}}\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/messages",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Invalid input or Validation Failed",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/messages",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"messages"
+											]
+										}
+									},
+									"status": "Method Not Allowed",
+									"code": 405,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"name\": \"BadRequest\",\n    \"message\": \"invalid or incomplete message format\",\n    \"code\": 400,\n    \"className\": \"bad-request\",\n    \"errors\": {}\n}"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "twilio/webhooks",
+					"item": [
+						{
+							"name": "Disallowed Methods",
+							"item": [
+								{
+									"name": "get webhook",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/twilio/webhooks/status",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"twilio",
+														"webhooks",
+														"status"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "put Webhook",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "patch Webhook",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/twilio/webhooks/status",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"twilio",
+														"webhooks",
+														"status"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Capture inbound webhook",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function () {",
+											"pm.environment.get(\"variable_key\");",
+											"    var result = pm.response.json()",
+											"    ",
+											"    var validation_breaks = pm.environment.get(\"validate_twilio\");",
+											"    if(validation_breaks === \"true\"){",
+											"        // should fail in staging and production where validate_twilio is true",
+											"        pm.response.to.have.status(400);",
+											"    }",
+											"    else {",
+											"        // should pass in dev, qaload, and sandbox where validate_twilio is false",
+											"        pm.response.to.have.status(201);",
+											"        pm.expect(result).to.not.have.property('OptOutType');",
+											"    }",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=webhooks_post_default",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=201",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ToCountry\":\"US\",\n  \"ToState\":\"LA\",\n  \"SmsMessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"NumMedia\":\"0\",\n  \"ToCity\":\"NEW ORLEANS\",\n  \"FromZip\":\"70149\",\n  \"SmsSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"FromState\":\"LA\",\n  \"SmsStatus\":\"received\",\n  \"FromCity\":\"NEW ORLEANS\",\n  \"Body\":\"stop\",\n  \"FromCountry\":\"US\",\n  \"To\":\"{{disneyPhoneNumber}}\",\n  \"MessagingServiceSid\":\"MGd8ab84a63d35aa0ef7880b5f0bb9e29a\",\n  \"ToZip\":\"70113\",\n  \"NumSegments\":\"1\",\n  \"MessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"AccountSid\":\"AC356a8a03a17b7217921d2dfc83e8d3f2\",\n  \"From\":\"{{toPhoneNumber}}\",\n  \"ApiVersion\":\"2010-04-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/twilio/webhooks?clientKey={{disneyClientKey}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"twilio",
+										"webhooks"
+									],
+									"query": [
+										{
+											"key": "clientKey",
+											"value": "{{disneyClientKey}}"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 12345678,\n    \"to\": \"+15555556666\",\n    \"from\": \"+16666665555\",\n    \"body\": \"Good news, everyone!\",\n    \"createdAt\": \"2012-11-11T23:36:55.994Z\",\n    \"updatedAt\": \"2005-01-02T10:54:59.531Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Capture inbound webhook without clientKey",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function () {",
+											"pm.environment.get(\"variable_key\");",
+											"    var result = pm.response.json()",
+											"    ",
+											"    var validation_breaks = pm.environment.get(\"validate_twilio\");",
+											"    if(validation_breaks === \"true\"){",
+											"        // should fail in staging and production where validate_twilio is true",
+											"        pm.response.to.have.status(400);",
+											"    }",
+											"    else {",
+											"        // should pass in dev, qaload, and sandbox where validate_twilio is false",
+											"        pm.response.to.have.status(201);",
+											"        pm.expect(result).to.not.have.property('OptOutType');",
+											"    }",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=webhooks_post_default",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=201",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ToCountry\":\"US\",\n  \"ToState\":\"LA\",\n  \"SmsMessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"NumMedia\":\"0\",\n  \"ToCity\":\"NEW ORLEANS\",\n  \"FromZip\":\"70149\",\n  \"SmsSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"FromState\":\"LA\",\n  \"SmsStatus\":\"received\",\n  \"FromCity\":\"NEW ORLEANS\",\n  \"Body\":\"stop\",\n  \"FromCountry\":\"US\",\n  \"To\":\"{{disneyPhoneNumber}}\",\n  \"MessagingServiceSid\":\"{{disneyMessagingService}}\",\n  \"ToZip\":\"70113\",\n  \"NumSegments\":\"1\",\n  \"MessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"AccountSid\":\"AC356a8a03a17b7217921d2dfc83e8d3f2\",\n  \"From\":\"{{toPhoneNumber}}\",\n  \"ApiVersion\":\"2010-04-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/twilio/webhooks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"twilio",
+										"webhooks"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 12345678,\n    \"to\": \"+15555556666\",\n    \"from\": \"+16666665555\",\n    \"body\": \"Good news, everyone!\",\n    \"createdAt\": \"2012-11-11T23:36:55.994Z\",\n    \"updatedAt\": \"2005-01-02T10:54:59.531Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Inbound webhook fails with invalid clientKey in URL",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"",
+											"    var validation_breaks = pm.environment.get(\"validate_twilio\");",
+											"    if(validation_breaks === \"true\"){",
+											"        // should fail in staging and production where validate_twilio is true",
+											"        pm.response.to.have.status(400);",
+											"    }",
+											"    else {",
+											"        // should pass in dev, qaload, and sandbox where validate_twilio is false",
+											"        pm.expect(result).to.have.property('name')",
+											"        pm.expect(result.name).to.equal('BadRequest')",
+											"        pm.expect(result.message).to.equal('Invalid Client Key.')",
+											"        pm.response.to.have.status(400); ",
+											"    }",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=webhooks_invalid_client_key",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=400",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ToCountry\":\"US\",\n  \"ToState\":\"LA\",\n  \"SmsMessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"NumMedia\":\"0\",\n  \"ToCity\":\"NEW ORLEANS\",\n  \"FromZip\":\"70149\",\n  \"SmsSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"FromState\":\"LA\",\n  \"SmsStatus\":\"received\",\n  \"FromCity\":\"NEW ORLEANS\",\n  \"Body\":\"stop\",\n  \"FromCountry\":\"US\",\n  \"To\":\"{{disneyPhoneNumber}}\",\n  \"MessagingServiceSid\":\"{{disneyMessagingService}}\",\n  \"ToZip\":\"70113\",\n  \"NumSegments\":\"1\",\n  \"MessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"AccountSid\":\"AC356a8a03a17b7217921d2dfc83e8d3f2\",\n  \"From\":\"{{toPhoneNumber}}\",\n  \"ApiVersion\":\"2010-04-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/twilio/webhooks?clientKey=invalid_client_key",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"twilio",
+										"webhooks"
+									],
+									"query": [
+										{
+											"key": "clientKey",
+											"value": "invalid_client_key"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 12345678,\n    \"to\": \"+15555556666\",\n   \"from\": \"+16666665555\",\n    \"body\": \"Good news, everyone!\",\n    \"createdAt\": \"2012-11-11T23:36:55.994Z\",\n    \"updatedAt\": \"2005-01-02T10:54:59.531Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Inbound webhook fails without clientKey and with invalid MessageServiceSid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"",
+											"    var validation_breaks = pm.environment.get(\"validate_twilio\");",
+											"    if(validation_breaks === \"true\"){",
+											"        // should fail in staging and production where validate_twilio is true",
+											"        pm.response.to.have.status(400);",
+											"    }",
+											"    else {",
+											"        // should pass in dev, qaload, and sandbox where validate_twilio is false",
+											"        pm.expect(result).to.have.property('name')",
+											"        pm.expect(result.name).to.equal('BadRequest')",
+											"        pm.expect(result.message).to.equal('Configuration not found: Invalid MessagingServiceSid.')",
+											"        pm.response.to.have.status(400); ",
+											"    }",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=webhooks_invalid_messaging_service_sid",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=400",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ToCountry\":\"US\",\n  \"ToState\":\"LA\",\n  \"SmsMessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"NumMedia\":\"0\",\n  \"ToCity\":\"NEW ORLEANS\",\n  \"FromZip\":\"70149\",\n  \"SmsSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"FromState\":\"LA\",\n  \"SmsStatus\":\"received\",\n  \"FromCity\":\"NEW ORLEANS\",\n  \"Body\":\"stop\",\n  \"FromCountry\":\"US\",\n  \"To\":\"{{disneyPhoneNumber}}\",\n  \"MessagingServiceSid\":\"Invalid MessageServiceSid\",\n  \"ToZip\":\"70113\",\n  \"NumSegments\":\"1\",\n  \"MessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"AccountSid\":\"AC356a8a03a17b7217921d2dfc83e8d3f2\",\n  \"From\":\"{{toPhoneNumber}}\",\n  \"ApiVersion\":\"2010-04-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/twilio/webhooks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"twilio",
+										"webhooks"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 12345678,\n    \"to\": \"+15555556666\",\n    \"from\": \"+16666665555\",\n    \"body\": \"Good news, everyone!\",\n    \"createdAt\": \"2012-11-11T23:36:55.994Z\",\n    \"updatedAt\": \"2005-01-02T10:54:59.531Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Capture inbound webhook Opt Out",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    var validation_breaks = pm.environment.get(\"validate_twilio\");",
+											"    if(validation_breaks === \"true\"){",
+											"        // should fail in staging and production where validate_twilio is true",
+											"        pm.response.to.have.status(400);",
+											"    }",
+											"    else {",
+											"        // should pass in dev, qaload, and sandbox where validate_twilio is false",
+											"        pm.response.to.have.status(201);",
+											"        pm.expect(result).to.have.property('OptOutType');",
+											"    }",
+											"",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=webhooks_opt_out_response",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=201",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ToCountry\":\"US\",\n  \"ToState\":\"LA\",\n  \"SmsMessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"NumMedia\":\"0\",\n  \"ToCity\":\"NEW ORLEANS\",\n  \"FromZip\":\"70149\",\n  \"SmsSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"OptOutType\":\"STOP\",\n  \"FromState\":\"LA\",\n  \"SmsStatus\":\"received\",\n  \"FromCity\":\"NEW ORLEANS\",\n  \"Body\":\"stop\",\n  \"FromCountry\":\"US\",\n  \"To\":\"{{disneyPhoneNumber}}\",\n  \"MessagingServiceSid\":\"MGd8ab84a63d35aa0ef7880b5f0bb9e29a\",\n  \"ToZip\":\"70113\",\n  \"NumSegments\":\"1\",\n  \"MessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"AccountSid\":\"AC356a8a03a17b7217921d2dfc83e8d3f2\",\n  \"From\":\"{{toPhoneNumber}}\",\n  \"ApiVersion\":\"2010-04-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/twilio/webhooks?clientKey={{disneyClientKey}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"twilio",
+										"webhooks"
+									],
+									"query": [
+										{
+											"key": "clientKey",
+											"value": "{{disneyClientKey}}"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 12345678,\n    \"to\": \"+15555556666\",\n    \"from\": \"+16666665555\",\n    \"body\": \"Good news, everyone!\",\n    \"createdAt\": \"2012-11-11T23:36:55.994Z\",\n    \"updatedAt\": \"2005-01-02T10:54:59.531Z\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Capture inbound webhook Opt In",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    var validation_breaks = pm.environment.get(\"validate_twilio\");",
+											"    if(validation_breaks === \"true\"){",
+											"        // should fail in staging and production where validate_twilio is true",
+											"        pm.response.to.have.status(400);",
+											"    }",
+											"    else {",
+											"        // should pass in dev, qaload, and sandbox where validate_twilio is false",
+											"        pm.response.to.have.status(201);",
+											"        pm.expect(result).to.have.property('OptOutType');",
+											"    }",
+											"",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=webhooks_opt_in_response",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=201",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ToCountry\":\"US\",\n  \"ToState\":\"LA\",\n  \"SmsMessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"NumMedia\":\"0\",\n  \"ToCity\":\"NEW ORLEANS\",\n  \"FromZip\":\"70149\",\n  \"SmsSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"OptOutType\":\"STOP\",\n  \"FromState\":\"LA\",\n  \"SmsStatus\":\"received\",\n  \"FromCity\":\"NEW ORLEANS\",\n  \"Body\":\"stop\",\n  \"FromCountry\":\"US\",\n  \"To\":\"{{disneyPhoneNumber}}\",\n  \"MessagingServiceSid\":\"MGd8ab84a63d35aa0ef7880b5f0bb9e29a\",\n  \"ToZip\":\"70113\",\n  \"NumSegments\":\"1\",\n  \"MessageSid\":\"SM28b2cba8d710bf3b9125f61c257632f5\",\n  \"AccountSid\":\"AC356a8a03a17b7217921d2dfc83e8d3f2\",\n  \"From\":\"{{toPhoneNumber}}\",\n  \"ApiVersion\":\"2010-04-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/twilio/webhooks?clientKey={{disneyClientKey}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"twilio",
+										"webhooks"
+									],
+									"query": [
+										{
+											"key": "clientKey",
+											"value": "{{disneyClientKey}}"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"id\": 12345678,\n    \"to\": \"+15555556666\",\n    \"from\": \"+16666665555\",\n    \"body\": \"Good news, everyone!\",\n    \"createdAt\": \"2012-11-11T23:36:55.994Z\",\n    \"updatedAt\": \"2005-01-02T10:54:59.531Z\"\n}"
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "twilio/webhooks/status",
+					"item": [
+						{
+							"name": "Disallowed Methods",
+							"item": [
+								{
+									"name": "get Status",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/twilio/webhooks/status",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"twilio",
+														"webhooks",
+														"status"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "put Status",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "delete Status",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/messages",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"messages"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "patch Status",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}"
+										},
+										"url": {
+											"raw": "{{baseUrl}}/twilio/webhooks/status",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"twilio",
+												"webhooks",
+												"status"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/twilio/webhooks/status",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"twilio",
+														"webhooks",
+														"status"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"message\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								}
+							]
+						},
+						{
+							"name": "Capture status update from webhook",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    var validation_breaks = pm.environment.get(\"validate_twilio\");",
+											"    if(validation_breaks === \"true\"){",
+											"        // should fail in staging and production where validate_twilio is true",
+											"        pm.response.to.have.status(400);",
+											"    }",
+											"    else {",
+											"        // should pass in dev, qaload, and sandbox where validate_twilio is false",
+											"        pm.response.to.have.status(201);",
+											"        pm.expect(result).to.have.property('status');",
+											"    }",
+											"",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=webhooks_status_post_default",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=201",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"account_sid\": \"ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\",\n  \"api_version\": \"2010-04-01\",\n  \"body\": \"McAvoy or Stewart? These timelines can get so confusing.\",\n  \"date_created\": \"Thu, 30 Jul 2015 20:12:31 +0000\",\n  \"date_sent\": \"Thu, 30 Jul 2015 20:12:33 +0000\",\n  \"date_updated\": \"Thu, 30 Jul 2015 20:12:33 +0000\",\n  \"direction\": \"outbound-api\",\n  \"from\": \"{{disneyPhoneNumber}}\",\n  \"messaging_service_sid\": \"MGXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\",\n  \"sid\": \"SMXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\",\n  \"status\": \"sent\",\n  \"to\": \"{{toPhoneNumber}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/twilio/webhooks/status?uniqueId={{message-1-id}}&orgId={{disneyOrgId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"twilio",
+										"webhooks",
+										"status"
+									],
+									"query": [
+										{
+											"key": "uniqueId",
+											"value": "{{message-1-id}}"
+										},
+										{
+											"key": "orgId",
+											"value": "{{disneyOrgId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "records",
+					"item": [
+						{
+							"name": "Disallowed Methods",
+							"item": [
+								{
+									"name": "get record",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/records",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"records"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/records",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"records"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"record\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "create record (externally)",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/records",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"records"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/records",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"records"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"record\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "put record",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/records/1",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"records",
+												"1"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/records",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"records"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"record\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "delete record",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/records/1",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"records",
+												"1"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "DELETE",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/records",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"records"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"record\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								},
+								{
+									"name": "patch record",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/records/1",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"records",
+												"1"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Invalid Action or Route",
+											"originalRequest": {
+												"method": "PATCH",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/records",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"records"
+													]
+												}
+											},
+											"status": "Method Not Allowed",
+											"code": 405,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "text/plain"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"MethodNotAllowed\",\n    \"record\": \"This method is unavailable for this route\",\n    \"code\": 405,\n    \"className\": \"method-not-allowed\",\n    \"errors\": {}\n}"
+										}
+									]
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "create record (externally) as admin",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.response.to.have.status(201)",
+											"    pm.expect(result).to.equal(true);",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Prefer",
+										"value": "example=records_post_default",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"type": "text",
+										"value": "code=201"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"uuid\": \"fakeUUID\",\n    \"eventType\": \"SENT\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/records",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"records"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "successful response",
+									"originalRequest": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/records",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"records"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": "true"
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "queue",
+					"item": [
+						{
+							"name": "Disallowed Methods",
+							"item": [
+								{
+									"name": "get pubsub",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/queue",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"queue"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "put pubsub",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/queue",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"queue"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "delete pubsub",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/queue",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"queue"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "patch pubsub",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    pm.expect(result).to.have.property('name')",
+													"    pm.expect(result.name).to.equal('MethodNotAllowed')",
+													"    pm.response.to.have.status(405);  ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "prefer",
+												"value": "code=405",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/queue",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"queue"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Add message to Pubsub queue",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    // Code is correct",
+											"    pm.response.to.have.status(201);",
+											"",
+											"    // Structure is correct",
+											"    pm.expect(result).to.have.property('message');",
+											"    pm.expect(result).to.not.have.property('messageId');",
+											"    pm.expect(result).to.not.have.property('attributes');",
+											"    pm.expect(result.message).to.not.have.property('_authentication');",
+											"",
+											"    pm.collectionVariables.set(\"pubsubData\", btoa(JSON.stringify({",
+											"        ...result.message,",
+											"        _authentication:{",
+											"            strategy: \"basic\",",
+											"            accessToken: btoa(`${pm.environment.get(\"disneyClientKey\")}:${pm.environment.get(\"disneyClientSecret\")}`)",
+											"        }",
+											"    })));",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=queue_post_default",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=201",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"to\": \"{{toPhoneNumber}}\",\n    \"from\": \"{{disneyPhoneNumber}}\",\n    \"messageBody\": \"Good news, everyone!\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/queue",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"queue"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Intercept unauthed /message from Pubsub Push",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    // Code is correct",
+											"    pm.response.to.have.status(401);",
+											"",
+											"    // Structure is correct",
+											"    pm.expect(result).to.have.property('name')",
+											"    pm.expect(result.name).to.equal('NotAuthenticated')",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "prefer",
+										"value": "example=error_not_authenticated",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=401",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"message\": {\n        \"data\": \"{{pubsubData}}\",\n        \"messageId\": \"12\",\n        \"attributes\": {\n            \"uniqueId\": \"{{pubsubUniqueId}}\",\n            \"PUBSUB_VERIFICATION_KEY\": \"Incorrect Key\"\n        }\n    },\n    \"subscription\":\"subscription\"\n}"
+								},
+								"url": {
+									"raw": "{{baseUrl}}/messages",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Retry /messages from Pubsub Push",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    // Code is correct",
+											"    pm.response.to.have.status(201);",
+											"",
+											"    // Structure is correct",
+											"    pm.expect(result).to.have.property('body');",
+											"    pm.expect(result).to.have.property('to');",
+											"    pm.expect(result).to.have.property('from');",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "prefer",
+										"value": "example=messages_post_default",
+										"type": "text"
+									},
+									{
+										"key": "prefer",
+										"value": "code=201",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"message\": {\n        \"data\": \"{{pubsubData}}\",\n        \"messageId\": \"12\",\n        \"attributes\": {\n            \"uniqueId\": \"{{pubsubUniqueId}}\",\n            \"PUBSUB_VERIFICATION_KEY\": \"{{pubsubVerificationKey}}\"\n        }\n    },\n    \"subscription\":\"subscription\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/messages",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"messages"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "teardown",
+					"item": [
+						{
+							"name": "DELETE configuration by configurationId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function() {",
+											"    var result = pm.response.json();",
+											"    pm.response.to.have.status(200);",
+											"    pm.expect(result).to.have.property('id');",
+											"    pm.expect(result).to.have.property('clientKey');",
+											"    pm.expect(result).to.have.property('name');",
+											"    pm.expect(result).to.have.property('config');",
+											"    pm.expect(result).to.have.property('updatedAt');",
+											"    pm.expect(result).to.have.property('createdAt');",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/configurations/{{configuration-id-1}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"configurations",
+										"{{configuration-id-1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE Key and Access token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(pm.info.requestName, function(){",
+											"    var result = pm.response.json()",
+											"    pm.expect(result.id).to.equal(pm.collectionVariables.get(\"loginKeyId\"))",
+											"    pm.response.to.have.status(200);",
+											"    pm.collectionVariables.unset(\"access-token\");",
+											"    pm.collectionVariables.unset(\"loginKey\");",
+											"    pm.collectionVariables.unset(\"loginKeyId\");",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "username",
+											"value": "{{adminKey}}",
+											"type": "string"
+										},
+										{
+											"key": "password",
+											"value": "{{adminSecret}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/keys/{{loginKeyId}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"keys",
+										"{{loginKeyId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "{{disneyClientSecret}}",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "{{disneyClientKey}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "/"
+		},
+		{
+			"key": "message-1-id",
+			"value": ""
+		},
+		{
+			"key": "message-1-status-1-id",
+			"value": ""
+		},
+		{
+			"key": "message-1-opt-status-1-id",
+			"value": ""
+		},
+		{
+			"key": "status-1-id",
+			"value": ""
+		},
+		{
+			"key": "record-1-id",
+			"value": ""
+		},
+		{
+			"key": "webhook-1-id",
+			"value": ""
+		},
+		{
+			"key": "smsgw-lastInserted-configurationId",
+			"value": ""
+		},
+		{
+			"key": "pubsubAccessToken",
+			"value": ""
+		},
+		{
+			"key": "pubsubData",
+			"value": ""
+		},
+		{
+			"key": "pubsubAttributes",
+			"value": ""
+		},
+		{
+			"key": "keyId",
+			"value": ""
+		},
+		{
+			"key": "configuration-id-1",
+			"value": ""
+		},
+		{
+			"key": "configuration-id-2",
+			"value": ""
+		},
+		{
+			"key": "nested-configuration-id",
+			"value": ""
+		},
+		{
+			"key": "configuration-id-3",
+			"value": ""
+		}
+	]
+}

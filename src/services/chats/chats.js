@@ -61,6 +61,7 @@ export const chat = (app) => {
                   await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
                   console.log(chunk)
                   if(chunk?.choices?.[0]?.finish_reason){
+                      console.log('[DONE]')
                       ctx.body.write(`data: [DONE]\n\n`);
                       ctx.body.end();
                       return

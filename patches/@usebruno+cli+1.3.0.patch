@@ -1,0 +1,1366 @@
+diff --git a/node_modules/@usebruno/cli/.gitignore b/node_modules/@usebruno/cli/.gitignore
+new file mode 100644
+index 0000000..024348e
+--- /dev/null
++++ b/node_modules/@usebruno/cli/.gitignore
+@@ -0,0 +1,7 @@
++node_modules
++web
++out
++
++pnpm-lock.yaml
++package-lock.json
++yarn.lock
+diff --git a/node_modules/@usebruno/cli/.vscode/launch.json b/node_modules/@usebruno/cli/.vscode/launch.json
+new file mode 100644
+index 0000000..5734b75
+--- /dev/null
++++ b/node_modules/@usebruno/cli/.vscode/launch.json
+@@ -0,0 +1,26 @@
++{
++    // Use IntelliSense to learn about possible attributes.
++    // Hover to view descriptions of existing attributes.
++    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
++    "version": "0.2.0",
++    "configurations": [
++        {
++            "name": "Attach by Process ID",
++            "processId": "${command:PickProcess}",
++            "request": "attach",
++            "skipFiles": [
++                "<node_internals>/**"
++            ],
++            "type": "node"
++        },
++        {
++            "type": "node",
++            "request": "launch",
++            "name": "Launch Program",
++            "skipFiles": [
++                "<node_internals>/**"
++            ],
++            "program": "${workspaceFolder}/src/index.js"
++        }
++    ]
++}
+\ No newline at end of file
+diff --git a/node_modules/@usebruno/cli/assets/images/cli-demo.png b/node_modules/@usebruno/cli/assets/images/cli-demo.png
+new file mode 100644
+index 0000000..98a6a0c
+Binary files /dev/null and b/node_modules/@usebruno/cli/assets/images/cli-demo.png differ
+diff --git a/node_modules/@usebruno/cli/changelog.md b/node_modules/@usebruno/cli/changelog.md
+index 843b4ff..70f3bcb 100644
+--- a/node_modules/@usebruno/cli/changelog.md
++++ b/node_modules/@usebruno/cli/changelog.md
+@@ -1,6 +1,7 @@
+ # Changelog
+ 
+ ## 1.3.0
++
+ - Junit report generation
+ 
+ ## 1.2.1
+diff --git a/node_modules/@usebruno/cli/examples/report.json b/node_modules/@usebruno/cli/examples/report.json
+new file mode 100644
+index 0000000..4cb7586
+--- /dev/null
++++ b/node_modules/@usebruno/cli/examples/report.json
+@@ -0,0 +1,325 @@
++{
++  "summary": {
++    "totalRequests": 10,
++    "passedRequests": 10,
++    "failedRequests": 0,
++    "totalAssertions": 4,
++    "passedAssertions": 0,
++    "failedAssertions": 4,
++    "totalTests": 0,
++    "passedTests": 0,
++    "failedTests": 0
++  },
++  "results": [
++    {
++      "request": {
++        "method": "GET",
++        "url": "http://localhost:3000/test/v4",
++        "headers": {}
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "146",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /test/v4</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [
++        {
++          "uid": "oidgfXLiyD8Jv0NBAHUHF",
++          "lhsExpr": "res.status",
++          "rhsExpr": "200",
++          "rhsOperand": "200",
++          "operator": "eq",
++          "status": "fail",
++          "error": "expected 404 to equal 200"
++        }
++      ],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "GET",
++        "url": "http://localhost:3000/test/v2",
++        "headers": {}
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "146",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /test/v2</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [
++        {
++          "uid": "IgliYuHd9wKp6JNyqyHFK",
++          "lhsExpr": "res.status",
++          "rhsExpr": "200",
++          "rhsOperand": "200",
++          "operator": "eq",
++          "status": "fail",
++          "error": "expected 404 to equal 200"
++        }
++      ],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "GET",
++        "url": "http://localhost:3000/test/v3",
++        "headers": {}
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "146",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot GET /test/v3</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [
++        {
++          "uid": "u-3sRebrCyuUbZOkwS0z8",
++          "lhsExpr": "res.status",
++          "rhsExpr": "200",
++          "rhsOperand": "200",
++          "operator": "eq",
++          "status": "fail",
++          "error": "expected 404 to equal 200"
++        }
++      ],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "POST",
++        "url": "http://localhost:3000/test/v1",
++        "headers": {
++          "content-type": "application/json"
++        },
++        "data": {
++          "test": "hello"
++        }
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "147",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /test/v1</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [
++        {
++          "uid": "PpKLK6I38I5_ibw4lZqLb",
++          "lhsExpr": "res.status",
++          "rhsExpr": "eq 200",
++          "rhsOperand": "200",
++          "operator": "eq",
++          "status": "fail",
++          "error": "expected 404 to equal 200"
++        }
++      ],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "POST",
++        "url": "http://localhost:3000/test",
++        "headers": {}
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "144",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /test</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "HEAD",
++        "url": "http://localhost:3000/",
++        "headers": {}
++      },
++      "response": {
++        "status": 200,
++        "statusText": "OK",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "12",
++          "etag": "W/\"c-Lve95gjOVATpfV8EL5X4nxwjKHE\"",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": ""
++      },
++      "error": null,
++      "assertionResults": [],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "POST",
++        "url": "http://localhost:3000",
++        "headers": {}
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "140",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "POST",
++        "url": "http://localhost:3000/",
++        "headers": {
++          "content-type": "multipart/form-data; boundary=--------------------------897965859410704836065858"
++        },
++        "data": {
++          "_overheadLength": 103,
++          "_valueLength": 3,
++          "_valuesToMeasure": [],
++          "writable": false,
++          "readable": true,
++          "dataSize": 0,
++          "maxDataSize": 2097152,
++          "pauseStreams": true,
++          "_released": true,
++          "_streams": [],
++          "_currentStream": null,
++          "_insideLoop": false,
++          "_pendingNext": false,
++          "_boundary": "--------------------------897965859410704836065858",
++          "_events": {},
++          "_eventsCount": 3
++        }
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "140",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "POST",
++        "url": "http://localhost:3000/",
++        "headers": {
++          "content-type": "application/x-www-form-urlencoded"
++        },
++        "data": "a=b&c=d"
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "140",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [],
++      "testResults": []
++    },
++    {
++      "request": {
++        "method": "POST",
++        "url": "http://localhost:3000/test",
++        "headers": {
++          "content-type": "text/xml"
++        },
++        "data": "<xml>\n  <test>1</test>\n</xml>"
++      },
++      "response": {
++        "status": 404,
++        "statusText": "Not Found",
++        "headers": {
++          "x-powered-by": "Express",
++          "content-security-policy": "default-src 'none'",
++          "x-content-type-options": "nosniff",
++          "content-type": "text/html; charset=utf-8",
++          "content-length": "144",
++          "date": "Fri, 29 Sep 2023 00:37:50 GMT",
++          "connection": "close"
++        },
++        "data": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>Error</title>\n</head>\n<body>\n<pre>Cannot POST /test</pre>\n</body>\n</html>\n"
++      },
++      "error": null,
++      "assertionResults": [],
++      "testResults": []
++    }
++  ]
++}
+diff --git a/node_modules/@usebruno/cli/src/commands/run.js b/node_modules/@usebruno/cli/src/commands/run.js
+index 2151ff5..b21fbc4 100644
+--- a/node_modules/@usebruno/cli/src/commands/run.js
++++ b/node_modules/@usebruno/cli/src/commands/run.js
+@@ -9,9 +9,10 @@ const makeJUnitOutput = require('../reporters/junit');
+ const { rpad } = require('../utils/common');
+ const { bruToJson, getOptions, collectionBruToJson } = require('../utils/bru');
+ const { dotenvToJson } = require('@usebruno/lang');
+-
++const { runSingleRequestOas } = require('../runner/run-single-request-oas')
+ const command = 'run [filename]';
+ const desc = 'Run a request';
++const yaml = require('js-yaml')
+ 
+ const printRunSummary = (results) => {
+   let totalRequests = 0;
+@@ -192,7 +193,7 @@ const builder = async (yargs) => {
+     })
+     .option('format', {
+       alias: 'f',
+-      describe: 'Format for the file results',
++      describe: 'Format of the file results; available formats are "json" (default) or "junit"',
+       default: 'json',
+       type: 'string'
+     })
+@@ -200,7 +201,9 @@ const builder = async (yargs) => {
+       type: 'boolean',
+       description: 'Allow insecure server connections'
+     })
++
+     .example('$0 run request.bru', 'Run a request')
++    .example('$0 run spec.yml', 'Run all requests described in an OpenAPI yml file.')
+     .example('$0 run request.bru --env local', 'Run a request with the environment set to local')
+     .example('$0 run folder', 'Run all requests in a folder')
+     .example('$0 run folder -r', 'Run all requests in a folder recursively')
+@@ -215,10 +218,15 @@ const builder = async (yargs) => {
+     .example(
+       '$0 run request.bru --output results.xml --format junit',
+       'Run a request and write the results to results.xml in junit format in the current directory'
++    )
++    .example(
++      '$0 run ./specifications/_merged.yml',
++      'Run a request and write '
+     );
+ };
+ 
+ const handler = async function (argv) {
++  console.log('is file')
+   try {
+     let { filename, cacert, env, envVar, insecure, r: recursive, output: outputPath, format } = argv;
+     const collectionPath = process.cwd();
+@@ -329,20 +337,61 @@ const handler = async function (argv) {
+     }
+ 
+     const _isFile = await isFile(filename);
++    console.log('is file', _isFile)
++
++    let _isOAS;
++
+     let results = [];
+ 
+     let bruJsons = [];
+ 
+     if (_isFile) {
+-      console.log(chalk.yellow('Running Request \n'));
+-      const bruContent = fs.readFileSync(filename, 'utf8');
+-      const bruJson = bruToJson(bruContent);
+-      bruJsons.push({
+-        bruFilepath: filename,
+-        bruJson
+-      });
++      const extension = path.extname(filename);
++      if (extension === '.bru') {
++        console.log(chalk.yellow('Running Request \n'));
++        const bruContent = fs.readFileSync(filename, 'utf8');
++        const bruJson = bruToJson(bruContent);
++        bruJsons.push({
++          bruFilepath: filename,
++          bruJson
++        });
++      } else if (extension === '.yml') {
++        _isOAS = true;
++        /* SAMPLE OAS FILE 
++        openapi: '3.0.2'
++        info:
++          title: API Title
++          version: '1.0'
++        servers:
++          - url: https://api.server.test/v1
++        tags:
++          - name: Chat
++            description: Given a list of messages comprising a conversation, the model will return a response.
++        x-Bru:
++          - body: example_chat_post_req_0
++            query: null
++            headers: 
++              Prefer: example_chat_post_res_0
++            script:pre-request: ''
++            script:post-response: ''
++            test: ''
++        */
++        _isOAS = true;
++        const ymlContent = fs.readFileSync(filename, 'utf8');
++        const ymlJson = yaml.load(ymlContent);
++        console.log(filename)
++        bruJsons.push({
++          bruFilepath: filename,
++          bruJson: ymlJson
++        });
++      } else {
++        console.error(chalk.red(`File ${filename} is not a .bru or .yml file`));
++        return;
++      }
+     }
+ 
++    
++
+     const _isDirectory = await isDirectory(filename);
+     if (_isDirectory) {
+       if (!recursive) {
+@@ -364,6 +413,7 @@ const handler = async function (argv) {
+           const bSequence = b.bruJson.seq || 0;
+           return aSequence - bSequence;
+         });
++
+       } else {
+         console.log(chalk.yellow('Running Folder Recursively \n'));
+ 
+@@ -371,53 +421,68 @@ const handler = async function (argv) {
+       }
+     }
+ 
+-    let currentRequestIndex = 0;
+-    let nJumps = 0; // count the number of jumps to avoid infinite loops
+-    while (currentRequestIndex < bruJsons.length) {
+-      const iter = bruJsons[currentRequestIndex];
+-      const { bruFilepath, bruJson } = iter;
+-
+-      const start = process.hrtime();
+-      const result = await runSingleRequest(
+-        bruFilepath,
+-        bruJson,
+-        collectionPath,
+-        collectionVariables,
+-        envVars,
+-        processEnvVars,
+-        brunoConfig,
+-        collectionRoot
+-      );
+-
+-      results.push({
+-        ...result,
+-        runtime: process.hrtime(start)[0] + process.hrtime(start)[1] / 1e9,
+-        suitename: bruFilepath.replace('.bru', '')
+-      });
++      let currentRequestIndex = 0;
++      let nJumps = 0; // count the number of jumps to avoid infinite loops
++      while (currentRequestIndex < bruJsons.length) {
++        const iter = bruJsons[currentRequestIndex];
++        const { bruFilepath, bruJson } = iter;
+   
+-      // determine next request
+-      const nextRequestName = result?.nextRequestName;
+-      if (nextRequestName !== undefined) {
+-        nJumps++;
+-        if (nJumps > 10000) {
+-          console.error(chalk.red(`Too many jumps, possible infinite loop`));
+-          process.exit(1);
+-        }
+-        if (nextRequestName === null) {
+-          break;
++        const start = process.hrtime();
++        let result
++        if(_isOAS) {
++          result = await runSingleRequestOas(
++            bruFilepath,
++            bruJson,
++            collectionPath,
++            collectionVariables,
++            envVars,
++            processEnvVars,
++            brunoConfig,
++            collectionRoot
++          )
++        }else{
++          result = await runSingleRequest(
++            bruFilepath,
++            bruJson,
++            collectionPath,
++            collectionVariables,
++            envVars,
++            processEnvVars,
++            brunoConfig,
++            collectionRoot
++          );
+         }
+-        const nextRequestIdx = bruJsons.findIndex((iter) => iter.bruJson.name === nextRequestName);
+-        if (nextRequestIdx >= 0) {
+-          currentRequestIndex = nextRequestIdx;
++        results.push({
++          ...result,
++          runtime: process.hrtime(start)[0] + process.hrtime(start)[1] / 1e9,
++          suitename: bruFilepath.replace('.bru', '')
++        });
++  
++        // determine next request
++        const nextRequestName = result?.nextRequestName;
++        if (nextRequestName !== undefined) {
++          nJumps++;
++          if (nJumps > 10000) {
++            console.error(chalk.red(`Too many jumps, possible infinite loop`));
++            process.exit(1);
++          }
++          if (nextRequestName === null) {
++            break;
++          }
++          const nextRequestIdx = bruJsons.findIndex((iter) => iter.bruJson.name === nextRequestName);
++          if (nextRequestIdx >= 0) {
++            currentRequestIndex = nextRequestIdx;
++          } else {
++            console.error("Could not find request with name '" + nextRequestName + "'");
++            currentRequestIndex++;
++          }
+         } else {
+-          console.error("Could not find request with name '" + nextRequestName + "'");
+           currentRequestIndex++;
+         }
+-      } else {
+-        currentRequestIndex++;
+-      }
+     }
+ 
++
++
+     const summary = printRunSummary(results);
+     const totalTime = results.reduce((acc, res) => acc + res.response.responseTime, 0);
+     console.log(chalk.dim(chalk.grey(`Ran all requests - ${totalTime} ms`)));
+@@ -449,7 +514,7 @@ const handler = async function (argv) {
+     }
+   } catch (err) {
+     console.log('Something went wrong');
+-    console.error(chalk.red(err.message));
++    console.error(chalk.red(err));
+     process.exit(1);
+   }
+ };
+diff --git a/node_modules/@usebruno/cli/src/runner/run-single-request-oas.js b/node_modules/@usebruno/cli/src/runner/run-single-request-oas.js
+new file mode 100644
+index 0000000..3ea554d
+--- /dev/null
++++ b/node_modules/@usebruno/cli/src/runner/run-single-request-oas.js
+@@ -0,0 +1,507 @@
++const os = require('os');
++const qs = require('qs');
++const chalk = require('chalk');
++const decomment = require('decomment');
++const fs = require('fs');
++const { forOwn, isUndefined, isNull, each, extend, get, compact } = require('lodash');
++const FormData = require('form-data');
++// const prepareRequest = require('./prepare-request');
++const interpolateVars = require('./interpolate-vars');
++const { interpolateString } = require('./interpolate-string');
++const { ScriptRuntime, TestRuntime, VarsRuntime, AssertRuntime } = require('@usebruno/js');
++const { stripExtension } = require('../utils/filesystem');
++const { getOptions } = require('../utils/bru');
++const https = require('https');
++const { HttpProxyAgent } = require('http-proxy-agent');
++const { SocksProxyAgent } = require('socks-proxy-agent');
++const { makeAxiosInstance } = require('../utils/axios-instance');
++const { shouldUseProxy, PatchedHttpsProxyAgent } = require('../utils/proxy-util');
++const yaml = require('js-yaml')
++const protocolRegex = /^([-+\w]{1,25})(:?\/\/|:)/;
++
++const runSingleRequestOas = async function (
++  filename,
++  bruJson,
++  collectionPath,
++  collectionVariables,
++  envVariables,
++  processEnvVars,
++  brunoConfig,
++  collectionRoot = {}
++) {
++  /* SAMPLE OAS FILE
++    openapi: '3.0.2'
++    info:
++      title: API Title
++      version: '1.0'
++    servers:
++      - url: https://api.server.test/v1
++    tags:
++      - name: Chat
++        description: Given a list of messages comprising a conversation, the model will return a response.
++    x-Bru:
++      - body: '#/paths/\/chats/post/requestBody/content/application\/json/examples/example_chat_post_req_0'
++        query: null
++        headers: 
++          Prefer: example_chat_post_res_0
++        script:pre-request: ''
++        script:post-response: ''
++        test: ''
++      - body:
++          $ref: #/components/examples/example_chat_post_req_1
++        query: null
++        headers: 
++          Prefer: example_chat_post_res_0
++        script:pre-request: ''
++        script:post-response: ''
++        test: ''
++    paths:
++      /chats:
++        post:
++          tags:
++            - Chat
++          summary: adds a new chat
++          operationId: postChat
++          description: Creates a new chat
++
++          requestBody:
++            content:
++              application/json:
++                schema:
++                  $ref: "#/components/schemas/ChatRequest"
++                examples:
++                  example_chat_post_req_0:
++                    $ref: "#/components/examples/example_chat_post_req_0"
++          responses:
++            "201":
++              description: Chat created.
++              content:
++                application/json:
++                  schema:
++                    $ref: "#/components/schemas/ChatResponse"
++                  examples:
++                    example_chat_post_res_0:
++                      $ref: "#/components/examples/example_chat_post_res_0"
++    components:
++      securitySchemes:
++        ApiKeyAuth:
++          type: http
++          scheme: "bearer"
++      examples:
++        example_chat_post_req_0:
++          summary: 'Create a chat'
++          value:
++            messages:
++              - role: user
++                content: Hello!
++        example_chat_post_req_1:
++          summary: 'Create a chat'
++          value:
++            messages:
++              - role: user
++                content: Hello!
++        example_chat_post_res_0:
++          summary: Respond to Chat
++          value:
++            id: chatcmpl-8bhzwKbG8q0qYnNW0DmJx9f77y3IL
++            object: chat.completion
++            created: 1703997956
++            model: gpt-4-1106-preview
++            choices:
++            - index: 0
++              message:
++                role: assistant
++                content: Hello! How can I assist you today?
++              logprobs:
++              finish_reason: stop
++            usage:
++              prompt_tokens: 8
++              completion_tokens: 9
++              total_tokens: 17
++            system_fingerprint: fp_3905aa4f79
++    `; /**/
++  try {
++
++
++
++
++    function prepareRequest(bru, bruJson) {
++      const request = {
++        url: '',
++        method: '',
++        headers: {},
++        data: {}
++      };
++
++      // find the example
++      const path = Object.keys(bruJson.paths)[0];
++      const method = Object.keys(bruJson.paths[path])[0];
++    
++      request.url = bruJson.servers[0].url + path;
++      request.method = method.toUpperCase();
++    
++      if (bruJson['x-Bru'] && bruJson['x-Bru'].headers) {
++        Object.entries(bruJson['x-Bru'].headers).forEach(([name, exampleRef]) => {
++          const example = bruJson.components.examples[exampleRef];
++    
++          if (example) {
++            request.headers[name] = example.value;
++          }
++        });
++      }
++    
++      if (bruJson.paths[path][method].requestBody) {
++        const requestBody = bruJson.paths[path][method].requestBody;
++        const contentType = Object.keys(requestBody.content)[0];
++        const exampleRef = requestBody.content[contentType].examples['x-Bru'];
++    
++        if (exampleRef) {
++          const example = bruJson.components.examples[exampleRef['$ref'].split('/').pop()];
++    
++          if (example) {
++            request.data = { body: example.value };
++          }
++        }
++      }
++    
++      return request;
++    }
++    
++    
++    const requests = bruJson['x-Bru'].map((req) => {
++      return prepareRequest(req, bruJson);
++    });
++
++    console.log(requests);
++
++
++    // const scriptingConfig = get(brunoConfig, 'scripts', {});
++
++    // // make axios work in node using form data
++    // // reference: https://github.com/axios/axios/issues/1006#issuecomment-320165427
++    // if (request.headers && request.headers['content-type'] === 'multipart/form-data') {
++    //   const form = new FormData();
++    //   forOwn(request.data, (value, key) => {
++    //     form.append(key, value);
++    //   });
++    //   extend(request.headers, form.getHeaders());
++    //   request.data = form;
++    // }
++
++    // // run pre-request vars
++    // const preRequestVars = get(bruJson, 'request.vars.req');
++    // if (preRequestVars?.length) {
++    //   const varsRuntime = new VarsRuntime();
++    //   varsRuntime.runPreRequestVars(
++    //     preRequestVars,
++    //     request,
++    //     envVariables,
++    //     collectionVariables,
++    //     collectionPath,
++    //     processEnvVars
++    //   );
++    // }
++
++    // // run pre request script
++    // const requestScriptFile = compact([
++    //   get(collectionRoot, 'request.script.req'),
++    //   get(bruJson, 'request.script.req')
++    // ]).join(os.EOL);
++    // if (requestScriptFile?.length) {
++    //   const scriptRuntime = new ScriptRuntime();
++    //   const result = await scriptRuntime.runRequestScript(
++    //     decomment(requestScriptFile),
++    //     request,
++    //     envVariables,
++    //     collectionVariables,
++    //     collectionPath,
++    //     null,
++    //     processEnvVars,
++    //     scriptingConfig
++    //   );
++    //   if (result?.nextRequestName !== undefined) {
++    //     nextRequestName = result.nextRequestName;
++    //   }
++    // }
++
++    // // interpolate variables inside request
++    // interpolateVars(request, envVariables, collectionVariables, processEnvVars);
++
++    // if (!protocolRegex.test(request.url)) {
++    //   request.url = `http://${request.url}`;
++    // }
++
++    // const options = getOptions();
++    // const insecure = get(options, 'insecure', false);
++    // const httpsAgentRequestFields = {};
++    // if (insecure) {
++    //   httpsAgentRequestFields['rejectUnauthorized'] = false;
++    // } else {
++    //   const caCertArray = [options['cacert'], process.env.SSL_CERT_FILE, process.env.NODE_EXTRA_CA_CERTS];
++    //   const caCert = caCertArray.find((el) => el);
++    //   if (caCert && caCert.length > 1) {
++    //     try {
++    //       httpsAgentRequestFields['ca'] = fs.readFileSync(caCert);
++    //     } catch (err) {
++    //       console.log('Error reading CA cert file:' + caCert, err);
++    //     }
++    //   }
++    // }
++
++    // const interpolationOptions = {
++    //   envVars: envVariables,
++    //   collectionVariables,
++    //   processEnvVars
++    // };
++
++    // // client certificate config
++    // const clientCertConfig = get(brunoConfig, 'clientCertificates.certs', []);
++    // for (let clientCert of clientCertConfig) {
++    //   const domain = interpolateString(clientCert.domain, interpolationOptions);
++    //   const certFilePath = interpolateString(clientCert.certFilePath, interpolationOptions);
++    //   const keyFilePath = interpolateString(clientCert.keyFilePath, interpolationOptions);
++    //   if (domain && certFilePath && keyFilePath) {
++    //     const hostRegex = '^https:\\/\\/' + domain.replaceAll('.', '\\.').replaceAll('*', '.*');
++
++    //     if (request.url.match(hostRegex)) {
++    //       try {
++    //         httpsAgentRequestFields['cert'] = fs.readFileSync(certFilePath);
++    //         httpsAgentRequestFields['key'] = fs.readFileSync(keyFilePath);
++    //       } catch (err) {
++    //         console.log('Error reading cert/key file', err);
++    //       }
++    //       httpsAgentRequestFields['passphrase'] = interpolateString(clientCert.passphrase, interpolationOptions);
++    //       break;
++    //     }
++    //   }
++    // }
++
++    // // set proxy if enabled
++    // const proxyEnabled = get(brunoConfig, 'proxy.enabled', false);
++    // const shouldProxy = shouldUseProxy(request.url, get(brunoConfig, 'proxy.bypassProxy', ''));
++    // if (proxyEnabled && shouldProxy) {
++    //   const proxyProtocol = interpolateString(get(brunoConfig, 'proxy.protocol'), interpolationOptions);
++    //   const proxyHostname = interpolateString(get(brunoConfig, 'proxy.hostname'), interpolationOptions);
++    //   const proxyPort = interpolateString(get(brunoConfig, 'proxy.port'), interpolationOptions);
++    //   const proxyAuthEnabled = get(brunoConfig, 'proxy.auth.enabled', false);
++    //   const socksEnabled = proxyProtocol.includes('socks');
++
++    //   let uriPort = isUndefined(proxyPort) || isNull(proxyPort) ? '' : `:${proxyPort}`;
++    //   let proxyUri;
++    //   if (proxyAuthEnabled) {
++    //     const proxyAuthUsername = interpolateString(get(brunoConfig, 'proxy.auth.username'), interpolationOptions);
++    //     const proxyAuthPassword = interpolateString(get(brunoConfig, 'proxy.auth.password'), interpolationOptions);
++
++    //     proxyUri = `${proxyProtocol}://${proxyAuthUsername}:${proxyAuthPassword}@${proxyHostname}${uriPort}`;
++    //   } else {
++    //     proxyUri = `${proxyProtocol}://${proxyHostname}${uriPort}`;
++    //   }
++
++    //   if (socksEnabled) {
++    //     const socksProxyAgent = new SocksProxyAgent(proxyUri);
++    //     request.httpsAgent = socksProxyAgent;
++    //     request.httpAgent = socksProxyAgent;
++    //   } else {
++    //     request.httpsAgent = new PatchedHttpsProxyAgent(
++    //       proxyUri,
++    //       Object.keys(httpsAgentRequestFields).length > 0 ? { ...httpsAgentRequestFields } : undefined
++    //     );
++    //     request.httpAgent = new HttpProxyAgent(proxyUri);
++    //   }
++    // } else if (Object.keys(httpsAgentRequestFields).length > 0) {
++    //   request.httpsAgent = new https.Agent({
++    //     ...httpsAgentRequestFields
++    //   });
++    // }
++
++    // // stringify the request url encoded params
++    // if (request.headers['content-type'] === 'application/x-www-form-urlencoded') {
++    //   request.data = qs.stringify(request.data);
++    // }
++
++    // let response, responseTime;
++    // try {
++    //   // run request
++    //   const axiosInstance = makeAxiosInstance();
++
++    //   /** @type {import('axios').AxiosResponse} */
++    //   response = await axiosInstance(request);
++
++    //   // Prevents the duration on leaking to the actual result
++    //   responseTime = response.headers.get('request-duration');
++    //   response.headers.delete('request-duration');
++    // } catch (err) {
++    //   if (err?.response) {
++    //     response = err.response;
++
++    //     // Prevents the duration on leaking to the actual result
++    //     responseTime = response.headers.get('request-duration');
++    //     response.headers.delete('request-duration');
++    //   } else {
++    //     console.log(chalk.red(stripExtension(filename)) + chalk.dim(` (${err.message})`));
++    //     return {
++    //       request: {
++    //         method: request.method,
++    //         url: request.url,
++    //         headers: request.headers,
++    //         data: request.data
++    //       },
++    //       response: {
++    //         status: null,
++    //         statusText: null,
++    //         headers: null,
++    //         data: null,
++    //         responseTime: 0
++    //       },
++    //       error: err.message,
++    //       assertionResults: [],
++    //       testResults: [],
++    //       nextRequestName: nextRequestName
++    //     };
++    //   }
++    // }
++
++    // response.responseTime = responseTime;
++
++    // console.log(
++    //   chalk.green(stripExtension(filename)) +
++    //     chalk.dim(` (${response.status} ${response.statusText}) - ${responseTime} ms`)
++    // );
++
++    // // run post-response vars
++    // const postResponseVars = get(bruJson, 'request.vars.res');
++    // if (postResponseVars?.length) {
++    //   const varsRuntime = new VarsRuntime();
++    //   varsRuntime.runPostResponseVars(
++    //     postResponseVars,
++    //     request,
++    //     response,
++    //     envVariables,
++    //     collectionVariables,
++    //     collectionPath,
++    //     processEnvVars
++    //   );
++    // }
++
++    // // run post response script
++    // const responseScriptFile = compact([
++    //   get(collectionRoot, 'request.script.res'),
++    //   get(bruJson, 'request.script.res')
++    // ]).join(os.EOL);
++    // if (responseScriptFile?.length) {
++    //   const scriptRuntime = new ScriptRuntime();
++    //   const result = await scriptRuntime.runResponseScript(
++    //     decomment(responseScriptFile),
++    //     request,
++    //     response,
++    //     envVariables,
++    //     collectionVariables,
++    //     collectionPath,
++    //     null,
++    //     processEnvVars,
++    //     scriptingConfig
++    //   );
++    //   if (result?.nextRequestName !== undefined) {
++    //     nextRequestName = result.nextRequestName;
++    //   }
++    // }
++
++    // // run assertions
++    // let assertionResults = [];
++    // const assertions = get(bruJson, 'request.assertions');
++    // if (assertions) {
++    //   const assertRuntime = new AssertRuntime();
++    //   assertionResults = assertRuntime.runAssertions(
++    //     assertions,
++    //     request,
++    //     response,
++    //     envVariables,
++    //     collectionVariables,
++    //     collectionPath
++    //   );
++
++    //   each(assertionResults, (r) => {
++    //     if (r.status === 'pass') {
++    //       console.log(chalk.green(`   ✓ `) + chalk.dim(`assert: ${r.lhsExpr}: ${r.rhsExpr}`));
++    //     } else {
++    //       console.log(chalk.red(`   ✕ `) + chalk.red(`assert: ${r.lhsExpr}: ${r.rhsExpr}`));
++    //       console.log(chalk.red(`      ${r.error}`));
++    //     }
++    //   });
++    // }
++
++    // // run tests
++    // let testResults = [];
++    // const testFile = compact([get(collectionRoot, 'request.tests'), get(bruJson, 'request.tests')]).join(os.EOL);
++    // if (typeof testFile === 'string') {
++    //   const testRuntime = new TestRuntime();
++    //   const result = await testRuntime.runTests(
++    //     decomment(testFile),
++    //     request,
++    //     response,
++    //     envVariables,
++    //     collectionVariables,
++    //     collectionPath,
++    //     null,
++    //     processEnvVars,
++    //     scriptingConfig
++    //   );
++    //   testResults = get(result, 'results', []);
++    // }
++
++    // if (testResults?.length) {
++    //   each(testResults, (testResult) => {
++    //     if (testResult.status === 'pass') {
++    //       console.log(chalk.green(`   ✓ `) + chalk.dim(testResult.description));
++    //     } else {
++    //       console.log(chalk.red(`   ✕ `) + chalk.red(testResult.description));
++    //     }
++    //   });
++    // }
++
++    // return {
++    //   request: {
++    //     method: request.method,
++    //     url: request.url,
++    //     headers: request.headers,
++    //     data: request.data
++    //   },
++    //   response: {
++    //     status: response.status,
++    //     statusText: response.statusText,
++    //     headers: response.headers,
++    //     data: response.data,
++    //     responseTime
++    //   },
++    //   error: null,
++    //   assertionResults,
++    //   testResults,
++    //   nextRequestName: nextRequestName
++    // };
++  } catch (err) {
++    console.log(err)
++    // console.log(chalk.red(stripExtension(filename)) + chalk.dim(` (${err.message})`));
++    return {
++      request: {
++        method: null,
++        url: null,
++        headers: null,
++        data: null
++      },
++      response: {
++        status: null,
++        statusText: null,
++        headers: null,
++        data: null,
++        responseTime: 0
++      },
++      error: err.message,
++      assertionResults: [],
++      testResults: []
++    };
++  }
++};
++
++module.exports = {
++  runSingleRequestOas
++};
+diff --git a/node_modules/@usebruno/cli/tests/commands/run.spec.js b/node_modules/@usebruno/cli/tests/commands/run.spec.js
+new file mode 100644
+index 0000000..10cdf42
+--- /dev/null
++++ b/node_modules/@usebruno/cli/tests/commands/run.spec.js
+@@ -0,0 +1,67 @@
++const { describe, it, expect } = require('@jest/globals');
++
++const { printRunSummary } = require('../../src/commands/run');
++
++describe('printRunSummary', () => {
++  // Suppress console.log output
++  jest.spyOn(console, 'log').mockImplementation(() => {});
++
++  it('should produce the correct summary for a successful run', () => {
++    const results = [
++      {
++        testResults: [{ status: 'pass' }, { status: 'pass' }, { status: 'pass' }],
++        assertionResults: [{ status: 'pass' }, { status: 'pass' }],
++        error: null
++      },
++      {
++        testResults: [{ status: 'pass' }, { status: 'pass' }],
++        assertionResults: [{ status: 'pass' }, { status: 'pass' }, { status: 'pass' }],
++        error: null
++      }
++    ];
++
++    const summary = printRunSummary(results);
++
++    expect(summary.totalRequests).toBe(2);
++    expect(summary.passedRequests).toBe(2);
++    expect(summary.failedRequests).toBe(0);
++    expect(summary.totalAssertions).toBe(5);
++    expect(summary.passedAssertions).toBe(5);
++    expect(summary.failedAssertions).toBe(0);
++    expect(summary.totalTests).toBe(5);
++    expect(summary.passedTests).toBe(5);
++    expect(summary.failedTests).toBe(0);
++  });
++
++  it('should produce the correct summary for a failed run', () => {
++    const results = [
++      {
++        testResults: [{ status: 'fail' }, { status: 'pass' }, { status: 'pass' }],
++        assertionResults: [{ status: 'pass' }, { status: 'fail' }],
++        error: null
++      },
++      {
++        testResults: [{ status: 'pass' }, { status: 'fail' }],
++        assertionResults: [{ status: 'pass' }, { status: 'fail' }, { status: 'fail' }],
++        error: null
++      },
++      {
++        testResults: [],
++        assertionResults: [],
++        error: new Error('Request failed')
++      }
++    ];
++
++    const summary = printRunSummary(results);
++
++    expect(summary.totalRequests).toBe(3);
++    expect(summary.passedRequests).toBe(2);
++    expect(summary.failedRequests).toBe(1);
++    expect(summary.totalAssertions).toBe(5);
++    expect(summary.passedAssertions).toBe(2);
++    expect(summary.failedAssertions).toBe(3);
++    expect(summary.totalTests).toBe(5);
++    expect(summary.passedTests).toBe(3);
++    expect(summary.failedTests).toBe(2);
++  });
++});
+diff --git a/node_modules/@usebruno/cli/tests/reporters/junit.spec.js b/node_modules/@usebruno/cli/tests/reporters/junit.spec.js
+new file mode 100644
+index 0000000..5d2154a
+--- /dev/null
++++ b/node_modules/@usebruno/cli/tests/reporters/junit.spec.js
+@@ -0,0 +1,135 @@
++const { describe, it, expect } = require('@jest/globals');
++const xmlbuilder = require('xmlbuilder');
++const fs = require('fs');
++
++const makeJUnitOutput = require('../../src/reporters/junit');
++
++describe('makeJUnitOutput', () => {
++  let createStub = jest.fn();
++
++  beforeEach(() => {
++    jest.spyOn(xmlbuilder, 'create').mockImplementation(() => {
++      return { end: createStub };
++    });
++    jest.spyOn(fs, 'writeFileSync').mockImplementation(() => {});
++  });
++
++  afterEach(() => {
++    jest.restoreAllMocks();
++  });
++
++  it('should produce a junit spec object for serialization', () => {
++    const results = [
++      {
++        description: 'description provided',
++        suitename: 'Tests/Suite A',
++        request: {
++          method: 'GET',
++          url: 'https://ima.test'
++        },
++        assertionResults: [
++          {
++            lhsExpr: 'res.status',
++            rhsExpr: 'eq 200',
++            status: 'pass'
++          },
++          {
++            lhsExpr: 'res.status',
++            rhsExpr: 'neq 200',
++            status: 'fail',
++            error: 'expected 200 to not equal 200'
++          }
++        ],
++        runtime: 1.2345678
++      },
++      {
++        request: {
++          method: 'GET',
++          url: 'https://imanother.test'
++        },
++        suitename: 'Tests/Suite B',
++        testResults: [
++          {
++            lhsExpr: 'res.status',
++            rhsExpr: 'eq 200',
++            description: 'A test that passes',
++            status: 'pass'
++          },
++          {
++            description: 'A test that fails',
++            status: 'fail',
++            error: 'expected 200 to not equal 200',
++            status: 'fail'
++          }
++        ],
++        runtime: 2.3456789
++      }
++    ];
++
++    makeJUnitOutput(results, '/tmp/testfile.xml');
++    expect(createStub).toBeCalled;
++
++    const junit = xmlbuilder.create.mock.calls[0][0];
++
++    expect(junit.testsuites).toBeDefined;
++    expect(junit.testsuites.testsuite.length).toBe(2);
++    expect(junit.testsuites.testsuite[0].testcase.length).toBe(2);
++    expect(junit.testsuites.testsuite[1].testcase.length).toBe(2);
++
++    expect(junit.testsuites.testsuite[0]['@name']).toBe('Tests/Suite A');
++    expect(junit.testsuites.testsuite[1]['@name']).toBe('Tests/Suite B');
++
++    expect(junit.testsuites.testsuite[0]['@tests']).toBe(2);
++    expect(junit.testsuites.testsuite[1]['@tests']).toBe(2);
++
++    const testcase = junit.testsuites.testsuite[0].testcase[0];
++
++    expect(testcase['@name']).toBe('res.status eq 200');
++    expect(testcase['@status']).toBe('pass');
++
++    const failcase = junit.testsuites.testsuite[0].testcase[1];
++
++    expect(failcase['@name']).toBe('res.status neq 200');
++    expect(failcase.failure).toBeDefined;
++    expect(failcase.failure[0]['@type']).toBe('failure');
++  });
++
++  it('should handle request errors', () => {
++    const results = [
++      {
++        description: 'description provided',
++        suitename: 'Tests/Suite A',
++        request: {
++          method: 'GET',
++          url: 'https://ima.test'
++        },
++        assertionResults: [
++          {
++            lhsExpr: 'res.status',
++            rhsExpr: 'eq 200',
++            status: 'fail'
++          }
++        ],
++        runtime: 1.2345678,
++        error: 'timeout of 2000ms exceeded'
++      }
++    ];
++
++    makeJUnitOutput(results, '/tmp/testfile.xml');
++
++    const junit = xmlbuilder.create.mock.calls[0][0];
++
++    expect(createStub).toBeCalled;
++
++    expect(junit.testsuites).toBeDefined;
++    expect(junit.testsuites.testsuite.length).toBe(1);
++    expect(junit.testsuites.testsuite[0].testcase.length).toBe(1);
++
++    const failcase = junit.testsuites.testsuite[0].testcase[0];
++
++    expect(failcase['@name']).toBe('Test suite has no errors');
++    expect(failcase.error).toBeDefined;
++    expect(failcase.error[0]['@type']).toBe('error');
++    expect(failcase.error[0]['@message']).toBe('timeout of 2000ms exceeded');
++  });
++});

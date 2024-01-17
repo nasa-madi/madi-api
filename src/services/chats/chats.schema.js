@@ -36,6 +36,27 @@ export const chatSchema = Type.Object(
         }, { required: ['name'] }),
       }),
     ]))
+    
+    // tool_choice:
+    //   type: object
+    //   description: Specifies a tool the model should use. Use to force the model to call a specific function.
+    //   properties:
+    //     type:
+    //       type: string
+    //       enum: ["function"]
+    //       description: The type of the tool. Currently, only `function` is supported.
+    //     function:
+    //       type: object
+    //       properties:
+    //         name:
+    //           type: string
+    //           description: The name of the function to call.
+    //       required:
+    //         - name
+    //   required:
+    //     - type
+    //     - function
+
   },
   { $id: 'Chat', additionalProperties: false }
 )
