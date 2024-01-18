@@ -17,6 +17,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Inject Google Secret
+        run: |-
+          SECRET_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
+          gcloud secrets versions access latest --secret "${SECRET_ENV}-env-overrides" > ./config/local.yml;
+          cd config;
+          ls -la;
+          echo "Contents of local.yml";
+          cat local.yml;
+          
       - name: Build and Push Container
         uses: whoan/docker-build-with-cache-action@v5
         with:
@@ -32,14 +41,7 @@ jobs:
           project_id: ${{ vars.PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
           
-      - name: Inject Google Secret
-        run: |-
-          SECRET_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
-          gcloud secrets versions access latest --secret "${SECRET_ENV}-env-overrides" > ./config/local.yml;
-          cd config;
-          ls -la;
-          echo "Contents of local.yml";
-          cat local.yml;
+
 
       - name: Deploy to Cloud Run
         id: deploy

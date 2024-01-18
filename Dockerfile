@@ -9,8 +9,6 @@ RUN npm ci --production
 
 COPY . ./
 
-# RUN ls -l ./config && cat ./config/local.yml
-
 # This is an ugly way to run migrations on EVERY container start. For most containers
 # it will be skipped, but does slow the start time.  
 # Seeding will only be done in the local, develop, test environments, but not prod.
