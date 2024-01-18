@@ -15,6 +15,7 @@ let config = {
       password: 'magical_password',
       database: 'rainbow_database', 
     },
+    debug:true,
     pool: { min: 0, max: 10, acquireTimeoutMillis: 60 * 1000 },
 
 }
