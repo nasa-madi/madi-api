@@ -1,36 +1,47 @@
-// src/services/authentication/authentication.abilities.ts
-import {  AbilityBuilder, createMongoAbility, createAliasResolver } from "@casl/ability";
+import { AbilityBuilder, createMongoAbility, createAliasResolver } from "@casl/ability";
+import * as yaml from 'js-yaml';
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
 
-// don't forget this, as `read` is used internally
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load permissions from the YAML file located in the same folder
+const permissionsPath = path.join(__dirname, 'permissions.yml');
+const permissions = yaml.load(fs.readFileSync(permissionsPath, 'utf8'));
+
 const resolveAction = createAliasResolver({
-  update: "patch", // define the same rules for update & patch
-  read: ["get", "find"], // use 'read' as a equivalent for 'get' & 'find'
-  delete: "remove" // use 'delete' or 'remove'
+  update: "patch",
+  read: ["get", "find"],
+  delete: "remove"
 });
 
-const isBuilder = (user)=>(role)=>user.role && user.role === role
+const isBuilder = (user) => (role) => user.role && user.role === role;
 
 export const defineRulesFor = (user) => {
-  // also see https://casl.js.org/v6/en/guide/define-rules
   const { can, cannot, rules } = new AbilityBuilder(createMongoAbility);
-  const is = isBuilder(user)
+  const is = isBuilder(user);
 
-  // SuperAdmin can do evil
-  if (is("superadmin")) can("manage", "all");
-  if (is("superadmin")) return rules;
+  // Iterate over the permissions and define rules based on user role
+  for (const role in permissions) {
+    if (is(role)) {
+      for (const subject in permissions[role]) {
+        permissions[role][subject].forEach((permission) => {
+          const action = permission.action;
+          const conditions = permission.conditions ? { ...permission.conditions, id: user.id } : undefined;
+          const fields = permission.fields;
+          const method = permission.method || 'can';
 
-  if (is("admin")) can("create", "users");
-
-
-  can("read", "tools");
-  can("create", "tools");
-
-  can("create", "chats");
-
-  can("read", "users");
-  can("update", "users", { id: user.id });
-  cannot("update", "users", ["roleId"], { id: user.id });
-  cannot("delete", "users", { id: user.id });
+          if (method === 'can') {
+            can(action, subject, conditions);
+          } else if (method === 'cannot') {
+            cannot(action, subject, fields, conditions);
+          }
+        });
+      }
+    }
+  }
 
   return rules;
 };

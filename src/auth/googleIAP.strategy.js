@@ -32,16 +32,19 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
       //   googleIAPEmail: "example@gmail.com",
       //   googleIAPUserId: "123456789",
       // }
+      
   
       const { emailField, idField, entity, errorMessage } = this.configuration;
       const entityService = this.entityService;
       let result = await entityService.find({
         ...params,
+        provider:null,
         query:{
           [emailField]: authentication.googleIAPEmail || null,
-          [idField]: authentication.googleIAPUserId || null
+          // Comented out so that only the googleIAPEmail is required for auth, since the 
+          // first interaction will not have a user credential established.
+          // [idField]: authentication.googleIAPUserId || null
         },
-        
       });
       if(result?.data?.[0]){
         console.log('Is Authenticated',{
@@ -53,6 +56,11 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
           [entity]: result?.data?.[0]
         }
       }else{
+        let { returnAuthBool } = params
+        if(returnAuthBool){
+          return false
+        }
+        // return false
         console.error('Not Authenticated',{
           authentication: { strategy: this.name },
           [entity]: result?.data?.[0]

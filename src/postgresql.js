@@ -1,7 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/databases.html
 import knex from 'knex'
 
-import pgvector from 'pgvector/knex'
 import { toSql } from 'pgvector/knex';
 
 knex.QueryBuilder.extend('cosineDistanceAs', function(column, value, name) {

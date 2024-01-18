@@ -3,11 +3,12 @@ export async function up(knex) {
     table.increments('id')
     table.string('email').unique()
     table.string('googleId').unique()
-    table.string('password')
     table.string('role')
   })
+
 }
 
 export async function down(knex) {
   await knex.schema.dropTable('users')
 }
+

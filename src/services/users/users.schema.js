@@ -4,14 +4,16 @@ import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { passwordHash } from '@feathersjs/authentication-local'
 import { dataValidator, queryValidator } from '../../validators.js'
 
+// Password fields have been left behind for temporary development in case auth strategy needs to change
+
 // Main data model schema
 export const userSchema = Type.Object(
   {
     id: Type.Number(),
     email: Type.String(),
-    password: Type.Optional(Type.String()),
+    // password: Type.Optional(Type.String()),
     googleId: Type.Optional(Type.String()),
-    role: Type.Optional(Type.String())
+    role: Type.Optional(Type.String(), { default: 'member' })
   },
   { $id: 'User', additionalProperties: false }
 )
@@ -20,16 +22,16 @@ export const userResolver = resolve({})
 
 export const userExternalResolver = resolve({
   // The password should never be visible externally
-  password: async () => undefined
+  // password: async () => undefined
 })
 
 // Schema for creating new entries
-export const userDataSchema = Type.Pick(userSchema, ['id','email', 'password','googleId'], {
+export const userDataSchema = Type.Pick(userSchema, ['id','email','googleId'], {
   $id: 'UserData'
 })
 export const userDataValidator = getValidator(userDataSchema, dataValidator)
 export const userDataResolver = resolve({
-  password: passwordHash({ strategy: 'local' })
+  // password: passwordHash({ strategy: 'local' })
 })
 
 // Schema for updating existing entries
@@ -38,7 +40,7 @@ export const userPatchSchema = Type.Partial(userSchema, {
 })
 export const userPatchValidator = getValidator(userPatchSchema, dataValidator)
 export const userPatchResolver = resolve({
-  password: passwordHash({ strategy: 'local' })
+  // password: passwordHash({ strategy: 'local' })
 })
 
 // Schema for allowed query properties

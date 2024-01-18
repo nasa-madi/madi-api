@@ -3,7 +3,7 @@ import { authenticate } from '@feathersjs/authentication'
 import { toolDescs } from '../../plugin-tools/index.js'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { authorizeHook } from '../../auth/authorize.hook.js'
-
+import { iff, iffElse } from 'feathers-hooks-common';
 import {
   userDataValidator,
   userPatchValidator,
@@ -21,6 +21,13 @@ export const userMethods = ['find', 'get', 'create', 'patch', 'remove']
 
 export * from './users.class.js'
 export * from './users.schema.js'
+
+
+// const iff = (condition, hook) =>async (context, next) => {
+//   const isCondition = typeof condition == 'function' ? condition(context) : !!condition;
+//   return isCondition ? hook(context, next) : next()
+// }
+
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const user = (app) => {
@@ -47,14 +54,40 @@ export const user = (app) => {
     },
     before: {
       all: [
+        schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)
+      ],
+      find: [
         authenticate('googleIAP'),
         authorizeHook,
-        schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)],
-      find: [],
-      get: [],
-      create: [schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],
-      patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
-      remove: []
+        schemaHooks.resolveData(userDataResolver)
+      ],
+      get: [
+        authenticate('googleIAP'),
+        authorizeHook,
+        schemaHooks.resolveData(userDataResolver)
+      ],
+      create: [
+        (context)=>context.params.returnAuthBool=true,
+        authenticate('googleIAP'),
+        iffElse((context)=>!!context.params.user,
+          [authorizeHook],[
+            (context)=>{
+              //update modify the create to be inputs from authentication
+              context.data = {
+                email:context.params.authentication.googleIAPEmail,
+                googleId: context.params.authentication.googleIAPUserId,
+                role:'member'
+              }
+            }
+          ]
+        ),
+        schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)
+      ],
+      patch: [
+        authenticate('googleIAP'),authorizeHook,
+        // schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)
+      ],
+      remove: [authenticate('googleIAP'),authorizeHook]
     },
     after: {
       all: [],

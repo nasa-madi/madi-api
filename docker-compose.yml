@@ -17,16 +17,10 @@ services:
   api:
     build: .
     environment:
+      - NODE_ENV=development
       - NODE_CONFIG_ENV=docker
-      - NODE_ENV=docker
-      - YES=NO
-      # - POSTGRES_PASSWORD=magical_password
-      # - POSTGRES_USER=unicorn_user
-      # - POSTGRES_DB=rainbow_database
-      # - POSTGRES_HOST=database
-      # - POSTGRES_PORT=5432
     ports:
-      - "4040:3030"
+      - "3030:3030"
     networks:
       - madi
     depends_on:
