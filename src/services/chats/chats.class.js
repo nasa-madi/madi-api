@@ -28,8 +28,6 @@ export class ChatService {
     }
     // return data
     return this.makeRequest(options)
-    // let writeFunc = (text)=>console.log(text)
-    // return await processConversation(messages, tools, tool_choice, writeFunc)
   }
 }
 

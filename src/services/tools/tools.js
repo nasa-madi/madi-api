@@ -1,7 +1,8 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
-
 import { hooks as schemaHooks } from '@feathersjs/schema'
+import { authorizeHook } from '../../auth/authorize.hook.js'
+
 import {
   toolDataValidator,
   // toolPatchValidator,
@@ -21,6 +22,15 @@ export const toolMethods = ['find', 'get', 'create']
 export * from './tools.class.js'
 export * from './tools.schema.js'
 
+// const { user } = context.result;
+// if (!user) return context;
+// const ability = defineAbilitiesFor(user);
+// context.result.ability = ability;
+// context.result.rules = ability.rules;
+
+// return context;
+
+
 // A configure function that registers the service and its hooks via `app.configure`
 export const tool = (app) => {
   // Register our service on the Feathers application
@@ -34,13 +44,15 @@ export const tool = (app) => {
   app.service(toolPath).hooks({
     around: {
       all: [
-        // authenticate('googleIAP'),
         schemaHooks.resolveExternal(toolExternalResolver),
-        schemaHooks.resolveResult(toolResolver)
+        schemaHooks.resolveResult(toolResolver),
+        
       ]
     },
     before: {
       all: [
+        authenticate('googleIAP'),
+        authorizeHook,
         schemaHooks.validateQuery(toolQueryValidator), schemaHooks.resolveQuery(toolQueryResolver)
       ],
       find: [],
@@ -50,7 +62,7 @@ export const tool = (app) => {
       remove: []
     },
     after: {
-      all: []
+      all: [authorizeHook]
     },
     error: {
       all: []

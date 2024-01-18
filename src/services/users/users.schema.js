@@ -10,7 +10,8 @@ export const userSchema = Type.Object(
     id: Type.Number(),
     email: Type.String(),
     password: Type.Optional(Type.String()),
-    googleId: Type.Optional(Type.String())
+    googleId: Type.Optional(Type.String()),
+    role: Type.Optional(Type.String())
   },
   { $id: 'User', additionalProperties: false }
 )

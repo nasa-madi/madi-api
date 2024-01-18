@@ -2,9 +2,9 @@
 import { authenticate } from '@feathersjs/authentication'
 import { PassThrough } from 'stream';
 import { hooks as schemaHooks } from '@feathersjs/schema'
-import { Transform } from 'stream'
-// import { iff } from 'feathers-hooks-common'
 import { logger } from '../../logger.js';
+import { authorizeHook } from '../../auth/authorize.hook.js'
+
 import {
   chatDataValidator,
   chatQueryValidator,
@@ -14,8 +14,8 @@ import {
   chatQueryResolver
 } from './chats.schema.js'
 import { ChatService, getOptions } from './chats.class.js'
-import fs from 'fs'
 import messageReducer from '../utils/deltaReducer.js';
+
 export const chatPath = 'chats'
 export const chatMethods = ['create']
 
@@ -93,6 +93,8 @@ export const chat = (app) => {
     },
     before: {
       all: [
+        authenticate('googleIAP'),
+        authorizeHook,
         schemaHooks.validateQuery(chatQueryValidator), schemaHooks.resolveQuery(chatQueryResolver)
       ],
       create: [

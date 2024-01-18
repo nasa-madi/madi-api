@@ -1,8 +1,9 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
 import { toolDescs } from '../../plugin-tools/index.js'
-
 import { hooks as schemaHooks } from '@feathersjs/schema'
+import { authorizeHook } from '../../auth/authorize.hook.js'
+
 import {
   userDataValidator,
   userPatchValidator,
@@ -37,15 +38,18 @@ export const user = (app) => {
         schemaHooks.resolveExternal(userExternalResolver), 
         schemaHooks.resolveResult(userResolver)
       ],
-      find: [authenticate('googleIAP')],
-      get: [authenticate('googleIAP')],
+      find: [],
+      get: [],
       create: [],
-      update: [authenticate('googleIAP')],
-      patch: [authenticate('googleIAP')],
-      remove: [authenticate('googleIAP')]
+      update: [],
+      patch: [],
+      remove: []
     },
     before: {
-      all: [schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)],
+      all: [
+        authenticate('googleIAP'),
+        authorizeHook,
+        schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)],
       find: [],
       get: [],
       create: [schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],

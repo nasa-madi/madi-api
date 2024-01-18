@@ -2,6 +2,7 @@
 import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors, serveStatic } from '@feathersjs/koa'
+import { feathersCasl } from "feathers-casl";
 
 import { configurationValidator } from './configuration.js'
 import { logError } from './hooks/log-error.js'
@@ -37,6 +38,8 @@ app.configure(postgresql)
 app.configure(authentication)
 
 app.configure(services)
+
+app.configure(feathersCasl());
 
 // Register hooks that run on all service methods
 app.hooks({
