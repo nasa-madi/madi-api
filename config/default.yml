@@ -39,6 +39,7 @@ authentication:
   authStrategies:
     - jwt
     - local
+    - googleIAP
   jwtOptions:
     header:
       typ: access
@@ -48,3 +49,6 @@ authentication:
   local:
     usernameField: email
     passwordField: password
+  googleIAP:
+    emailField: email
+    idField: googleId

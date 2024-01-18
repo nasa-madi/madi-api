@@ -37,12 +37,12 @@ export const user = (app) => {
         schemaHooks.resolveExternal(userExternalResolver), 
         schemaHooks.resolveResult(userResolver)
       ],
-      find: [authenticate('jwt')],
-      get: [authenticate('jwt')],
+      find: [authenticate('googleIAP')],
+      get: [authenticate('googleIAP')],
       create: [],
-      update: [authenticate('jwt')],
-      patch: [authenticate('jwt')],
-      remove: [authenticate('jwt')]
+      update: [authenticate('googleIAP')],
+      patch: [authenticate('googleIAP')],
+      remove: [authenticate('googleIAP')]
     },
     before: {
       all: [schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)],

@@ -7,7 +7,7 @@ import { configurationValidator } from './configuration.js'
 import { logError } from './hooks/log-error.js'
 import { postgresql } from './postgresql.js'
 
-import { authentication } from './authentication.js'
+import { authentication } from './auth/authentication.js'
 
 import { services } from './services/index.js'
 
@@ -21,13 +21,8 @@ app.configure(configuration(configurationValidator))
 
 // Set up Koa middleware
 app.use(cors())
-// app.use(serveStatic(app.get('public')))
 app.use(serveStatic('specifications/build'))
 app.use(errorHandler())
-app.use(async (ctx, next) => {
-  console.log(ctx.request.headers);
-  await next();
-});
 app.use(parseAuthentication())
 app.use(bodyParser())
 app.configure(openaiConfig)

@@ -2,6 +2,7 @@ export async function up(knex) {
   await knex.schema.createTable('users', (table) => {
     table.increments('id')
     table.string('email').unique()
+    table.string('googleId').unique()
     table.string('password')
   })
 }

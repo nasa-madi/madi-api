@@ -30,8 +30,8 @@ export class ToolService {
     });
 
     return {
-      skip: null,
-      limit: null,
+      skip: 0,
+      limit: 0,
       total: sortedData.length,
       data: sortedData
     }
