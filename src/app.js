@@ -24,9 +24,14 @@ app.use(cors())
 // app.use(serveStatic(app.get('public')))
 app.use(serveStatic('specifications/build'))
 app.use(errorHandler())
+app.use(async (ctx, next) => {
+  console.log(ctx.request.headers);
+  await next();
+});
 app.use(parseAuthentication())
 app.use(bodyParser())
 app.configure(openaiConfig)
+
 
 
 // Configure services and transports
