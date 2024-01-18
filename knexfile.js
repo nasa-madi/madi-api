@@ -11,9 +11,9 @@ let config = {
     connection: {
       host: '10.43.177.3',
       port: '5432',
-      user: 'unicorn_user', 
-      password: 'magical_password',
-      database: 'rainbow_database', 
+      user: 'postgres', 
+      password: 'changeme',
+      database: 'main', 
     },
     debug:true,
     pool: { min: 0, max: 10, acquireTimeoutMillis: 60 * 1000 },
