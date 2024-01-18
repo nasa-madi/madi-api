@@ -10,14 +10,14 @@ let config = {
     client: 'pg',
     connection: {
       host: '10.43.177.3',
-      port: '5432',
+      port: 5432,
       user: 'postgres', 
       password: 'changeme',
       database: 'main', 
     },
     debug:true,
-    pool: { min: 0, max: 10, acquireTimeoutMillis: 60 * 1000 },
-
+    pool: { min: 0, max: 30, acquireTimeoutMillis: 10 * 1000 },
 }
+console.log(config)
 
 export default config
