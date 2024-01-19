@@ -3,6 +3,8 @@ name: Build and Deploy to Cloud Run
 on:
   push:
     branches: [ "main", "develop", "test" ]
+    paths:
+      - 'migrations/**'
 
 jobs:
   deploy:
@@ -27,10 +29,6 @@ jobs:
         run: |-
           SECRET_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
           gcloud secrets versions access latest --secret "${SECRET_ENV}-env-overrides" > ./config/local.yml;
-        # cd config;
-        # ls -la;
-        # echo "Contents of local.yml";
-        # cat local.yml;
 
       - name: Build and Push Container
         uses: whoan/docker-build-with-cache-action@v5
@@ -41,11 +39,20 @@ jobs:
           image_name: ${{ vars.SERVICE }}
           image_tag: ${{ github.sha }}
 
-
-
+      - name: Deploy to Cloud Run with Migration
+        if: ${{ contains(github.event.head_commit.modified, 'migrations/') }}
+        uses: google-github-actions/deploy-cloudrun@v2.0.0
+        with:
+          project_id: ${{ vars.PROJECT_ID }}
+          service: ${{ vars.SERVICE }}-migrate
+          region: ${{ vars.REGION }}
+          image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
+          env_vars: |
+            NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
+            MIGRATION=true
 
       - name: Deploy to Cloud Run
-        id: deploy
+        if: ${{ steps.deploy.outputs.status == 'succeeded' }}
         uses: google-github-actions/deploy-cloudrun@v2.0.0
         with:
           project_id: ${{ vars.PROJECT_ID }}
@@ -54,5 +61,4 @@ jobs:
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           env_vars: |
             NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
-
-          
+            MIGRATION=false
