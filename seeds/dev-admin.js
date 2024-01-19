@@ -5,7 +5,7 @@
  */
 export const seed = async function(knex) {
   // Deletes ALL existing entries
-  await knex('users').del();
+  // await knex('users').del();
 
   const sequenceValue = await knex.raw("SELECT last_value FROM users_id_seq");
   if (sequenceValue.rows[0].last_value < 4) {
