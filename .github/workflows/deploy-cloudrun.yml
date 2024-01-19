@@ -66,16 +66,14 @@ jobs:
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           env_vars: |
             MIGRATION=true
-            NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
+            NODE_CONFIG_ENV=${{ env.ENV }}
           no_traffic: true
-          flags: >
-            --command sh 
-            --args "-c,npm run migrate;npm start"
+
 
       - name: Create Migration tag  
         uses: actions/github-script@v5
         with:
-          script: require('./cicd/upsertTag.js')({ github, context, tag:"_migration-${{ env.ENV }}" })
+          script: require('./.cicd/upsertTag.js')({ github, context, tag:"_migration-${{ env.ENV }}" })
  
 
       - name: Deploy to Cloud Run
@@ -93,5 +91,5 @@ jobs:
       - name: Create Migration tag  
         uses: actions/github-script@v5
         with:
-          script: require('./cicd/upsertTag.js')({ github, context, tag:"_deployed-${{ env.ENV }}" })
+          script: require('./.cicd/upsertTag.js')({ github, context, tag:"_deployed-${{ env.ENV }}" })
      
