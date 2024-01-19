@@ -12,13 +12,13 @@ COPY . ./
 # This is an ugly way to run migrations on EVERY container start. For most containers
 # it will be skipped, but does slow the start time.  
 # Seeding will only be done in the local, develop, test environments, but not prod.
-CMD     if [ "$NODE_ENV" != "production" ]; then \
-            npm run migrate && \
-            npm run knex:seed; \
-        else \
-            npm run migrate; \
-        fi && \
-        npm start
-# CMD     npm start
+# CMD     if [ "$NODE_ENV" != "production" ]; then \
+#             npm run migrate && \
+#             npm run knex:seed; \
+#         else \
+#             npm run migrate; \
+#         fi && \
+#         npm start
+CMD     npm start
 
 # CMD     ls -l ./config && node connector.test.js

@@ -4,6 +4,8 @@ export async function up(knex) {
     table.string('email').unique()
     table.string('googleId').unique()
     table.string('role')
+
+    
   })
 
 }

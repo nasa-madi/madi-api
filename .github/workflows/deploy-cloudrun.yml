@@ -57,6 +57,6 @@ jobs:
           service: ${{ vars.SERVICE }}
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }} 
-          flags: --command="npm start"
+          flags: --command=npm --args="start"
           env_vars: |
             NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}         
