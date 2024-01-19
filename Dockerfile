@@ -9,16 +9,8 @@ RUN npm ci --production
 
 COPY . ./
 
-# CMD sh -c ' \
-#   echo "SEED $SEED"; \
-#   echo "MIGRATION $MIGRATION"; \
-#   if [ "$SEED" = "true" ]; then \
-#     echo "Running seed:admin"; \
-#     npm run seed:admin; \
-#   fi; \
-#   echo "Starting the application"; \
-#   npm start \
-# '
+RUN npm spec:build
+
 
 CMD sh -c ' \
   echo "SEED $SEED"; \
