@@ -1,15 +1,4 @@
-import { AbilityBuilder, createMongoAbility, createAliasResolver } from "@casl/ability";
-import * as yaml from 'js-yaml';
-import * as fs from 'fs';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Load permissions from the YAML file located in the same folder
-const permissionsPath = path.join(__dirname, 'permissions.yml');
-const permissions = yaml.load(fs.readFileSync(permissionsPath, 'utf8'));
+import { Ability, AbilityBuilder, createAliasResolver } from "@casl/ability";
 
 const resolveAction = createAliasResolver({
   update: "patch",
@@ -17,37 +6,38 @@ const resolveAction = createAliasResolver({
   delete: "remove"
 });
 
-const isBuilder = (user) => (role) => user.role && user.role === role;
+const defineRules = (can, cannot, user) => {
+  if (user.role) {
+    switch (user.role.name) {
 
-export const defineRulesFor = (user) => {
-  const { can, cannot, rules } = new AbilityBuilder(createMongoAbility);
-  const is = isBuilder(user);
+      case "superadmin":
+        can("manage", "all");
+        break;
 
-  // Iterate over the permissions and define rules based on user role
-  for (const role in permissions) {
-    if (is(role)) {
-      for (const subject in permissions[role]) {
-        permissions[role][subject].forEach((permission) => {
-          const action = permission.action;
-          const conditions = permission.conditions ? { ...permission.conditions, id: user.id } : undefined;
-          const fields = permission.fields;
-          const method = permission.method || 'can';
+      case "admin":
+        can("create", "users");
 
-          if (method === 'can') {
-            can(action, subject, conditions);
-          } else if (method === 'cannot') {
-            cannot(action, subject, fields, conditions);
-          }
-        });
-      }
+      default:
+        can("read",   "tools");
+        can("create", "tools");
+        
+        can("create", "chats");
+
+        can("read", "users", {id: user.id});
+        cannot("update", "users")
+        cannot("delete", "users");
+        break;
     }
   }
+};
 
+export const defineRulesFor = (user) => {
+  const { can, cannot, rules } = new AbilityBuilder(Ability);
+  defineRules(can, cannot, user);
   return rules;
 };
 
 export const defineAbilitiesFor = (user) => {
   const rules = defineRulesFor(user);
-
-  return new createMongoAbility(rules, { resolveAction });
+  return new Ability(rules, { resolveAction });
 };

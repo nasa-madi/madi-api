@@ -26,7 +26,7 @@ export const userExternalResolver = resolve({
 })
 
 // Schema for creating new entries
-export const userDataSchema = Type.Pick(userSchema, ['id','email','googleId'], {
+export const userDataSchema = Type.Pick(userSchema, ['email','googleId','role'], {
   $id: 'UserData'
 })
 export const userDataValidator = getValidator(userDataSchema, dataValidator)
@@ -54,13 +54,13 @@ export const userQuerySchema = Type.Intersect(
   { additionalProperties: false }
 )
 export const userQueryValidator = getValidator(userQuerySchema, queryValidator)
-export const userQueryResolver = resolve({
-  // If there is a user (e.g. with authentication), they are only allowed to see their own data
-  id: async (value, user, context) => {
-    if (context.params.user) {
-      return context.params.user.id
-    }
+export const userQueryResolver = resolve({})
 
-    return value
-  }
-})
+//   // If there is a user (e.g. with authentication), they are only allowed to see their own data
+//   id: async (value, user, context) => {
+//     if (context.params.user) {
+//       return context.params.user.id
+//     }
+//     return value
+//   }
+// })

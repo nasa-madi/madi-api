@@ -54,40 +54,48 @@ export const user = (app) => {
     },
     before: {
       all: [
-        schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)
+        schemaHooks.validateQuery(userQueryValidator), 
+        schemaHooks.resolveQuery(userQueryResolver)
       ],
       find: [
         authenticate('googleIAP'),
         authorizeHook,
-        schemaHooks.resolveData(userDataResolver)
       ],
       get: [
         authenticate('googleIAP'),
         authorizeHook,
-        schemaHooks.resolveData(userDataResolver)
       ],
       create: [
         (context)=>context.params.returnAuthBool=true,
+        // (context)=>{console.log('user create', context)},
         authenticate('googleIAP'),
         iffElse((context)=>!!context.params.user,
           [authorizeHook],[
             (context)=>{
+              // console.log('iffElse BEFORE', context.params, context.data)
               //update modify the create to be inputs from authentication
               context.data = {
                 email:context.params.authentication.googleIAPEmail,
                 googleId: context.params.authentication.googleIAPUserId,
                 role:'member'
               }
+              // console.log('iffElse AFTER', context.data)
             }
           ]
         ),
-        schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)
+        schemaHooks.validateData(userDataValidator), 
+        schemaHooks.resolveData(userDataResolver)
       ],
       patch: [
-        authenticate('googleIAP'),authorizeHook,
-        // schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)
+        authenticate('googleIAP'),
+        authorizeHook,
+        schemaHooks.validateData(userPatchValidator),
+        schemaHooks.resolveData(userPatchResolver)
       ],
-      remove: [authenticate('googleIAP'),authorizeHook]
+      remove: [
+        authenticate('googleIAP'),
+        authorizeHook
+      ]
     },
     after: {
       all: [],

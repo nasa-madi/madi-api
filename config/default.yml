@@ -17,6 +17,12 @@ postgresql:
     password: magical_password
     database: rainbow_database
     port: 5432
+  pool: 
+    min: 0
+    max: 10
+    idleTimeoutMillis: 5000
+  #   createTimeoutMillis: 30000
+  #   acquireTimeoutMillis: 60000
   debug: true
 
 # API KEYS

@@ -9,13 +9,24 @@ RUN npm ci --production
 
 COPY . ./
 
-# This is an ugly way to run migrations on EVERY container start. For most containers
-# it will be skipped, but does slow the start time.  
-# Seeding will only be done in the local, develop, test environments, but not prod.
-CMD if [ "$NODE_ENV" != "production" ]; then \
-        npm run migrate && \
-        npm run knex:seed; \
-    else \
-        npm run migrate; \
-    fi && \
-    npm start
+# CMD sh -c ' \
+#   echo "SEED $SEED"; \
+#   echo "MIGRATION $MIGRATION"; \
+#   if [ "$SEED" = "true" ]; then \
+#     echo "Running seed:admin"; \
+#     npm run seed:admin; \
+#   fi; \
+#   echo "Starting the application"; \
+#   npm start \
+# '
+
+CMD sh -c ' \
+  echo "SEED $SEED"; \
+  echo "MIGRATION $MIGRATION"; \
+  if [ "${MIGRATION:-false}" = "true" ]; then \
+    npm run migrate; \
+  elif [ "${SEED:-false}" = "true" ]; then \
+    npm run seed:admin; \
+  fi; \
+  npm start \
+'
