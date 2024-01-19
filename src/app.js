@@ -55,5 +55,5 @@ app.hooks({
   setup: [],
   teardown: []
 })
-
+console.log(app.get('postgresql'))
 export { app }
