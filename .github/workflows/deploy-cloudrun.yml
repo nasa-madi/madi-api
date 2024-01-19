@@ -73,7 +73,7 @@ jobs:
       - name: Create Migration tag  
         uses: actions/github-script@v7
         with:
-          script: require('./.cicd/upsertTag.js')({ github, context, tag:"_migration-${{ env.ENV }}" })
+          script: require('./.cicd/upsertTag.cjs')({ github, context, tag:"_migration-${{ env.ENV }}" })
  
 
       - name: Deploy to Cloud Run
@@ -91,5 +91,5 @@ jobs:
       - name: Create Migration tag  
         uses: actions/github-script@v7
         with:
-          script: require('./.cicd/upsertTag.js')({ github, context, tag:"_deployed-${{ env.ENV }}" })
+          script: require('./.cicd/upsertTag.cjs')({ github, context, tag:"_deployed-${{ env.ENV }}" })
      
