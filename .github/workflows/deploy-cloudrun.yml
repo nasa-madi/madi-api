@@ -60,7 +60,7 @@ jobs:
             --args "-c,npm run migrate;npm start"
 
       - name: Deploy to Cloud Run
-        uses: jamesvillarrubia/deploy-cloudrun
+        uses: google-github-actions/deploy-cloudrun@v2.0.0
         with:
           project_id: ${{ vars.PROJECT_ID }}
           service: ${{ vars.SERVICE }}
