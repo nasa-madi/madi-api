@@ -37,8 +37,14 @@ jobs:
           image_name: ${{ vars.SERVICE }}
           image_tag: ${{ github.sha }}
 
+      - name: Get changes in migrations folder
+        id: changed-files-migrations
+        uses: tj-actions/changed-files@v42
+        with:
+          files: migrations/**
+
       - name: Deploy to Cloud Run with Migration
-        if: ${{ contains(github.event.head_commit.modified, 'migrations/') }}
+        if: steps.changed-files-migrations.outputs.any_changed == 'true'
         uses: google-github-actions/deploy-cloudrun@v2.0.0
         with:
           project_id: ${{ vars.PROJECT_ID }}
