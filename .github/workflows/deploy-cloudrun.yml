@@ -8,9 +8,9 @@ jobs:
   deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
     environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name }}
-    permissions:
-      contents: 'read'
-      id-token: 'write'
+    # permissions:
+    #   contents: 'read'
+      # id-token: 'write'
 
     runs-on: ubuntu-latest
     steps:
