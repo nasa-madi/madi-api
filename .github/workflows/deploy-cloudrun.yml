@@ -54,7 +54,7 @@ jobs:
           env_vars: |
             NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
           no_traffic: true
-          flags: |
+          flags: >
             --command sh 
             --args "-c,npm run migrate;npm start"
 
@@ -66,7 +66,7 @@ jobs:
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }} 
           # This command wil only run the admin seed file override in non-production environments
-          flags: --command sh --args -c,"npm start"
+          flags: --command sh --args "-c,npm start"
         # --args "-c,if [ \"develop\" != \"production\" ]; then npm run seed:admin; fi && npm start"
           env_vars: |
             NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}         
