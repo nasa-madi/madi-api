@@ -21,5 +21,6 @@ COPY . ./
 #             npm run migrate; \
 #         fi && \
 #         npm start
+CMD     npm start
 
-CMD     ls -l ./config && node connector.test.js
+# CMD     ls -l ./config && node connector.test.js
