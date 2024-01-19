@@ -83,7 +83,7 @@ jobs:
           # This command wil only run the admin seed file override in non-production environments
           flags: |
             --command sh 
-            --args "-c,npm run seed:admin && npm start"
+            --args "-c,npm run seed:admin; npm start"
         # --args "-c,if [ \"develop\" != \"production\" ]; then npm run seed:admin; fi && npm start"
           env_vars: |
             NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}         
