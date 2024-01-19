@@ -34,12 +34,9 @@ services:
   database:
     image: "ankane/pgvector"
     environment:
-      # - POSTGRES_USER=unicorn_user
-      # - POSTGRES_PASSWORD=magical_password
-      # - POSTGRES_DB=rainbow_database
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=changeme
-      - POSTGRES_DB=main
+      - POSTGRES_USER=unicorn_user
+      - POSTGRES_PASSWORD=magical_password
+      - POSTGRES_DB=rainbow_database
     volumes:
       - database-data:/var/lib/postgresql/data/
     ports:
@@ -47,7 +44,7 @@ services:
     networks:
       - madi
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d main"]
+      test: ["CMD-SHELL", "pg_isready -U unicorn_user -d rainbow_database"]
       interval: 5s
       timeout: 5s
       retries: 5
