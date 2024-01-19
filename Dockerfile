@@ -10,6 +10,8 @@ RUN npm ci --production
 COPY . ./
 
 CMD sh -c ' \
+  echo "SEED $SEED"; \
+  echo "MIGATION $MIGRATION"; \
   if [ "$MIGRATION" = "true" ]; then \
     npm run migrate; \
   elif [ "$SEED" = "true" ]; then \
