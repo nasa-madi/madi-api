@@ -48,7 +48,7 @@ jobs:
           env_vars: |
             NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
           no_traffic: true
-          flags: --command="npm run migrate; npm start;" 
+          flags: --command "npm run migrate; npm start;"
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2.0.0
@@ -57,6 +57,6 @@ jobs:
           service: ${{ vars.SERVICE }}
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }} 
-          flags: --command=npm --args="start"
+          flags: --command "npm start"
           env_vars: |
             NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}         
