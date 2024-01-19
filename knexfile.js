@@ -10,7 +10,7 @@ let config = {
     client: 'pg',
     connection: {
       host: '10.43.177.3',
-      port: 5432,
+      port: '5432',
       user: 'postgres', 
       password: 'changeme',
       database: 'main', 

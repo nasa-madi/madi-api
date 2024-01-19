@@ -22,5 +22,4 @@ COPY . ./
 #         fi && \
 #         npm start
 
-CMD     ls -l ./config && \
-        npm start
+CMD     ls -l ./config && node connector.test.js
