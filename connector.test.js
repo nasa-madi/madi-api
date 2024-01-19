@@ -4,7 +4,7 @@ import knexLib from 'knex';
 const knex = knexLib({
   client: 'pg',
   connection: {
-    host: '/cloudsql/hq-madi-dev-4ebd7d92:us-east4:postgres-hq-madi-dev-4ebd7d92-28e2',
+    host: '10.43.177.3',
     user: 'postgres',
     password: 'changeme',
     database: 'main',
