@@ -17,6 +17,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      # - name: Create tag  
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       github.rest.git.createRef({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         ref: 'refs/tags/deployed',
+      #         sha: context.sha
+      #       })
+
+      - name: Get changes in migrations folder
+        id: changed-files-migrations
+        uses: tj-actions/changed-files@v42
+        with:
+          files: migrations/**
+          sha: 'migration'
+
+
       - name: Authenticate with Google
         uses: 'google-github-actions/auth@v2'
         with:
@@ -37,11 +56,7 @@ jobs:
           image_name: ${{ vars.SERVICE }}
           image_tag: ${{ github.sha }}
 
-      - name: Get changes in migrations folder
-        id: changed-files-migrations
-        uses: tj-actions/changed-files@v42
-        with:
-          files: migrations/**
+
 
       - name: Deploy to Cloud Run with Migration
         if: steps.changed-files-migrations.outputs.any_changed == 'true'
