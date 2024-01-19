@@ -18,25 +18,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-tags: true
-      
-      # - name: Create tag  
-      #   uses: actions/github-script@v5
-      #   with:
-      #     script: |
-      #       github.rest.git.createRef({
-      #         owner: context.repo.owner,
-      #         repo: context.repo.repo,
-      #         ref: 'refs/tags/deployed',
-      #         sha: context.sha
-      #       })
+      - name: Get SHA for "migration" tag
+        id: get-migration-sha
+        run: |
+          echo "MIGRATION_SHA=$(git rev-parse refs/tags/migration)" >> $GITHUB_ENV
+
 
       - name: Get changes in migrations folder
         id: changed-files-migrations
         uses: tj-actions/changed-files@v42
         with:
           files: migrations/**
-          sha: 'migration'
-
+          sha: ${{ env.MIGRATION_SHA }}
 
       - name: Authenticate with Google
         uses: 'google-github-actions/auth@v2'
