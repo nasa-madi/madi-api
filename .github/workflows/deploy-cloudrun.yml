@@ -6,11 +6,9 @@ on:
 
 jobs:
   deploy:
-    # Add 'id-token' with the intended permissions for workload identity federation
     environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name }}
-    # permissions:
-    #   contents: 'read'
-      # id-token: 'write'
+    env: 
+      ENV: ${{ github.ref_name == 'main' && 'production' || github.ref_name }}
 
     runs-on: ubuntu-latest
     steps:
@@ -77,14 +75,7 @@ jobs:
       - name: Create Migration tag  
         uses: actions/github-script@v5
         with:
-          script: |
-            github.rest.git.updateRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'tags/_deployed-${{ github.ref_name == 'main' && 'production' || github.ref_name }}',
-              sha: context.sha,
-              force: true,
-            });
+          script: require('./cicd/upsertTag.js')({ github, context, tag:"_migration-${{ env.ENV }}" })
  
 
       - name: Deploy to Cloud Run
@@ -96,17 +87,11 @@ jobs:
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }} 
           env_vars: |
             SEED=${{ github.ref_name == 'main' && 'false' || 'true' }}
-            NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
+            NODE_CONFIG_ENV=${{ env.ENV }}
               
       
-      - name: Create tag  
+      - name: Create Migration tag  
         uses: actions/github-script@v5
         with:
-          script: |
-            github.rest.git.updateRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'tags/_deployed-${{ github.ref_name == 'main' && 'production' || github.ref_name }}',
-              sha: context.sha,
-              force: true,
-            });
+          script: require('./cicd/upsertTag.js')({ github, context, tag:"_deployed-${{ env.ENV }}" })
+     
