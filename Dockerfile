@@ -9,4 +9,4 @@ RUN npm ci --production
 
 COPY . ./
 
-CMD     npm start
+CMD if [ "$MIGRATION" = "true" ]; then npm run migrate && npm start; elif [ "$SEED" = "true" ]; then npm run seed:admin && npm start; else npm start; fi
