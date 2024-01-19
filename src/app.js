@@ -56,4 +56,5 @@ app.hooks({
   teardown: []
 })
 console.log(app.get('postgresql'))
+console.log('pwd', app.get('postgresql').connection.password)
 export { app }
