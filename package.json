@@ -48,7 +48,7 @@
     "spec:generate": "npx foas generate",
     "spec:validate": "npx @redocly/cli lint --extends=minimal ./specifications/openapi/_merged.yml",
     "spec:mock": "npx @stoplight/prism-cli mock ./specifications/openapi/_merged.yml",
-    "spec:swagger": "node ./node_modules/feathers-oas/node_modules/swagger-to-static/index.js ./specifications/openapi/_merged.yml ./specifications/build",
+    "spec:swagger": "node ./node_modules/feathers-oas/node_modules/swagger-to-static/index.js ./specifications/openapi/_merged.yml ./public",
     "bru-yml": "bru run ./src/services/chats/chats.spec.yml"
   },
   "dependencies": {
@@ -107,5 +107,8 @@
     "ses": "^1.0.1",
     "stacktracey": "^2.1.8",
     "vm2": "^3.9.19"
+  },
+  "nodemonConfig": {
+    "ignoreRoot": [".git"]
   }
 }

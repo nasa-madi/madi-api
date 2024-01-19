@@ -40,7 +40,7 @@ services:
     volumes:
       - database-data:/var/lib/postgresql/data/
     ports:
-      - "5432:5432"
+      - "35432:5432"
     networks:
       - madi
     healthcheck:
@@ -62,12 +62,6 @@ services:
       # this make the initial bucket state a local folder.  You cannot add directly.
       # uncomment this line to have docker manage a persistent folder for you.
       - ./dl/uploads:/storage
-
-  cache:
-    container_name: cache
-    image: redis:6
-    networks:
-      - madi
 
 networks:
   madi:
