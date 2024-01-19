@@ -78,12 +78,14 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            github.rest.git.createRef({
+            github.rest.git.updateRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/migration',
-              sha: context.sha
-            })
+              ref: 'tags/_deployed-${{ github.ref_name == 'main' && 'production' || github.ref_name }}',
+              sha: context.sha,
+              force: true,
+            });
+ 
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2.0.0
@@ -101,9 +103,10 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            github.rest.git.createRef({
+            github.rest.git.updateRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: 'refs/tags/deployed',
-              sha: context.sha
-            })
+              ref: 'tags/_deployed-${{ github.ref_name == 'main' && 'production' || github.ref_name }}',
+              sha: context.sha,
+              force: true,
+            });
