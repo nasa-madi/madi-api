@@ -74,13 +74,13 @@ jobs:
             NODE_CONFIG_ENV=${{ github.ref_name == 'main' && 'production' || github.ref_name }}
               
       
-      - name: Create tag  
-        uses: actions/github-script@v5
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/deployed',
-              sha: context.sha
-            })
+      # - name: Create tag  
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       github.rest.git.createRef({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         ref: 'refs/tags/deployed',
+      #         sha: context.sha
+      #       })
