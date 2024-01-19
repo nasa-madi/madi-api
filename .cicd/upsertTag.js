@@ -1,8 +1,10 @@
-try {
+// updateOrCreateTag.js
+module.exports = async ({ github, context, tag }) => {
+  try {
     await github.rest.git.createRef({
       owner: context.repo.owner,
       repo: context.repo.repo,
-      ref: 'refs/tags/migration',
+      ref: `refs/tags/${tag}`,
       sha: context.sha,
     });
   } catch (error) {
@@ -10,11 +12,12 @@ try {
       await github.rest.git.updateRef({
         owner: context.repo.owner,
         repo: context.repo.repo,
-        ref: 'tags/migration',
+        ref: `tags/${tag}`,
         sha: context.sha,
         force: true,
       });
     } else {
       throw error;
     }
-}
+  }
+};
