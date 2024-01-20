@@ -1,5 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
+import { Readable } from 'stream';
 import { PassThrough } from 'stream';
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { logger } from '../../logger.js';
@@ -27,6 +28,21 @@ const ARTIFICIAL_DELAY_MS = 0;
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+function repeat(stream) {
+  return new Promise(function(resolve, reject){
+    let count = 0;
+    setTimeout(function f(){
+      if ( ++count <= 10){
+        stream.push(count.toString() + ': ' + Date());
+        stream.push('\n');
+        setTimeout(f, 500);
+      } else {
+        resolve();
+      }
+    },500);
+  });
+}
 // A configure function that registers the service and its hooks via `app.configure`
 export const chat = (app) => {
   // Register our service on the Feathers application
@@ -37,45 +53,59 @@ export const chat = (app) => {
     events: [],
     koa: {
       after: [async (ctx, next) => {    
-        if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
-          // ctx.body is an async iterable
-          ctx.request.socket.setTimeout(0);
-          ctx.req.socket.setNoDelay(true);
-          ctx.req.socket.setKeepAlive(true);
+        // if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
+        //   // ctx.body is an async iterable
+        //   ctx.request.socket.setTimeout(0);
+        //   ctx.req.socket.setNoDelay(true);
+        //   ctx.req.socket.setKeepAlive(true);
       
-          // console.log('RES HEADERS', ctx.res)
-          ctx.set({
-            "Content-Type": "text/event-stream",
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "Transfer-Encoding": "chunked"
-          });
+        //   // console.log('RES HEADERS', ctx.res)
+        //   ctx.set({
+        //     "Content-Type": "text/event-stream; charset=UTF-8",
+        //     "Cache-Control": "no-cache",
+        //     "Connection": "keep-alive",
+        //     // "Transfer-Encoding": "chunked"
+        //   });
           
-          ctx.res.flushHeaders()
+        //   ctx.res.flushHeaders()
 
-          let chunkStream = ctx.body;
-          ctx.body = new PassThrough();
-          let message = {}
+        //   console.log(ctx.res.headersSent)
 
-          let writeData = async () => {
-              for await (let chunk of chunkStream) {
-                  console.log('RAW CHUNK',chunk)
-                  message = messageReducer(message, chunk)
-                  ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
-                  await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
-                  // console.log(chunk)
-                  if(chunk?.choices?.[0]?.finish_reason){
-                      ctx.body.write(`data: [DONE]\n\n`);
-                      ctx.body.end();
-                      return
-                  }
-              }
-          };
-          writeData()
-          .then(()=>{
-            logger.info(JSON.stringify(message))
-          })
-        }
+          var stream = ctx.body = new Readable();
+          stream._read = function () {};
+          stream.pipe(ctx.res); // add a pipe() to fix it
+          ctx.type = 'text/undefined-content';
+        
+          stream.push('begin Date() printing via timmer:\n\n');
+          await repeat(stream);
+          stream.push('\nall done!\n');
+          stream.push('\nEvery thing is fine again!!\n');
+          stream.push(null);
+
+      //     // let chunkStream = ctx.body;
+
+      //     // ctx.body = new PassThrough();
+      //     let message = {}
+
+      //     // let writeData = async () => {
+      //     //     for await (let chunk of chunkStream) {
+      //     //         // console.log('RAW CHUNK',chunk)
+      //     //         message = messageReducer(message, chunk)
+      //     //         ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
+      //     //         await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
+      //     //         // console.log(chunk)
+      //     //         if(chunk?.choices?.[0]?.finish_reason){
+      //     //             ctx.body.write(`data: [DONE]\n\n`);
+      //     //             ctx.body.end();
+      //     //             return
+      //     //         }
+      //     //     }
+      //     // };
+      //     // writeData()
+      //     // .then(()=>{
+      //     //   logger.info(JSON.stringify(message))
+      //     // })
+      //   }
       }]
     }
   })
