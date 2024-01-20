@@ -23,7 +23,7 @@ export const chatMethods = ['create']
 export * from './chats.class.js'
 export * from './chats.schema.js'
 
-const ARTIFICIAL_DELAY_MS = 0;
+const ARTIFICIAL_DELAY_MS = 1000;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -53,60 +53,58 @@ export const chat = (app) => {
     events: [],
     koa: {
       after: [async (ctx, next) => {    
-        // if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
-        //   // ctx.body is an async iterable
-        //   ctx.request.socket.setTimeout(0);
-        //   ctx.req.socket.setNoDelay(true);
-        //   ctx.req.socket.setKeepAlive(true);
+        if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
+          // ctx.body is an async iterable
+          ctx.request.socket.setTimeout(0);
+          ctx.req.socket.setNoDelay(true);
+          ctx.req.socket.setKeepAlive(true);
       
-        //   // console.log('RES HEADERS', ctx.res)
+          // console.log('RES HEADERS', ctx.res)
           ctx.set({
             "Content-Type": "text/event-stream; charset=UTF-8",
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
             "X-Accel-Buffering": "no",
-            // "Transfer-Encoding": "chunked"
+            "Transfer-Encoding": "chunked"
           });
           
-        //   ctx.res.flushHeaders()
+          ctx.res.flushHeaders()
 
-        //   console.log(ctx.res.headersSent)
 
-          var stream = ctx.body = new Readable();
-          stream._read = function () {};
-          stream.pipe(ctx.res); // add a pipe() to fix it
-          ctx.type = 'text/undefined-content';
+          // var stream = ctx.body = new Readable();
+          // stream._read = function () {};
+          // stream.pipe(ctx.res); // add a pipe() to fix it
+          // // ctx.type = 'text/undefined-content';
         
-          stream.push('begin Date() printing via timmer:\n\n');
-          await repeat(stream);
-          stream.push('\nall done!\n');
-          stream.push('\nEvery thing is fine again!!\n');
-          stream.push(null);
+          // stream.push('begin Date() printing via timmer:\n\n');
+          // await repeat(stream);
+          // stream.push('\nall done!\n');
+          // stream.push('\nEvery thing is fine again!!\n');
+          // stream.push(null);
 
-      //     // let chunkStream = ctx.body;
+          let chunkStream = ctx.body;
 
-      //     // ctx.body = new PassThrough();
-      //     let message = {}
+          ctx.body = new PassThrough();
+          let message = {}
 
-      //     // let writeData = async () => {
-      //     //     for await (let chunk of chunkStream) {
-      //     //         // console.log('RAW CHUNK',chunk)
-      //     //         message = messageReducer(message, chunk)
-      //     //         ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
-      //     //         await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
-      //     //         // console.log(chunk)
-      //     //         if(chunk?.choices?.[0]?.finish_reason){
-      //     //             ctx.body.write(`data: [DONE]\n\n`);
-      //     //             ctx.body.end();
-      //     //             return
-      //     //         }
-      //     //     }
-      //     // };
-      //     // writeData()
-      //     // .then(()=>{
-      //     //   logger.info(JSON.stringify(message))
-      //     // })
-      //   }
+          let writeData = async () => {
+              for await (let chunk of chunkStream) {
+                  console.log('RAW CHUNK',chunk)
+                  message = messageReducer(message, chunk)
+                  ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
+                  await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
+                  if(chunk?.choices?.[0]?.finish_reason){
+                      ctx.body.write(`data: [DONE]\n\n`);
+                      ctx.body.end();
+                      return
+                  }
+              }
+          };
+          writeData()
+          .then(()=>{
+            logger.info(JSON.stringify(message))
+          })
+        }
       }]
     }
   })
