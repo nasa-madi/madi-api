@@ -12,6 +12,8 @@ export function get_current_weather({location, unit = "fahrenheit"}) {
 
 export const get_current_weather_desc = {
   type: "function",
+  plugin: "Weather API",
+  display: "Get Weather",
   function: {
     name: "get_current_weather",
     description: "Get the current weather in a given location",
