@@ -67,19 +67,19 @@ export const user = (app) => {
       ],
       create: [
         (context)=>context.params.returnAuthBool=true,
-        // (context)=>{console.log('user create', context)},
+        (context)=>{console.log('user create', context)},
         authenticate('googleIAP'),
         iffElse((context)=>!!context.params.user,
           [authorizeHook],[
             (context)=>{
-              // console.log('iffElse BEFORE', context.params, context.data)
+              console.log('iffElse BEFORE', context.params, context.data)
               //update modify the create to be inputs from authentication
               context.data = {
                 email:context.params.authentication.googleIAPEmail,
                 googleId: context.params.authentication.googleIAPUserId,
                 role:'member'
               }
-              // console.log('iffElse AFTER', context.data)
+              console.log('iffElse AFTER', context.data)
             }
           ]
         ),

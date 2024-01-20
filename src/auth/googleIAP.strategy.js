@@ -72,10 +72,17 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
     }
     async parse(req) {
       
+      const headerToLowerCase = req.headers && Object.keys(req.headers).reduce((acc, current) => {
+        acc[current.toLowerCase()] = req.headers[current];
+        return acc;
+      }, {});
+
+      console.log("HEADERS", req.headers)
       //example header accounts.google.com:example@gmail.com
-      const emailScheme = req.headers && req.headers['x-goog-authenticated-user-email'];
-      const userIdScheme = req.headers && req.headers['x-goog-authenticated-user-id'];
-  
+
+      const emailScheme = headerToLowerCase['x-goog-authenticated-user-email'];
+      const userIdScheme = headerToLowerCase['x-goog-authenticated-user-id'];
+
       // if(!emailScheme || !userIdScheme){
       //   throw new NotAuthenticated('Missing required IAP Headers')
       // }

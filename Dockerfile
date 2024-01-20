@@ -9,7 +9,7 @@ RUN npm ci --production
 
 COPY . ./
 
-RUN npm spec:build
+RUN npm run spec:build
 
 
 CMD sh -c ' \
