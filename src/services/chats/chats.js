@@ -48,7 +48,7 @@ export const chat = (app) => {
             "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
-            "Transfer-Encoding": "chunked"
+            // "Transfer-Encoding": "chunked"
           });
           
           ctx.res.flushHeaders()
