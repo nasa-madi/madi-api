@@ -14,7 +14,7 @@ export class ChatService {
 
   async create(data, params) {
     console.log('\n\n************ CHAT SERVICE CREATE')
-    console.log(data)
+    console.log(JSON.stringify(data,null,2))
     console.log(params)
     // console.log("model: ", data.model)
     // console.log("messages: ",data.messages)
