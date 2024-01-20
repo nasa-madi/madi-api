@@ -43,11 +43,14 @@ export const chat = (app) => {
           ctx.req.socket.setNoDelay(true);
           ctx.req.socket.setKeepAlive(true);
       
+          console.log('RES HEADERS', ctx.res)
           ctx.set({
             "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
+            "Transfer-Encoding": "chunked"
           });
+          
           ctx.res.flushHeaders()
 
           let chunkStream = ctx.body;
@@ -56,10 +59,11 @@ export const chat = (app) => {
 
           let writeData = async () => {
               for await (let chunk of chunkStream) {
+                  // console.log('RAW CHUNK',chunk)
                   message = messageReducer(message, chunk)
                   ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
                   await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
-                  console.log(chunk)
+                  // console.log(chunk)
                   if(chunk?.choices?.[0]?.finish_reason){
                       ctx.body.write(`data: [DONE]\n\n`);
                       ctx.body.end();
