@@ -1,3 +1,4 @@
+import { omit } from 'lodash'
 
 export class ChatService {
   constructor(options) {
@@ -26,7 +27,7 @@ export class ChatService {
       // stream: params?.query?.stream === 'false' ? false:true,
       stream,
       messages, 
-      tools, 
+      tools: omit(tools,['plugin','display']), 
       tool_choice
     }
     // return data
