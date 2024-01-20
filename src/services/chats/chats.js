@@ -60,12 +60,13 @@ export const chat = (app) => {
         //   ctx.req.socket.setKeepAlive(true);
       
         //   // console.log('RES HEADERS', ctx.res)
-        //   ctx.set({
-        //     "Content-Type": "text/event-stream; charset=UTF-8",
-        //     "Cache-Control": "no-cache",
-        //     "Connection": "keep-alive",
-        //     // "Transfer-Encoding": "chunked"
-        //   });
+          ctx.set({
+            "Content-Type": "text/event-stream; charset=UTF-8",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+            // "Transfer-Encoding": "chunked"
+          });
           
         //   ctx.res.flushHeaders()
 
