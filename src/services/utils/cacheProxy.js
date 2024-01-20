@@ -41,6 +41,7 @@ const openaiProxy = (app) => new OpenAI({
 
 export const openaiConfig = (app)=>{
     let openai;
+    console.log(app.get('openai'))
     if(app.get('openai').use_proxy){
         console.log('Cache Enabled')
         openai = openaiProxy(app)

@@ -47,10 +47,10 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
         },
       });
       if(result?.data?.[0]){
-        console.log('Is Authenticated',{
-          authentication: { strategy: this.name },
-          [entity]: result?.data?.[0]
-        })
+        // console.log('Is Authenticated',{
+        //   authentication: { strategy: this.name },
+        //   [entity]: result?.data?.[0]
+        // })
         return {
           authentication: { strategy: this.name },
           [entity]: result?.data?.[0]
@@ -77,7 +77,7 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
         return acc;
       }, {});
 
-      console.log("HEADERS", req.headers)
+      // console.log("HEADERS", req.headers)
       //example header accounts.google.com:example@gmail.com
 
       const emailScheme = headerToLowerCase['x-goog-authenticated-user-email'];
