@@ -27,7 +27,7 @@ export class ChatService {
       // stream: params?.query?.stream === 'false' ? false:true,
       stream,
       messages, 
-      tools: _.omit(tools,['plugin','display']), 
+      tools: tools.map(t=>_.omit(t,['plugin','display'])), 
       tool_choice
     }
     // return data
