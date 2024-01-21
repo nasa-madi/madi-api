@@ -23,7 +23,7 @@ export const chatMethods = ['create']
 export * from './chats.class.js'
 export * from './chats.schema.js'
 
-const ARTIFICIAL_DELAY_MS = 1000;
+const ARTIFICIAL_DELAY_MS = 0;
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
