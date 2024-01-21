@@ -1,6 +1,18 @@
 name: Build and Deploy to Cloud Run
 
 on:
+  workflow_dispatch:
+    inputs:
+      migration_input:
+        description: 'Perform Migration'
+        default: false
+        required: true
+        type: boolean
+      seed_input:
+        description: 'Perform Seed'
+        default: false
+        required: true
+        type: boolean
   push:
     branches: [ "main", "develop", "test" ]
 
@@ -58,7 +70,7 @@ jobs:
 
       - name: Deploy to Cloud Run with Migration
         id: migration
-        if: steps.changed-files-migrations.outputs.any_changed == 'true'
+        if: steps.changed-files-migrations.outputs.any_changed == 'true' || github.event.inputs.migration_input == true
         uses: google-github-actions/deploy-cloudrun@v2.0.0
         with:
           project_id: ${{ vars.PROJECT_ID }}
@@ -66,7 +78,7 @@ jobs:
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           env_vars: |
-            MIGRATION=true
+            MIGRATION=${{ github.event.inputs.migration_input || steps.changed-files-migrations.outputs.any_changed }}
             NODE_CONFIG_ENV=${{ env.ENV }}
           no_traffic: true
 
@@ -80,7 +92,7 @@ jobs:
 
       - name: Seed Data to Instance
         id: seed
-        if: steps.changed-files-migrations.outputs.any_changed == 'true'
+        if: steps.changed-files-migrations.outputs.any_changed == 'true' || github.event.inputs.migration_input == true
         uses: google-github-actions/deploy-cloudrun@v2.0.0
         with:
           project_id: ${{ vars.PROJECT_ID }}
@@ -88,7 +100,7 @@ jobs:
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           env_vars: |
-            SEED=${{ github.ref_name == 'main' && 'false' || 'true' }}
+            SEED=${{ github.ref_name == 'main' && 'false' || github.event.inputs.migration_input || 'true' }}
           no_traffic: true
 
       - name: Deploy to Cloud Run
