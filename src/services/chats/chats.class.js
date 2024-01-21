@@ -1,3 +1,4 @@
+import _ from 'lodash'
 
 export class ChatService {
   constructor(options) {
@@ -12,9 +13,6 @@ export class ChatService {
 
   async create(data, params) {
     console.log('\n\n************ CHAT SERVICE CREATE')
-    console.log("model: ", data.model)
-    console.log("messages: ",data.messages)
-    console.log("tool_choice: ",data.tool_choice || "auto")
     // console.log("tools: ", availableToolDescriptions)
     let { messages, tools, tool_choice } = data
     let stream = !!data.stream
@@ -23,8 +21,8 @@ export class ChatService {
       // stream: params?.query?.stream === 'false' ? false:true,
       stream,
       messages, 
-      tools, 
-      tool_choice
+      tools: (tools)?tools.map(t=>_.omit(t,['plugin','display'])):undefined, 
+      tool_choice: (tools)?tool_choice:undefined
     }
     // return data
     return this.makeRequest(options)

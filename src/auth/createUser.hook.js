@@ -20,10 +20,10 @@ export const createUserHook = //(options)=>
           },
         });
         if(result?.data?.[0]){
-          console.log('Is Authenticated',{
-            authentication: { strategy: this.name },
-            [entity]: result?.data?.[0]
-          })
+          // console.log('Is Authenticated',{
+          //   authentication: { strategy: this.name },
+          //   [entity]: result?.data?.[0]
+          // })
           return {
             authentication: { strategy: this.name },
             [entity]: result?.data?.[0]

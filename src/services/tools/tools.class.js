@@ -1,4 +1,4 @@
-import { toolFuncs, toolDescs } from "../../plugin-tools/index.js";
+import { toolFuncs, toolDescs, defaultTools } from "../../plugin-tools/index.js";
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
 export class ToolService {
@@ -12,9 +12,9 @@ export class ToolService {
 
     // get the user
     let user = params.user || {}
-    let usersToolNames = user.tools || ['get_current_weather']
+    let usersToolNames = defaultTools
     let allToolNames = Object.keys(toolDescs);
-    let intersectionToolNames = allToolNames.filter(value => usersToolNames.includes(value)); //<- was incorrect
+    let intersectionToolNames = allToolNames.filter(value => usersToolNames.includes(value));
     let intersectionTools = intersectionToolNames.map(name => Object.assign({},toolDescs[name]));
     return intersectionTools
 

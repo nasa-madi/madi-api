@@ -40,7 +40,7 @@ services:
     volumes:
       - database-data:/var/lib/postgresql/data/
     ports:
-      - "35432:5432"
+      - "5432:5432"
     networks:
       - madi
     healthcheck:
