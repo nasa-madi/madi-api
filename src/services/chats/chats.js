@@ -64,8 +64,8 @@ export const chat = (app) => {
             "Content-Type": "text/event-stream; charset=UTF-8",
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
-            "Content-Length": 100,
-            "X-Accel-Buffering": "no",
+            // "Content-Length": 100,
+            // "X-Accel-Buffering": "no",
             // "Transfer-Encoding": "chunked"
           });
           
