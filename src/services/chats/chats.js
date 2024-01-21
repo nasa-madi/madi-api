@@ -61,7 +61,7 @@ export const chat = (app) => {
             "Connection": "keep-alive",
             "Transfer-Encoding": "chunked"
           });
-          ctx.status = 201;
+          ctx.status = 200;
           
           ctx.res.flushHeaders()
 
