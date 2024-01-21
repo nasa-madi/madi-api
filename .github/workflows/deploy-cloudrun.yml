@@ -21,8 +21,8 @@ jobs:
         id: get-migration-sha
         run: |
           if git rev-parse refs/tags/migration >/dev/null 2>&1; then
-            echo "MIGRATION_SHA=$(git rev-parse refs/tags/migration)"
-            echo "MIGRATION_SHA=$(git rev-parse refs/tags/migration)" >> $GITHUB_ENV
+            echo "MIGRATION_SHA=$(git rev-parse refs/tags/_migration-${{ env.ENV }})"
+            echo "MIGRATION_SHA=$(git rev-parse refs/tags/_migration-${{ env.ENV }})" >> $GITHUB_ENV
           else
             echo "MIGRATION_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
           fi
