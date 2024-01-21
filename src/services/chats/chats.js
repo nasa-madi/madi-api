@@ -54,34 +54,17 @@ export const chat = (app) => {
     koa: {
       after: [async (ctx, next) => {    
         if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
-          // ctx.body is an async iterable
-          ctx.request.socket.setTimeout(0);
-          ctx.req.socket.setNoDelay(true);
-          ctx.req.socket.setKeepAlive(true);
-      
-          // console.log('RES HEADERS', ctx.res)
+
           ctx.set({
-            "Content-Type": "text/event-stream; charset=UTF-8",
+            "Content-Type": "text/event-stream;",
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
-            // "Content-Length": 100,
-            // "X-Accel-Buffering": "no",
             "Transfer-Encoding": "chunked"
           });
+          ctx.status = 201;
           
           ctx.res.flushHeaders()
 
-
-          // var stream = ctx.body = new Readable();
-          // stream._read = function () {};
-          // stream.pipe(ctx.res); // add a pipe() to fix it
-          // // ctx.type = 'text/undefined-content';
-        
-          // stream.push('begin Date() printing via timmer:\n\n');
-          // await repeat(stream);
-          // stream.push('\nall done!\n');
-          // stream.push('\nEvery thing is fine again!!\n');
-          // stream.push(null);
 
           let chunkStream = ctx.body;
 
