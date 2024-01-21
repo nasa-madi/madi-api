@@ -1,4 +1,4 @@
-import { toolFuncs, toolDescs } from "../../plugin-tools/index.js";
+import { toolFuncs, toolDescs, defaultTools } from "../../plugin-tools/index.js";
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
 export class ToolService {
@@ -12,17 +12,22 @@ export class ToolService {
 
     // get the user
     let user = params.user || {}
-    let usersToolNames = user.tools || ['get_current_weather']
+    // let usersToolNames = user.tools || defaultTools
+    let usersToolNames = defaultTools
+    console.log(usersToolNames)
     let allToolNames = Object.keys(toolDescs);
-    let intersectionToolNames = allToolNames.filter(value => usersToolNames.includes(value)); //<- was incorrect
+    console.log(allToolNames)
+    let intersectionToolNames = allToolNames.filter(value => usersToolNames.includes(value));
+    console.log(intersectionToolNames)
     let intersectionTools = intersectionToolNames.map(name => Object.assign({},toolDescs[name]));
+    console.log(intersectionTools)
     return intersectionTools
 
   }
 
   async find(_params) {
     let authorizedTools = await this.getAuthorizedTools(_params)
-
+    console.log(authorizedTools)
     const sortedData = authorizedTools.sort((a, b) => {
       if(a.function.name < b.function.name) { return -1; }
       if(a.function.name > b.function.name) { return 1; }
