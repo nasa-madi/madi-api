@@ -6,11 +6,19 @@ import { dataValidator, queryValidator } from '../../validators.js'
 // Main data model schema
 export const uploadSchema = Type.Object(
   {
-    id: Type.Number(),
-    text: Type.String()
+    id: Type.String(), // Unique identifier for the metadata entry
+    userId: Type.String(), // User ID
+    pluginId: Type.Optional(Type.String()), // Plugin ID
+    fileId: Type.String(), // File ID
+    filename: Type.String(), // Name of the file
+    uploadTimestamp: Type.Number(), // Timestamp when the file was uploaded
+    metadata: Type.Object({}, {additionalProperties:true}),
+    hash: Type.String(),
+    embedding:  Type.Array(Type.Number()),
   },
-  { $id: 'Upload', additionalProperties: false }
+  { $id: 'Uploads', additionalProperties: false }
 )
+
 export const uploadValidator = getValidator(uploadSchema, dataValidator)
 export const uploadResolver = resolve({})
 
@@ -18,14 +26,14 @@ export const uploadExternalResolver = resolve({})
 
 // Schema for creating new entries
 export const uploadDataSchema = Type.Pick(uploadSchema, ['text'], {
-  $id: 'UploadData'
+  $id: 'UploadsData'
 })
 export const uploadDataValidator = getValidator(uploadDataSchema, dataValidator)
 export const uploadDataResolver = resolve({})
 
 // Schema for updating existing entries
 export const uploadPatchSchema = Type.Partial(uploadSchema, {
-  $id: 'UploadPatch'
+  $id: 'UploadsPatch'
 })
 export const uploadPatchValidator = getValidator(uploadPatchSchema, dataValidator)
 export const uploadPatchResolver = resolve({})

@@ -38,6 +38,12 @@ openai:
 debug: false
 verbose: false
 
+storage:
+  bucket: sample-bucket2
+  apiEndpoint: http://127.0.0.1:9023
+  local: true
+  projectId: test
+  
 authentication:
   entity: user
   service: users

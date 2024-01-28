@@ -53,11 +53,15 @@ export const tool = (app) => {
       all: [
         authenticate('googleIAP'),
         authorizeHook,
-        schemaHooks.validateQuery(toolQueryValidator), schemaHooks.resolveQuery(toolQueryResolver)
+        schemaHooks.validateQuery(toolQueryValidator), 
+        schemaHooks.resolveQuery(toolQueryResolver)
       ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(toolDataValidator), schemaHooks.resolveData(toolDataResolver)],
+      create: [
+        schemaHooks.validateData(toolDataValidator), 
+        schemaHooks.resolveData(toolDataResolver)
+      ],
       patch: [],
       remove: []
     },
