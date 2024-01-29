@@ -40,7 +40,7 @@ export const chat = (app) => {
         if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
 
           ctx.set({
-            "Content-Type": "text/event-stream;",
+            "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
           });

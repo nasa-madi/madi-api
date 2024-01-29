@@ -5,38 +5,46 @@ import {default as fetch, Response } from 'node-fetch';
 import crypto from 'crypto';
 
 // dotenv.config()
+const openaiProxy = (app) => {
+  const openai = new OpenAI({
+    apiKey: app.get('openai').key,
+    fetch: async (url, options) => {
+      const md5 = crypto.createHash('md5');
+      md5.update(url + JSON.stringify(options.body));
+      const cacheKey = `./cache/${md5.digest('hex')}`;
 
-const openaiProxy = (app) => new OpenAI({
-  apiKey: app.get('openai').key,
-  fetch: async (url, options)=>{
+      try {
+        const cachedData = await fs.promises.readFile(cacheKey, 'utf8');
+        console.log('Returning cached response:', cachedData);
 
-    const md5 = crypto.createHash('md5');
-    md5.update(url + JSON.stringify(options.body));
-    const cacheKey = `./cache/${md5.digest('hex')}`;
+        return new Response(cachedData, {});
+      } catch (error) {
+        const response = await fetch(url, options).catch((e) => {
+          console.error(e);
+        });
 
-    return fs.promises.readFile(cacheKey, 'utf8')
-    .then(data => {
-      console.log('Returning cached response', data);
+        const responseClone = response.clone();
+        const requestBody = JSON.parse(options.body);
+        
+        if (requestBody && requestBody.stream && responseClone.body) {
+          const chunks = [];
+          for await (const chunk of responseClone.body) {
+            chunks.push(chunk);
+          }
+          const decodedText = Buffer.concat(chunks).toString('utf8');
+          await fs.promises.writeFile(cacheKey, decodedText, 'utf8');
+        } else {
+          const responseBody = await responseClone.json();
+          await fs.promises.writeFile(cacheKey, JSON.stringify(responseBody), 'utf8');
+        }
 
-      return new Response(data,{
-        headers: { 
-          'Content-Type': 'application/json'
-        },
-      });
+        return response;
+      }
+    },
+  });
 
-    })
-    .catch(async err => {
-      const response = await fetch(url, options).catch(e=>{
-        console.error(e)
-      })
-      const response2 = response.clone();
-      const responseBody = await response2.json()
-      await fs.promises.writeFile(cacheKey, JSON.stringify(responseBody), 'utf8');
-      return response
-    })
-
-  }
-});
+  return openai;
+};
 
 
 export const openaiConfig = (app)=>{
