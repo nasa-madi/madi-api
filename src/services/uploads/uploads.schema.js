@@ -6,14 +6,12 @@ import { dataValidator, queryValidator } from '../../validators.js'
 // Main data model schema
 export const uploadSchema = Type.Object(
   {
-    id: Type.String(), // Unique identifier for the metadata entry
-    userId: Type.String(), // User ID
+    id: Type.Number(), // Unique identifier for the metadata entry
+    userId: Type.Optional(Type.String()), // User ID
     pluginId: Type.Optional(Type.String()), // Plugin ID
     fileId: Type.String(), // File ID
     filename: Type.String(), // Name of the file
-    uploadTimestamp: Type.Number(), // Timestamp when the file was uploaded
     metadata: Type.Object({}, {additionalProperties:true}),
-    hash: Type.String(),
     embedding:  Type.Array(Type.Number()),
   },
   { $id: 'Uploads', additionalProperties: false }

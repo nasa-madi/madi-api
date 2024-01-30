@@ -15,9 +15,13 @@ import { UploadService, getOptions } from './uploads.class.js'
 
 
 export const uploadPath = 'uploads'
-export const uploadMethods = ['find', 'get', 'create', 'patch', 'remove']
+// export const uploadMethods = ['find', 'get', 'create', 'patch', 'remove']
+export const uploadMethods = ['find','create']
 export * from './uploads.class.js'
 export * from './uploads.schema.js'
+import multer from '@koa/multer';
+const multipartMulter = multer({ storage: multer.memoryStorage() }); // Use memory storage for file uploads
+
 
 
 
@@ -30,32 +34,39 @@ export const upload = (app) => {
     // A list of all methods this service exposes externally
     methods: uploadMethods,
     // You can add additional custom events to be sent to clients here
-    events: []
+    events: [],
+    koa:{
+      before:[
+        multipartMulter.single('file'), 
+        async function(ctx, next){
+          ctx.feathers.file = ctx.file
+          ctx.request.body = Object.assign({},{
+            metadata:ctx.request.body
+          })
+          next()
+        }
+      ]
+    }
   })
   // Initialize hooks
   app.service(uploadPath).hooks({
     around: {
-      all: [
-        authenticate('googleIAP'),
-        authorizeHook,
-        schemaHooks.resolveExternal(uploadExternalResolver),
-        schemaHooks.resolveResult(uploadResolver)
-      ]
+      all: []
     },
     before: {
       all: [
-        schemaHooks.validateQuery(uploadQueryValidator), 
-        schemaHooks.resolveQuery(uploadQueryResolver)
+        // schemaHooks.validateQuery(uploadQueryValidator), 
+        // schemaHooks.resolveQuery(uploadQueryResolver)
       ],
       find: [],
       get: [],
       create: [
-        schemaHooks.validateData(uploadDataValidator),
-        schemaHooks.resolveData(uploadDataResolver)
+        // schemaHooks.validateData(uploadDataValidator),
+        // schemaHooks.resolveData(uploadDataResolver)
       ],
       patch: [
-        schemaHooks.validateData(uploadPatchValidator), 
-        schemaHooks.resolveData(uploadPatchResolver)
+        // schemaHooks.validateData(uploadPatchValidator), 
+        // schemaHooks.resolveData(uploadPatchResolver)
       ],
       remove: []
     },

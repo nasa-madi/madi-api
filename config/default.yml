@@ -43,6 +43,10 @@ storage:
   apiEndpoint: http://127.0.0.1:9023
   local: true
   projectId: test
+
+uploads:
+  embeddingModel: text-embedding-3-small 
+
   
 authentication:
   entity: user

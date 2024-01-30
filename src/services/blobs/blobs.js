@@ -33,24 +33,24 @@ export const blob = (app) => {
   app.service(blobPath).hooks({
     around: {
       all: [
-        disallow('external'),
-        schemaHooks.resolveResult(blobResolver)
+        // disallow('external'),
+        // schemaHooks.resolveResult(blobResolver)
       ]
     },
     before: {
       all: [
-        schemaHooks.validateQuery(blobQueryValidator), 
-        schemaHooks.resolveQuery(blobQueryResolver)
+        // schemaHooks.validateQuery(blobQueryValidator), 
+        // schemaHooks.resolveQuery(blobQueryResolver)
       ],
       find: [],
       get: [],
       create: [
-        schemaHooks.validateData(blobDataValidator), 
-        schemaHooks.resolveData(blobDataResolver)
+        // schemaHooks.validateData(blobDataValidator), 
+        // schemaHooks.resolveData(blobDataResolver)
       ],
       patch: [
-        schemaHooks.validateData(blobPatchValidator), 
-        schemaHooks.resolveData(blobPatchResolver)
+        // schemaHooks.validateData(blobPatchValidator), 
+        // schemaHooks.resolveData(blobPatchResolver)
       ],
       remove: []
     },
