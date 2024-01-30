@@ -30,7 +30,7 @@ openai:
   key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXX
   # MODEL OPTIONS
   max_tokens_llm: 4000
-  use_proxy: true
+  use_proxy: false
   proxy_port: 8888
   stream: true
 

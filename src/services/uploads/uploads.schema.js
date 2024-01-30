@@ -10,9 +10,11 @@ export const uploadSchema = Type.Object(
     userId: Type.Optional(Type.String()), // User ID
     pluginId: Type.Optional(Type.String()), // Plugin ID
     fileId: Type.String(), // File ID
+    filePath: Type.String(),
     filename: Type.String(), // Name of the file
     metadata: Type.Object({}, {additionalProperties:true}),
     embedding:  Type.Array(Type.Number()),
+    
   },
   { $id: 'Uploads', additionalProperties: false }
 )
@@ -23,11 +25,16 @@ export const uploadResolver = resolve({})
 export const uploadExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const uploadDataSchema = Type.Pick(uploadSchema, ['text'], {
-  $id: 'UploadsData'
+export const uploadDataSchema = Type.Object({
+  file: Type.Uint8Array()
+}, {
+  $id: 'UploadsData',
+  additionalProperties: true
 })
 export const uploadDataValidator = getValidator(uploadDataSchema, dataValidator)
-export const uploadDataResolver = resolve({})
+export const uploadDataResolver = resolve({
+  file:()=>undefined
+})
 
 // Schema for updating existing entries
 export const uploadPatchSchema = Type.Partial(uploadSchema, {
@@ -48,3 +55,11 @@ export const uploadQuerySchema = Type.Intersect(
 )
 export const uploadQueryValidator = getValidator(uploadQuerySchema, queryValidator)
 export const uploadQueryResolver = resolve({})
+
+
+export const uploadResultResolver = resolve({
+  embedding: ()=>undefined,
+  filepath: ()=>undefined,
+  userId:()=>undefined,
+  pluginId:()=>undefined
+})

@@ -61,7 +61,7 @@
     "@feathersjs/authentication-oauth": "^5.0.11",
     "@feathersjs/configuration": "^5.0.11",
     "@feathersjs/errors": "^5.0.11",
-    "@feathersjs/feathers": "^5.0.18",
+    "@feathersjs/feathers": "^5.0.21",
     "@feathersjs/knex": "^5.0.11",
     "@feathersjs/koa": "^5.0.11",
     "@feathersjs/schema": "^5.0.11",
@@ -70,6 +70,7 @@
     "@google-cloud/logging-winston": "^6.0.0",
     "@google-cloud/storage": "^7.7.0",
     "@koa/multer": "^3.0.2",
+    "@sinclair/typebox": "^0.32.13",
     "dotenv": "^16.3.1",
     "feathers-blob": "^2.6.0",
     "feathers-casl": "^2.1.1",
@@ -112,6 +113,8 @@
     "vm2": "^3.9.19"
   },
   "nodemonConfig": {
-    "ignoreRoot": [".git"]
+    "ignoreRoot": [
+      ".git"
+    ]
   }
 }

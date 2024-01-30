@@ -9,7 +9,8 @@ import {
   uploadExternalResolver,
   uploadDataResolver,
   uploadPatchResolver,
-  uploadQueryResolver
+  uploadQueryResolver,
+  uploadResultResolver
 } from './uploads.schema.js'
 import { UploadService, getOptions } from './uploads.class.js'
 
@@ -41,9 +42,10 @@ export const upload = (app) => {
         async function(ctx, next){
           ctx.feathers.file = ctx.file
           ctx.request.body = Object.assign({},{
-            metadata:ctx.request.body
+            metadata:ctx.request.body,
+            file: new Uint8Array()
           })
-          next()
+          await next()
         }
       ]
     }
@@ -51,27 +53,31 @@ export const upload = (app) => {
   // Initialize hooks
   app.service(uploadPath).hooks({
     around: {
-      all: []
+      all: [
+        schemaHooks.resolveExternal(uploadResultResolver)
+      ]
     },
     before: {
       all: [
-        // schemaHooks.validateQuery(uploadQueryValidator), 
-        // schemaHooks.resolveQuery(uploadQueryResolver)
+        schemaHooks.validateQuery(uploadQueryValidator), 
+        schemaHooks.resolveQuery(uploadQueryResolver)
       ],
       find: [],
       get: [],
       create: [
-        // schemaHooks.validateData(uploadDataValidator),
-        // schemaHooks.resolveData(uploadDataResolver)
+        schemaHooks.validateData(uploadDataValidator),
+        schemaHooks.resolveData(uploadDataResolver)
       ],
       patch: [
-        // schemaHooks.validateData(uploadPatchValidator), 
-        // schemaHooks.resolveData(uploadPatchResolver)
+        schemaHooks.validateData(uploadPatchValidator), 
+        schemaHooks.resolveData(uploadPatchResolver)
       ],
       remove: []
     },
     after: {
-      all: []
+      all: [
+        
+      ]
     },
     error: {
       all: []
