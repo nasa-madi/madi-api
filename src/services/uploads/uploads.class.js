@@ -9,6 +9,17 @@ export class UploadService extends EmbeddingKnexService{
     this.embeddingModel = options.embeddingModel
   }
 
+  
+
+  async get(id, params){
+    let item = await this._get(id, params)
+    let path = 'hello.txt'
+    return await this.app.services['blobs'].get(
+      path  
+    ,{...params, provider:'internal'})
+    return item
+  }
+
   async create(data,params){
     let file = await this.app.services['blobs'].create({
       ...data,

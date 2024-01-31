@@ -16,8 +16,7 @@ import { UploadService, getOptions } from './uploads.class.js'
 
 
 export const uploadPath = 'uploads'
-// export const uploadMethods = ['find', 'get', 'create', 'patch', 'remove']
-export const uploadMethods = ['find','create']
+export const uploadMethods = ['find','get','create','remove']
 export * from './uploads.class.js'
 export * from './uploads.schema.js'
 import multer from '@koa/multer';

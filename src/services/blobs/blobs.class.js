@@ -29,9 +29,33 @@ export class BlobService {
   }
 
 
-  // prefix = `${plugin}/${user}`
-  // prefix = `${plugin}/all`
-  // prefix = `all/all`
+  async get(fileName, params){
+
+    let { restrictToUser, user, plugin, restrictToPlugin } = params
+
+    let userString = restrictToUser ? user.id : 'all'
+    let pluginString = restrictToPlugin ? plugin.id : 'all'
+    let prefix = `${pluginString}/${userString}/`
+
+    // These options will allow temporary read access to the file
+    const options = {
+      // version: 'v2', // defaults to 'v2' if missing.
+      // action: 'read',
+      // expires: Date.now() + 1000 * 60 * 60, // one hour
+      destination: 'new.txt',
+    };
+
+    
+    // Get a v2 signed URL for the file
+    // const [url] = await this.bucket
+      // .file(prefix+fileName)
+      // .getSignedUrl(options);
+
+    let url = await this.bucket.file(prefix+fileName).publicUrl();
+    return {url}
+    // return url
+  }
+
 
   async find(params) {
     // Get a blob from Google Cloud Storage
@@ -47,8 +71,8 @@ export class BlobService {
         prefix,
         matchGlob: search
       }
-
     );
+
     return file[0].map(f => {
       let base = f
       let meta = f.metadata
@@ -61,42 +85,6 @@ export class BlobService {
         size: meta.size,
         hash: meta.hash,
         metadata: meta.metadata
-      }
-    })
-    // const [metadata] = await file.getMetadata();
-    // return metadata;
-  }
-
-  async get(filename, params) {
-    // Get a blob from Google Cloud Storage
-    let { restrictToUser, user, plugin, restrictToPlugin } = params
-
-    let userString = restrictToUser ? user.id : 'all'
-    let pluginString = restrictToPlugin ? plugin.id : 'all'
-    let prefix = `${pluginString}/${userString}/`
-    let { search } = params.query
-
-    const file = await this.bucket.getFiles(
-      {
-        prefix,
-        matchGlob: filename
-      }
-    );
-
-    return file[0].map(f => {
-      let base = f
-      let meta = f.metadata
-      let [plugin, user, name] = meta.name.split("/")
-      return {
-        name,
-        contentType: meta.contentType,
-        createdAt: meta.timeCreated,
-        updatedAt: meta.updated,
-        size: meta.size,
-        hash: meta.hash,
-        metadata: {
-          ...meta.metadata
-        }
       }
     })
     // const [metadata] = await file.getMetadata();
