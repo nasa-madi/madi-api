@@ -30,7 +30,7 @@ openai:
   key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXX
   # MODEL OPTIONS
   max_tokens_llm: 4000
-  use_proxy: true
+  use_proxy: false
   proxy_port: 8888
   stream: true
 
@@ -38,6 +38,16 @@ openai:
 debug: false
 verbose: false
 
+storage:
+  bucket: sample-bucket2
+  apiEndpoint: http://127.0.0.1:9023
+  local: true
+  projectId: test
+
+uploads:
+  embeddingModel: text-embedding-3-small 
+
+  
 authentication:
   entity: user
   service: users

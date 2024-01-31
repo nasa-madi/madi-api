@@ -8,7 +8,7 @@ const resolveAction = createAliasResolver({
 
 const defineRules = (can, cannot, user) => {
   if (user.role) {
-    switch (user.role.name) {
+    switch (user.role) {
 
       case "superadmin":
         can("manage", "all");

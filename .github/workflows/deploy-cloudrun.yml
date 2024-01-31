@@ -78,8 +78,9 @@ jobs:
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           env_vars: |
-            MIGRATION=${{ github.event.inputs.migration_input || steps.changed-files-migrations.outputs.any_changed }}
+            MIGRATION=${{ toJson(github.event.inputs.migration_input) || steps.changed-files-migrations.outputs.any_changed }}
             NODE_CONFIG_ENV=${{ env.ENV }}
+            SEED=false
           no_traffic: true
 
 
@@ -100,7 +101,9 @@ jobs:
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           env_vars: |
-            SEED=${{ github.ref_name == 'main' && 'false' || github.event.inputs.migration_input || 'true' }}
+            MIGRATION=false
+            SEED=${{ github.ref_name == 'main' && 'false' || toJson(github.event.inputs.migration_input) || 'true' }}
+            NODE_CONFIG_ENV=${{ env.ENV }}
           no_traffic: true
 
       - name: Deploy to Cloud Run
@@ -111,7 +114,8 @@ jobs:
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }} 
           env_vars: |
-            SEED=${{ github.ref_name == 'main' && 'false' || 'true' }}
+            MIGRATION=false
+            SEED=false
             NODE_CONFIG_ENV=${{ env.ENV }}
               
       

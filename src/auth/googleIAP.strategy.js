@@ -47,10 +47,6 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
         },
       });
       if(result?.data?.[0]){
-        // console.log('Is Authenticated',{
-        //   authentication: { strategy: this.name },
-        //   [entity]: result?.data?.[0]
-        // })
         return {
           authentication: { strategy: this.name },
           [entity]: result?.data?.[0]

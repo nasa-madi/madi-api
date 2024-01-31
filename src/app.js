@@ -9,7 +9,7 @@ import { logError } from './hooks/log-error.js'
 import { postgresql } from './postgresql.js'
 
 import { authentication } from './auth/authentication.js'
-
+import multer from '@koa/multer';
 import { services } from './services/index.js'
 
 const app = koa(feathers())
