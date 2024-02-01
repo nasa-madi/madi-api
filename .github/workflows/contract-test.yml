@@ -30,11 +30,9 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-
       - name: Start stack
         shell: bash
         run: |
-          
           docker compose -f ${{ env.FILE }} up database storage api
 
       # - name: Setup Docker
@@ -51,18 +49,18 @@ jobs:
       #     docker-compose -f ${{ env.FILE }} pull --include-deps database storage
       #     docker-compose -f ${{ env.FILE }} up -d database storage api
 
-      # - name: Test
-      #   shell: bash
-      #   run: |
-      #     npm install -g newman
-      #     newman run ./test/contracts/contract.collection.json
+      - name: Test
+        shell: bash
+        run: |
+          npm install -g newman
+          newman run ./test/contracts/contract.collection.json
         
       #   # DIR=$(pwd)
       #   # docker-compose -f ${{ env.FILE }} run -v ${DIR}:/github_workspace -w /github_workspace --entrypoint ${{ env.ENTRYPOINT }} --rm ${{ env.SERVICE }} -- ${{ env.COMMAND }}
 
-      # - name: Stop stacks
-      #   if: always()
-      #   shell: bash
-      #   run: |
-      #     cd ${{ env.WORKDIR }}
-      #     docker-compose -f ${{ env.FILE }} down
+      - name: Stop stacks
+        if: always()
+        shell: bash
+        run: |
+          cd ${{ env.WORKDIR }}
+          docker compose -f ${{ env.FILE }} down
