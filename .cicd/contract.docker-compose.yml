@@ -54,7 +54,9 @@ services:
       - "9229:9229"
     networks:
       - madi
-    command: node --inspect=0.0.0.0:9229 ./src/index.js
+    command: |
+      ls -la
+      node --inspect=0.0.0.0:9229 ./src/index.js
     depends_on:
       database:
         condition: service_healthy
