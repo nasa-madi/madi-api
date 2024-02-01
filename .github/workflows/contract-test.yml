@@ -31,8 +31,8 @@ jobs:
           ls -la
           pwd
           cd ${{ env.WORKDIR }}
-          docker-compose -f ${{ env.FILE }} pull --include-deps
-          docker-compose -f ${{ env.FILE }} up -d
+          docker-compose -f ${{ env.FILE }} pull --include-deps database storage
+          docker-compose -f ${{ env.FILE }} up -d database storage
 
       - name: Test
         shell: bash
