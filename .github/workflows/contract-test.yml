@@ -11,6 +11,7 @@ env:
   ENTRYPOINT: "entrypoint-command"
   SERVICE: "newman"
   COMMAND: run /etc/newman/contract.collection.json
+  DOCKER_REGISTRY: https://ghcr.io # the github registry
 
 jobs:
   build:
@@ -19,33 +20,49 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Setup Docker
-        uses: KengoTODA/actions-setup-docker-compose@main
         with:
-          version: '2.14.2'
-      
+          fetch-tags: true
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+
       - name: Start stack
         shell: bash
         run: |
-          ls -la
-          pwd
-          cd ${{ env.WORKDIR }}
-          docker-compose -f ${{ env.FILE }} pull --include-deps database storage
-          docker-compose -f ${{ env.FILE }} up -d database storage api
+          
+          docker compose -f ${{ env.FILE }} up database storage api
 
-      - name: Test
-        shell: bash
-        run: |
-          npm install -g newman
-          newman run ./test/contracts/contract.collection.json
+      # - name: Setup Docker
+      #   uses: KengoTODA/actions-setup-docker-compose@main
+      #   with:
+      #     version: '2.14.2'
+      
+      # - name: Start stack
+      #   shell: bash
+      #   run: |
+      #     ls -la
+      #     pwd
+      #     cd ${{ env.WORKDIR }}
+      #     docker-compose -f ${{ env.FILE }} pull --include-deps database storage
+      #     docker-compose -f ${{ env.FILE }} up -d database storage api
+
+      # - name: Test
+      #   shell: bash
+      #   run: |
+      #     npm install -g newman
+      #     newman run ./test/contracts/contract.collection.json
         
-        # DIR=$(pwd)
-        # docker-compose -f ${{ env.FILE }} run -v ${DIR}:/github_workspace -w /github_workspace --entrypoint ${{ env.ENTRYPOINT }} --rm ${{ env.SERVICE }} -- ${{ env.COMMAND }}
+      #   # DIR=$(pwd)
+      #   # docker-compose -f ${{ env.FILE }} run -v ${DIR}:/github_workspace -w /github_workspace --entrypoint ${{ env.ENTRYPOINT }} --rm ${{ env.SERVICE }} -- ${{ env.COMMAND }}
 
-      - name: Stop stacks
-        if: always()
-        shell: bash
-        run: |
-          cd ${{ env.WORKDIR }}
-          docker-compose -f ${{ env.FILE }} down
+      # - name: Stop stacks
+      #   if: always()
+      #   shell: bash
+      #   run: |
+      #     cd ${{ env.WORKDIR }}
+      #     docker-compose -f ${{ env.FILE }} down
