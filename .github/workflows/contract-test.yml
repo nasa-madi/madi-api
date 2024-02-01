@@ -6,7 +6,7 @@ on:
       - dockertest
 
 env:
-  # WORKDIR: ""
+  WORKDIR: "./"
   FILE: ".cicd/contract.docker-compose.yml"
   ENTRYPOINT: "entrypoint-command"
   SERVICE: "service-name"
@@ -29,6 +29,7 @@ jobs:
         shell: bash
         run: |
           ls -la
+          pwd
           cd ${{ env.WORKDIR }}
           docker-compose -f ${{ env.FILE }} pull --include-deps
           docker-compose -f ${{ env.FILE }} up -d
