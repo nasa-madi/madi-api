@@ -9,8 +9,8 @@ env:
   WORKDIR: "./"
   FILE: ".cicd/contract.docker-compose.yml"
   ENTRYPOINT: "entrypoint-command"
-  SERVICE: "service-name"
-  COMMAND: "command"
+  SERVICE: "newman"
+  COMMAND: run /etc/newman/contract.collection.json
 
 jobs:
   build:
@@ -31,8 +31,8 @@ jobs:
           ls -la
           pwd
           cd ${{ env.WORKDIR }}
-          docker-compose -f ${{ env.FILE }} pull --include-deps database storage
-          docker-compose -f ${{ env.FILE }} up -d database storage
+          docker-compose -f ${{ env.FILE }} pull --include-deps database storage api
+          docker-compose -f ${{ env.FILE }} up -d database storage api
 
       - name: Test
         shell: bash

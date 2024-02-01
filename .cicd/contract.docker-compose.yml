@@ -110,6 +110,19 @@ services:
       timeout: 5s
       retries: 5
 
+  newman:
+    image: postman/newman:alpine
+    volumes:
+      - ./test/contracts:/etc/newman
+    command: run /etc/newman/contract.collection.json
+    networks:
+      - madi
+    depends_on:
+      - storage
+      - database
+      - api
+  
+
   #-----------------------------
   # UI SERVICE
   #-----------------------------
