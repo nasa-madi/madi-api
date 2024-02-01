@@ -7,7 +7,7 @@ on:
 
 env:
   WORKDIR: "/"
-  FILE: "./cicd/contract.docker-compose.yml"
+  FILE: "./.cicd/contract.docker-compose.yml"
   ENTRYPOINT: "entrypoint-command"
   SERVICE: "service-name"
   COMMAND: "command"
