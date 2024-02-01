@@ -1,4 +1,4 @@
-name: Docker Compose
+name: Contract Tests
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 env:
   WORKDIR: "/"
-  FILE: "./.cicd/contract.docker-compose.yml"
+  FILE: ".cicd/contract.docker-compose.yml"
   ENTRYPOINT: "entrypoint-command"
   SERVICE: "service-name"
   COMMAND: "command"
@@ -28,6 +28,7 @@ jobs:
       - name: Start stack
         shell: bash
         run: |
+          ls -la
           cd ${{ env.WORKDIR }}
           docker-compose -f ${{ env.FILE }} pull --include-deps
           docker-compose -f ${{ env.FILE }} up -d
