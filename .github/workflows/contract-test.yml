@@ -37,9 +37,11 @@ jobs:
       - name: Test
         shell: bash
         run: |
-          cd ${{ env.WORKDIR }}
-          DIR=$(pwd)
-          docker-compose -f ${{ env.FILE }} run -v ${DIR}:/github_workspace -w /github_workspace --entrypoint ${{ env.ENTRYPOINT }} --rm ${{ env.SERVICE }} -- ${{ env.COMMAND }}
+          npm install -g newman
+          newman ./test/contracts/contract.collection.json
+        
+        # DIR=$(pwd)
+        # docker-compose -f ${{ env.FILE }} run -v ${DIR}:/github_workspace -w /github_workspace --entrypoint ${{ env.ENTRYPOINT }} --rm ${{ env.SERVICE }} -- ${{ env.COMMAND }}
 
       - name: Stop stacks
         if: always()

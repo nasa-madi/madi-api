@@ -44,7 +44,7 @@ services:
   # for the top level docker-compose and may not be the same image 
   # as built under the /api folder directly
   api:
-    build: ../
+    build: ../ # must be relative to the compose file
     environment:
       - NODE_ENV=development
       - DEBUG=*
@@ -108,7 +108,7 @@ services:
       - madi
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9023 | grep 'OK' || exit 1"]
-      interval: 60s
+      interval: 5s
       timeout: 5s
       retries: 5
 
