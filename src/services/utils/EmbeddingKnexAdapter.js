@@ -4,6 +4,15 @@ import { KnexService } from '@feathersjs/knex'
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
 export class EmbeddingKnexService extends KnexService {
 
+    constructor(options){
+        super({
+            filters: {
+                $search: true
+            },
+            ...options
+        })
+    }
+
     async fetchEmbedding (text, model){
         const embedding = await this.app.openai.embeddings.create({
             model: model || "text-embedding-ada-002",

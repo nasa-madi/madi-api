@@ -22,13 +22,33 @@ export * from './uploads.schema.js'
 import multer from '@koa/multer';
 const multipartMulter = multer({ storage: multer.memoryStorage() }); // Use memory storage for file uploads
 
-
-
+// TODO: Add a proxy for all GCS assets to prevent location leakage
+// import koa from '@feathersjs/koa'
+// import proxy from 'koa-proxies'
+// import httpsProxyAgent from 'https-proxy-agent'
 
 
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const upload = (app) => {
+
+  // TODO: Add a proxy for all GCS assets to prevent location leakage
+  // export const proxyPath = 'files'
+
+  // options.events = {
+  //   error (err, req, res) { },
+  //   proxyReq (proxyReq, req, res) { },
+  //   proxyRes (proxyRes, req, res) { }
+  // }
+
+  // app.use(proxyPath, {
+  //   target: 'https://api.github.com/users/',
+  //   changeOrigin: true,
+  //   // agent: new httpsProxyAgent('http://1.2.3.4:88'), // if you need or just delete this line
+  //   rewrite: path => path.replace(/^\/octocat(\/|\/\w+)?$/, '/vagusx'),
+  //   logs: true
+  // })
+
   // Register our service on the Feathers application
   app.use(uploadPath, new UploadService(getOptions(app)), {
     // A list of all methods this service exposes externally

@@ -44,22 +44,30 @@ export const uploadPatchValidator = getValidator(uploadPatchSchema, dataValidato
 export const uploadPatchResolver = resolve({})
 
 // Schema for allowed query properties
-export const uploadQueryProperties = Type.Pick(uploadSchema, ['id', 'text'])
+export const uploadQueryProperties = Type.Pick(uploadSchema, ['id', 'fileId','filename','metadata'])
 export const uploadQuerySchema = Type.Intersect(
   [
     querySyntax(uploadQueryProperties),
     // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
+    Type.Object({
+      $search: Type.Optional(Type.String()),
+      sign:Type.Optional(Type.String())
+    }, { additionalProperties: false })
   ],
   { additionalProperties: false }
 )
 export const uploadQueryValidator = getValidator(uploadQuerySchema, queryValidator)
-export const uploadQueryResolver = resolve({})
+export const uploadQueryResolver = resolve({
+  sign: (value, sanitized, ctx)=>{
+    ctx.params.sign = value
+    return undefined
+  }
+})
 
 
 export const uploadResultResolver = resolve({
   embedding: ()=>undefined,
-  filepath: ()=>undefined,
+  filePath: ()=>undefined,
   userId:()=>undefined,
   pluginId:()=>undefined
 })

@@ -36,7 +36,7 @@ export const blobQuerySchema = Type.Intersect(
   [
     querySyntax(blobQueryProperties),
     // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
+    Type.Object({}, { additionalProperties: true })
   ],
   { additionalProperties: false }
 )
