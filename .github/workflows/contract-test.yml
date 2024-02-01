@@ -38,7 +38,7 @@ jobs:
         shell: bash
         run: |
           npm install -g newman
-          newman ./test/contracts/contract.collection.json
+          newman run ./test/contracts/contract.collection.json
         
         # DIR=$(pwd)
         # docker-compose -f ${{ env.FILE }} run -v ${DIR}:/github_workspace -w /github_workspace --entrypoint ${{ env.ENTRYPOINT }} --rm ${{ env.SERVICE }} -- ${{ env.COMMAND }}
