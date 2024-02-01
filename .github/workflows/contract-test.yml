@@ -6,7 +6,7 @@ on:
       - dockertest
 
 env:
-  WORKDIR: "/"
+  # WORKDIR: ""
   FILE: ".cicd/contract.docker-compose.yml"
   ENTRYPOINT: "entrypoint-command"
   SERVICE: "service-name"
