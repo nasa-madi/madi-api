@@ -44,7 +44,7 @@ services:
   # for the top level docker-compose and may not be the same image 
   # as built under the /api folder directly
   api:
-    build: ./api
+    build: .
     environment:
       - NODE_ENV=development
       - DEBUG=*
