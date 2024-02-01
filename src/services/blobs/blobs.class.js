@@ -14,6 +14,7 @@ export class BlobService {
     const storageConfig = local ? {
       apiEndpoint, // Local GCS mock server endpoint
       projectId, // projectId is required for Storage options even if it's a mock
+      keyFilename: './src/auth/fake-credentials.json'
     } : {};
 
     this.storage = new Storage(storageConfig);
@@ -31,29 +32,31 @@ export class BlobService {
 
   async get(fileName, params){
 
-    let { restrictToUser, user, plugin, restrictToPlugin } = params
+    let { restrictToUser, user, plugin, restrictToPlugin, sign } = params
 
     let userString = restrictToUser ? user.id : 'all'
     let pluginString = restrictToPlugin ? plugin.id : 'all'
     let prefix = `${pluginString}/${userString}/`
 
     // These options will allow temporary read access to the file
-    const options = {
-      // version: 'v2', // defaults to 'v2' if missing.
-      // action: 'read',
-      // expires: Date.now() + 1000 * 60 * 60, // one hour
+    const publicOptions = {
       destination: 'new.txt',
     };
 
+    const signedOptions = {
+      version: 'v4', // defaults to 'v2' if missing.
+      action: 'read',
+      expires: Date.now() + 1000 * 60 * 60, // one hour
+    };
     
-    // Get a v2 signed URL for the file
-    // const [url] = await this.bucket
-      // .file(prefix+fileName)
-      // .getSignedUrl(options);
-
-    let url = await this.bucket.file(prefix+fileName).publicUrl();
-    return {url}
-    // return url
+    let url 
+    if(sign === 'true'){
+      url = await this.bucket.file(prefix+fileName).getSignedUrl(signedOptions);
+      url = url[0]
+    }else{
+      url = await this.bucket.file(prefix+fileName).publicUrl(publicOptions);
+    }
+    return { url }
   }
 
 

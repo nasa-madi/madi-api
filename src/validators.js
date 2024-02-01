@@ -25,8 +25,8 @@ function schemaOf(schemaOf, value, schema) {
   }
 }
 
-export function createAjv() {
-  return addFormats(new Ajv({}), [
+export function createAjv(options={}) {
+  return addFormats(new Ajv(options), [
     'date-time', 
     'time', 
     'date', 
@@ -56,4 +56,4 @@ export function createAjv() {
 export const dataValidator = createAjv()
 
 
-export const queryValidator = createAjv()
+export const queryValidator = createAjv({coerceTypes: true})

@@ -1,0 +1,45 @@
+name: Docker Compose
+
+on:
+  push:
+    branches:
+      - dockertest
+
+env:
+  WORKDIR: "/"
+  FILE: "./cicd/contract.docker-compose.yml"
+  ENTRYPOINT: "entrypoint-command"
+  SERVICE: "service-name"
+  COMMAND: "command"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Docker
+        uses: KengoTODA/actions-setup-docker-compose@main
+      
+      - name: Start stack
+        shell: bash
+        run: |
+          cd ${{ env.WORKDIR }}
+          docker-compose -f ${{ env.FILE }} pull --include-deps
+          docker-compose -f ${{ env.FILE }} up -d
+
+      - name: Test
+        shell: bash
+        run: |
+          cd ${{ env.WORKDIR }}
+          DIR=$(pwd)
+          docker-compose -f ${{ env.FILE }} run -v ${DIR}:/github_workspace -w /github_workspace --entrypoint ${{ env.ENTRYPOINT }} --rm ${{ env.SERVICE }} -- ${{ env.COMMAND }}
+
+      - name: Stop stacks
+        if: always()
+        shell: bash
+        run: |
+          cd ${{ env.WORKDIR }}
+          docker-compose -f ${{ env.FILE }} down

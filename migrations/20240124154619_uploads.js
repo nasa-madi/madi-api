@@ -4,12 +4,13 @@ export async function up(knex) {
       table.increments('id')
       table.string('userId').nullable();
       table.string('pluginId').nullable();
-      table.string('fileId').nullable();
-      table.string('filename').nullable();
+      table.string('fileId');
+      table.string('filePath');
+      table.string('filename');
       table.json('metadata').nullable();
       table.timestamps(); // created_at and updated_at
-      table.string('hash').nullable();
-      table.specificType('embedding','vector').nullable(); // a vector of all of the document fields
+      table.specificType('embedding','vector') // a vector of all of the document fields
+      table.unique(['filePath','filename', 'fileId']);
     })
     .catch(function (e) {
       console.error(e);
