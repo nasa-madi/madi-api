@@ -74,7 +74,7 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v2.0.0
         with:
           project_id: ${{ vars.PROJECT_ID }}
-          service: ${{ vars.SERVICE }}-migrate
+          service: ${{ vars.SERVICE }}
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           env_vars: |
@@ -97,7 +97,7 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v2.0.0
         with:
           project_id: ${{ vars.PROJECT_ID }}
-          service: ${{ vars.SERVICE }}-migrate
+          service: ${{ vars.SERVICE }}
           region: ${{ vars.REGION }}
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.AR_REPO }}/${{ vars.SERVICE }}:${{ github.sha }}
           env_vars: |

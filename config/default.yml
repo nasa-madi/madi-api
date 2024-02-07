@@ -30,9 +30,9 @@ openai:
   key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXX
   # MODEL OPTIONS
   max_tokens_llm: 4000
-  use_proxy: false
+  use_proxy: true
   proxy_port: 8888
-  stream: true
+  stream: false
 
 # TESTING
 debug: false
@@ -41,6 +41,7 @@ verbose: false
 storage:
   bucket: sample-bucket2
   apiEndpoint: http://127.0.0.1:9023
+  baseUrl: 127.0.0.1:9023
   local: true
   projectId: test
 

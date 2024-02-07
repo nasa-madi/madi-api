@@ -48,10 +48,12 @@ docs/.vitepress/cache
 
 config/*
 !config/default.yml
+!config/docker.yml
 !config/custom-environment-variables.json
 
-cache/*
+# cache/* #commented out so that contract tests run faster.
 ignore/*
+.uploads/*
 
 #####
 client_secret*

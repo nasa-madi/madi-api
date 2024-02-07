@@ -16,7 +16,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 4
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -33,7 +33,8 @@ jobs:
       - name: Start stack
         shell: bash
         run: |
-          docker compose -f ${{ env.FILE }} up database storage api
+          export OPENAI_API_KEY=XXX
+          docker compose -f ${{ env.FILE }} --env OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} .env up --exit-code-from newman
 
       # - name: Setup Docker
       #   uses: KengoTODA/actions-setup-docker-compose@main
@@ -49,11 +50,11 @@ jobs:
       #     docker-compose -f ${{ env.FILE }} pull --include-deps database storage
       #     docker-compose -f ${{ env.FILE }} up -d database storage api
 
-      - name: Test
-        shell: bash
-        run: |
-          npm install -g newman
-          newman run ./test/contracts/contract.collection.json
+      # - name: Test
+      #   shell: bash
+      #   run: |
+      #     npm install -g newman
+      #     newman run ./test/contracts/contract.collection.json
         
       #   # DIR=$(pwd)
       #   # docker-compose -f ${{ env.FILE }} run -v ${DIR}:/github_workspace -w /github_workspace --entrypoint ${{ env.ENTRYPOINT }} --rm ${{ env.SERVICE }} -- ${{ env.COMMAND }}
