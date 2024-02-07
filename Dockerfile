@@ -2,6 +2,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
+# Curl is required for health checks
+RUN apk update && apk add --no-cache curl 
+
 COPY package.json ./
 COPY package-lock.json ./
 
@@ -17,7 +20,8 @@ CMD sh -c ' \
   echo "MIGRATION $MIGRATION"; \
   if [ "${MIGRATION:-false}" = "true" ]; then \
     npm run migrate; \
-  elif [ "${SEED:-false}" = "true" ]; then \
+  fi; \
+  if [ "${SEED:-false}" = "true" ]; then \
     npm run seed:admin; \
   fi; \
   npm start \
