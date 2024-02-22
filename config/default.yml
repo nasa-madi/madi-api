@@ -23,14 +23,14 @@ postgresql:
     idleTimeoutMillis: 5000
   #   createTimeoutMillis: 30000
   #   acquireTimeoutMillis: 60000
-  debug: true
+  debug: false
 
 # API KEYS
 openai: 
   key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXX
   # MODEL OPTIONS
   max_tokens_llm: 4000
-  use_proxy: true
+  use_proxy: false
   proxy_port: 8888
   stream: false
 
