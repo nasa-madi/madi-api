@@ -1,4 +1,5 @@
 import { toolFuncs, toolDescs, defaultTools } from "../../plugin-tools/index.js";
+import crypto from 'crypto'
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
 export class ToolService {
@@ -44,38 +45,79 @@ export class ToolService {
 
   async create(data, params) {
     // get available tools
+
     let authorizedTools = await this.getAuthorizedTools(params)
 
 
+0
     let { tool_calls } = data
     tool_calls = Array.isArray(tool_calls)?tool_calls:[tool_calls]
     let response = []
     for (const toolCall of tool_calls) {
-      let functionName = toolCall?.function?.name
-      let functionResponse
-      if(authorizedTools.map(t=>t?.function?.name).includes(functionName)){
-        const functionToCall = toolFuncs[functionName];
-        const functionArgs = typeof toolCall.function.arguments === 'string' 
-          ? JSON.parse(toolCall?.function?.arguments)
-          : toolCall?.function?.arguments
-        functionResponse = await functionToCall(functionArgs);
+      let pluginName = toolCall?.function?.name
+      let pluginResponse = ''
+      let partial 
+      let nextCall
+      if(authorizedTools.map(t=>t?.function?.name).includes(pluginName)){
+        
+            
+        // get the function or class
+        const pluginToCall = toolFuncs[pluginName];
+        let pluginInstance = new pluginToCall({
+          documents: this.options.app.service('documents'),
+          chunks: this.options.app.service('chunks'),
+          uploads: this.options.app.service('uploads'),
+          chats: this.options.app.service('chats'),
+          tools: this.options.app.service('tools')
+        })
+        
+        // get the arguments
+        const pluginArgs = typeof toolCall.function.arguments === 'string' 
+        ? JSON.parse(toolCall?.function?.arguments)
+        : toolCall?.function?.arguments
+
+        let result = await pluginInstance.run(pluginArgs, params);
+
+
+        if (typeof result == 'string'){
+          pluginResponse = result
+        }else{
+          pluginResponse = result.content
+          partial = result.partial
+          nextCall = result.nextCall
+        }
+
       }else{
-        throw new Error(`Tool ${functionName} is not allowed or not available.`)
+        throw new Error(`Tool ${pluginName} is not allowed or not available.`)
       }
 
-      // update the messages to include the tool calls
+      var id = crypto.randomBytes(20).toString('hex');
+
+      // update the messages to include the tool calls  
       response.push({
           tool_call_id: toolCall.id,
           role: "tool",
-          name: functionName,
-          content: functionResponse,
-      });
+          name: pluginName,
+          content: pluginResponse
+      },partial?
+      {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            tool_call_id: id,
+            type: 'function',
+            function: nextCall
+          }
+        ]
+      }:undefined);
     }
-      
     return response
   }
 }
 
 export const getOptions = (app) => {
-  return { app }
+  return { 
+    app
+  }
 }

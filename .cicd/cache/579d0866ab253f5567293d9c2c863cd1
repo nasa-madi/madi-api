@@ -1,0 +1,1 @@
+{"error":{"message":"An assistant message with 'tool_calls' must be followed by tool messages responding to each 'tool_call_id'. The following tool_call_ids did not have response messages: call_k3YLTd4jC5gTFwXneuTakbSv, call_RRE9R9AuhtLvqoHEVmywhMiJ, call_CQWPfgIyY78pv7VKwA01Sgs1","type":"invalid_request_error","param":"messages","code":null}}

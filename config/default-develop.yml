@@ -1,0 +1,10 @@
+file: develop
+port: 80
+postgresql:
+  debug: true
+openai: 
+  use_proxy: false
+debug: true
+verbose: false
+storage:
+  local: true

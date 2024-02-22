@@ -1,5 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 import { Readable } from 'stream'
+import { BadRequest } from '@feathersjs/errors'
 
 
 export class BlobService {
@@ -20,9 +21,10 @@ export class BlobService {
     this.storage = new Storage(storageConfig);
     this.storage
       .getBuckets()
-      .then(buckets => {
+      .then(async buckets => {
         if (!buckets[0].map(b => b.name).includes(bucketName)) {
-          this.storage.createBucket(bucketName)
+          await this.storage.createBucket(bucketName)
+          this.bucket = await this.storage.bucket(bucketName);
         }
       })
 
@@ -95,7 +97,7 @@ export class BlobService {
   }
 
   async create(data, params) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       const { file, ...rest } = data
       const { buffer, mimetype, originalname } = file;
 
@@ -110,11 +112,19 @@ export class BlobService {
       stream.push(null); // indicates end-of-file basically - the end of the stream
       stream.on('error', () => reject(new Error('Failure loading up to Google Cloud')));
 
+      // this.bucket = await this.storage.getBuckets()
+
       const newFile = this.bucket.file(prefix + originalname);
       // const newFile = this.bucket.file(originalname);
 
       stream
         .pipe(newFile.createWriteStream())
+        .on('error', async (e)=>{
+          console.log('upload error')
+          console.log(e)
+          reject(new Error('Failure loading up to Google Cloud'))
+          throw new BadRequest(e)
+        })
         .on('finish', async () => {
           console.log('Write Stream Finished');
 

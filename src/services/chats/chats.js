@@ -4,6 +4,12 @@ import { PassThrough } from 'stream';
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { logger } from '../../logger.js';
 import { authorizeHook } from '../../auth/authorize.hook.js'
+import { Stream } from 'openai/streaming.js'
+
+// import OpenAI from 'openai';
+
+// const openai = new OpenAI();
+
 
 import {
   chatDataValidator,
@@ -22,11 +28,11 @@ export const chatMethods = ['create']
 export * from './chats.class.js'
 export * from './chats.schema.js'
 
-const ARTIFICIAL_DELAY_MS = 0;
+// const ARTIFICIAL_DELAY_MS = 0;
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+// function sleep(ms) {
+//   return new Promise(resolve => setTimeout(resolve, ms));
+// }
 // A configure function that registers the service and its hooks via `app.configure`
 export const chat = (app) => {
   // Register our service on the Feathers application
@@ -37,6 +43,9 @@ export const chat = (app) => {
     events: [],
     koa: {
       after: [async (ctx, next) => {    
+
+        ctx.body = Object.assign(new Stream(), ctx.body)
+
         if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
 
           ctx.set({
@@ -47,7 +56,6 @@ export const chat = (app) => {
           ctx.status = 200;
           
           ctx.res.flushHeaders()
-
 
           let chunkStream = ctx.body;
 

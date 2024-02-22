@@ -1,42 +1,8 @@
-version: "3.8"
+# version: "3.10"
 
 services:
 
-  #-----------------------------
-  # LLAMA SERVICE
-  #-----------------------------
-  # This service builds and runs a script from the ./models/llama-cpp-python directory.
-  # The service is available at port 8000.
-  llama:
-    # Before running, you must run ./models/llama-cpp-python/build.sh
-    build: 
-      context: ./models/llama-cpp-python
-    image: open_llama_3b
-    ports:
-      - 8000:8000
-    volumes:
-      - ./models/llama-cpp-python:/data
-    cap_add:
-      - SYS_RESOURCE
 
-
-
-
-  #-----------------------------
-  # MOCK API SERVICE
-  #-----------------------------
-  # This service is a mock API available at port 8080
-  mock:
-    image: stoplight/prism:4.2.6
-    volumes:
-      - "./api/specifications:/tmp"
-    ports:
-      - "8080:4010"
-    command: >
-      mock -m -p 4010 --host 0.0.0.0 "/tmp/api-specification.yml" -m
-
-
-  
   #-----------------------------
   # API SERVICE
   #-----------------------------
@@ -44,22 +10,37 @@ services:
   # for the top level docker-compose and may not be the same image 
   # as built under the /api folder directly
   api:
+<<<<<<< HEAD
     build: ./api
+=======
+    build: ${PWD}/ # must be relative to the compose file
+>>>>>>> 2874fe33 (update)
     environment:
       - NODE_ENV=development
-      - DEBUG=*
       - NODE_CONFIG_ENV=docker
+      - MIGRATION=true
+      - SEED=true
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     ports:
       - "3030:3030"
-      - "9229:9229"
     networks:
       - madi
+<<<<<<< HEAD
     command: node --inspect=0.0.0.0:9229 ./src/index.js
+=======
+>>>>>>> 2874fe33 (update)
     depends_on:
       database:
         condition: service_healthy
       storage: 
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3030 | grep -q \"404\" && exit 0 || exit 1"]
+      interval: 60s
+      timeout: 5s
+      start_period: 60s
+      start_interval: 5s
+      retries: 5
 
   #-----------------------------
   # DATABASE SERVICE
@@ -95,21 +76,29 @@ services:
     image: jamesmtc/madi-gcp-emulator:latest
     environment:
       - PORT=9023
-      - STORAGE_BASE=./api
-      - STORAGE_DIR=./uploads
+      # If you want to user ./api/uploads as the storage folder
+      - STORAGE_BASE=/ #put it in the base folder
+      - STORAGE_DIR=./storage #to keep the data, you should match the volumes
     ports:
       - "9023:9023"
-      - "9339:9339"
     volumes:
-      - ./uploads:/storage
+      - ${PWD}/.uploads:/storage
     networks:
       - madi
+    command: ["start", "--host=storage", "--port=9023", "--in-memory"]
     healthcheck:
+<<<<<<< HEAD
       test: ["CMD-SHELL", "curl -f http://localhost:9023 | grep 'OK' || exit 1"]
+=======
+      test: ["CMD-SHELL", "curl -f http://storage:9023 | grep 'OK' || exit 1"]
+>>>>>>> 2874fe33 (update)
       interval: 60s
       timeout: 5s
+      start_period: 30s
+      start_interval: 1s
       retries: 5
 
+<<<<<<< HEAD
   #-----------------------------
   # UI SERVICE
   #-----------------------------
@@ -124,6 +113,18 @@ services:
       - OPENAI_API_HOST=https://localhost:3030
 
 
+=======
+  newman:
+    image: postman/newman:alpine
+    volumes:
+      - ${PWD}/test/contracts:/etc/newman
+    command: run /etc/newman/contract.collection.json --env-var storageUrl=http://storage:9023 --env-var baseUrl=http://api:3030 --folder blueprint
+    networks:
+      - madi
+    depends_on:
+      api:
+        condition: service_healthy
+>>>>>>> 2874fe33 (update)
 
 
 networks:
