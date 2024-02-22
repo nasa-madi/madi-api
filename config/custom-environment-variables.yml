@@ -1,4 +1,3 @@
-port: 
-  key: PORT
+port: PORT
 openai:
   key: OPENAI_API_KEY
