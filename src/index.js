@@ -1,9 +1,8 @@
 import { koa, rest } from '@feathersjs/koa'
 import { feathers } from '@feathersjs/feathers'
 import { logger } from './logger.js'
-import mount from 'koa-mount'
-
 import { app } from './app.js'
+import config from 'config'
 
 // const http = koa(feathers())
 
@@ -20,6 +19,7 @@ import { app } from './app.js'
 
 
 console.log(process.env)
+console.log(config)
 
 const port = app.get('port')
 const host = app.get('host')
