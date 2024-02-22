@@ -1,5 +1,5 @@
 file: develop
-port: 80
+port: 8080
 postgresql:
   debug: true
 openai: 
