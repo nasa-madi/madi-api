@@ -47,8 +47,8 @@ packages/**/lib
 docs/.vitepress/cache
 
 config/*
-!config/default.yml
-!config/custom-environment-variables.json
+!config/default*
+!config/custom*
 
 cache/*
 ignore/*

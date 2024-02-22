@@ -32,29 +32,29 @@ openai:
   max_tokens_llm: 4000
   use_proxy: true
   proxy_port: 8888
-  stream: true
+  stream: false
 
 # TESTING
 debug: false
 verbose: false
 
+storage:
+  bucket: sample-bucket2
+  apiEndpoint: http://127.0.0.1:9023
+  baseUrl: 127.0.0.1:9023
+  local: true
+  projectId: test
+
+uploads:
+  embeddingModel: text-embedding-3-small 
+
+  
 authentication:
   entity: user
   service: users
-  secret: Z5EMUOsgs9oQ8+6Otfy8eNc6DRTU3L5O
+  secret: XXXXXXXXXXXXXXXXXXXXXXXXXXX
   authStrategies:
-    - jwt
-    - local
     - googleIAP
-  jwtOptions:
-    header:
-      typ: access
-    audience: https://yourdomain.com
-    algorithm: HS256
-    expiresIn: 1d
-  local:
-    usernameField: email
-    passwordField: password
   googleIAP:
     emailField: email
     idField: googleId

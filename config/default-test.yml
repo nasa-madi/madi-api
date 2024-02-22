@@ -1,0 +1,14 @@
+file: test
+port: 80
+postgresql:
+  debug: false
+openai: 
+  use_proxy: false
+debug: true
+verbose: false
+storage:
+  local: true
+
+
+
+
