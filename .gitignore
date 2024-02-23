@@ -51,7 +51,8 @@ config/*
 !config/custom*
 
 cache/*
-ignore/*
+ignore/
+.uploads/
 
 #####
 client_secret*

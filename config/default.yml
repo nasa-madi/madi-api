@@ -39,11 +39,7 @@ debug: false
 verbose: false
 
 storage:
-  bucket: sample-bucket2
-  apiEndpoint: http://127.0.0.1:9023
-  baseUrl: 127.0.0.1:9023
-  local: true
-  projectId: test
+  bucket: sample-bucket
 
 uploads:
   embeddingModel: text-embedding-3-small 
