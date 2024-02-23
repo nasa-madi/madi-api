@@ -32,7 +32,6 @@ openai:
   max_tokens_llm: 4000
   use_proxy: false
   proxy_port: 8888
-  stream: false
 
 # TESTING
 debug: false
