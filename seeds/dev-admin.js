@@ -14,9 +14,9 @@ export const seed = async function(knex) {
   }
 
   await knex('users').insert([
-    { id: 1, email: 'superadmin@example.com', role: 'superadmin' },
-    { id: 2, email: 'admin@example.com', role: 'admin' },
-    { id: 3, email: 'member@example.com', role: 'member' }
+    { id: 1, email: 'superadmin@example.com', googleId: '00000000', role: 'superadmin' },
+    { id: 2, email: 'admin@example.com',      googleId: '11111111', role: 'admin' },
+    { id: 3, email: 'member@example.com',     googleId: '22222222', role: 'member' }
   ]).onConflict('id').merge();
 
 };

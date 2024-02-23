@@ -7,27 +7,24 @@ const resolveAction = createAliasResolver({
 });
 
 const defineRules = (can, cannot, user) => {
-  if (user.role) {
-    switch (user.role.name) {
+  switch (user.role) {
+    case "superadmin":
+      can("manage", "all");
+      break;
 
-      case "superadmin":
-        can("manage", "all");
-        break;
+    case "admin":
+      can("create", "users");
 
-      case "admin":
-        can("create", "users");
+    default:
+      can("read",   "tools");
+      can("create", "tools");
+      
+      can("create", "chats");
 
-      default:
-        can("read",   "tools");
-        can("create", "tools");
-        
-        can("create", "chats");
-
-        can("read", "users", {id: user.id});
-        cannot("update", "users")
-        cannot("delete", "users");
-        break;
-    }
+      can("read", "users", {id: user.id});
+      cannot("update", "users")
+      cannot("delete", "users");
+      break;
   }
 };
 
