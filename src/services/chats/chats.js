@@ -27,6 +27,12 @@ const ARTIFICIAL_DELAY_MS = 0;
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+function checkStreamResponse(response){
+  console.log(typeof response)
+  return response.controller && response.iterator
+}
+
 // A configure function that registers the service and its hooks via `app.configure`
 export const chat = (app) => {
   // Register our service on the Feathers application
@@ -37,10 +43,11 @@ export const chat = (app) => {
     events: [],
     koa: {
       after: [async (ctx, next) => {    
-        if (typeof ctx.body[Symbol.asyncIterator] === 'function') {
 
+        // terrible way to detext controller
+        if (checkStreamResponse(ctx.body)) {
           ctx.set({
-            "Content-Type": "text/event-stream;",
+            "Content-Type": "text/event-stream",
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
           });
@@ -87,9 +94,12 @@ export const chat = (app) => {
   app.service(chatPath).hooks({
     around: {
       all: [
-        // authenticate('jwt'),
-        iff(!app.get('openai').stream,schemaHooks.resolveExternal(chatExternalResolver)),
-        iff(!app.get('openai').stream,schemaHooks.resolveResult(chatResolver)) 
+        
+        // THESE LINES HAVE TO COMMENTED OUT BECAUSE EXTERNAL RESOLVER KILLS ASYNC ITERATOR
+        // iff((ctx,next)=>!ctx.data.stream, schemaHooks.resolveExternal(chatExternalResolver)),
+        // iff((ctx,next)=>!ctx.data.stream, schemaHooks.resolveResult(chatResolver)),
+
+        schemaHooks.resolveResult(chatResolver)
       ]
     },
     before: {

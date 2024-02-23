@@ -6,13 +6,11 @@ export class ChatService {
   }
 
   async makeRequest(options) {
+    options.model = 'gpt-4-1106-preview';
     let openai = this.options?.app?.openai;
     try {
-      const response = await openai.chat.completions.create(options);
-      if (response.status !== 201) {
-        console.log('Request:', options, 'Error:', response);
-      }
-      return response;
+      let response = await openai.chat.completions.create(options)
+      return response
     } catch (error) {
       console.log('Request:', options, 'Error:', error);
       throw error;
@@ -26,8 +24,6 @@ export class ChatService {
     let { messages, tools, tool_choice } = data
     let stream = !!data.stream
     let options = {
-      model: 'gpt-4-1106-preview',
-      // stream: params?.query?.stream === 'false' ? false:true,
       stream,
       messages, 
       tools: (tools)?tools.map(t=>_.omit(t,['plugin','display'])):undefined, 
