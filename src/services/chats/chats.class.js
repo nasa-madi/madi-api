@@ -5,11 +5,20 @@ export class ChatService {
     this.options = options
   }
 
-  async makeRequest(options){
-    let openai = this.options?.app?.openai
-    return openai.chat.completions.create(options);
+  async makeRequest(options) {
+    let openai = this.options?.app?.openai;
+    try {
+      const response = await openai.chat.completions.create(options);
+      if (response.status !== 201) {
+        console.log('Request:', options, 'Error:', response);
+      }
+      return response;
+    } catch (error) {
+      console.log('Request:', options, 'Error:', error);
+      throw error;
+    }
   }
-  
+    
 
   async create(data, params) {
     console.log('\n\n************ CHAT SERVICE CREATE')
