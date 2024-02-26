@@ -1,26 +1,15 @@
 import _ from 'lodash'
+import * as openaiAdapter from './chats.openai.js'
+import * as geminiAdapter from './chats.gemini.js'
+
 
 export class ChatService {
   constructor(options) {
     this.options = options
   }
 
-  async makeRequest(options) {
-    options.model = 'gpt-4-1106-preview';
-    let openai = this.options?.app?.openai;
-    try {
-      let response = await openai.chat.completions.create(options)
-      return response
-    } catch (error) {
-      console.log('Request:', options, 'Error:', error);
-      throw error;
-    }
-  }
-    
-
   async create(data, params) {
     console.log('\n\n************ CHAT SERVICE CREATE')
-    // console.log("tools: ", availableToolDescriptions)
     let { messages, tools, tool_choice } = data
     let stream = !!data.stream
     let options = {
@@ -29,8 +18,6 @@ export class ChatService {
       tools: (tools)?tools.map(t=>_.omit(t,['plugin','display'])):undefined, 
       tool_choice: (tools)?tool_choice:undefined
     }
-    // return data
-    return this.makeRequest(options)
   }
 }
 

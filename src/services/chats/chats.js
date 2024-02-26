@@ -1,37 +1,25 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
-import { PassThrough } from 'stream';
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { logger } from '../../logger.js';
 import { authorizeHook } from '../../auth/authorize.hook.js'
-
+import { streamToSSE } from '../utils/koaSSE.js'
 import {
   chatDataValidator,
   chatQueryValidator,
   chatResolver,
-  chatExternalResolver,
   chatDataResolver,
   chatQueryResolver
 } from './chats.schema.js'
 import { ChatService, getOptions } from './chats.class.js'
-import messageReducer from '../utils/deltaReducer.js';
 
 export const chatPath = 'chats'
 export const chatMethods = ['create']
 
 export * from './chats.class.js'
 export * from './chats.schema.js'
+import { Readable } from 'node:stream'
 
-const ARTIFICIAL_DELAY_MS = 0;
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function checkStreamResponse(response){
-  console.log(typeof response)
-  return response.controller && response.iterator
-}
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const chat = (app) => {
@@ -42,63 +30,18 @@ export const chat = (app) => {
     // You can add additional custom events to be sent to clients here
     events: [],
     koa: {
-      after: [async (ctx, next) => {    
-
-        // terrible way to detext controller
-        if (checkStreamResponse(ctx.body)) {
-          ctx.set({
-            "Content-Type": "text/event-stream",
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-          });
-          ctx.status = 200;
-          
-          ctx.res.flushHeaders()
-
-
-          let chunkStream = ctx.body;
-
-          ctx.body = new PassThrough();
-          let message = {}
-
-          let writeData = async () => {
-              for await (let chunk of chunkStream) {
-                  // console.log('RAW CHUNK',chunk)
-                  message = messageReducer(message, chunk)
-                  ctx.body.write(`data: ${JSON.stringify(chunk)}\n\n`);
-                  await new Promise(resolve => setTimeout(resolve, ARTIFICIAL_DELAY_MS));
-                  if(chunk?.choices?.[0]?.finish_reason){
-                      ctx.body.write(`data: [DONE]\n\n`);
-                      ctx.body.end();
-                      return
-                  }
-              }
-          };
-          writeData()
-          .then(()=>{
-            logger.info(JSON.stringify(message))
-          })
-          next();
+      after: [async (ctx, next) => {   
+        if(typeof ctx.body[Symbol.asyncIterator] === 'function'){
+          streamToSSE(ctx)
         }
+        next();
       }]
     }
   })
  
-  const iff = (condition, hook) =>async (context, next) => {
-    const isCondition = typeof condition == 'function' ? condition(context) : !!condition;
-    return isCondition ? hook(context, next) : next()
-  }
-
-        
-  // Initialize hooks=
   app.service(chatPath).hooks({
     around: {
       all: [
-        
-        // THESE LINES HAVE TO COMMENTED OUT BECAUSE EXTERNAL RESOLVER KILLS ASYNC ITERATOR
-        // iff((ctx,next)=>!ctx.data.stream, schemaHooks.resolveExternal(chatExternalResolver)),
-        // iff((ctx,next)=>!ctx.data.stream, schemaHooks.resolveResult(chatResolver)),
-
         schemaHooks.resolveResult(chatResolver)
       ]
     },
