@@ -49,6 +49,7 @@ docs/.vitepress/cache
 config/*
 !config/default*
 !config/custom*
+!config/docker.yml
 
 cache/*
 ignore/
