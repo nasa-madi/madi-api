@@ -3,7 +3,7 @@ name: Test, Build, and Deploy to Cloud Run
 on:
   push: 
     branches: [develop, test, production]
-    
+
   workflow_dispatch:
     inputs:
       migration_input:
@@ -19,6 +19,6 @@ on:
 
 jobs:
     contract-test:
-        uses: ./.github/workflows/components/contract-test.yml
+        uses: ./.github/workflows/_contract-test.yml
     deploy:
-        uses: ./.github/workflows/components/deploy-cloudrun.yml
+        uses: ./.github/workflows/_deploy-cloudrun.yml
