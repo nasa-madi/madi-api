@@ -23,7 +23,7 @@ on:
 
 jobs:
     contract-test:
-      uses: ./.github/workflows/_contract-test.yml
+      uses: ./.github/workflows/job.contract-test.yml
     deploy:
       needs: contract-test
-      uses: ./.github/workflows/_deploy-cloudrun.yml
+      uses: ./.github/workflows/job.deploy-cloudrun.yml

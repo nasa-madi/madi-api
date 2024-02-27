@@ -23,5 +23,5 @@ on:
         type: boolean
 
 jobs:
-    contract-test:
-      uses: ./.github/workflows/_contract-test.yml
+  contract-test:
+    uses: ./.github/workflows/job.contract-test.yml
