@@ -23,7 +23,9 @@ on:
 
 jobs:
     contract-test:
+      secrets: inherit
       uses: ./.github/workflows/job.contract-test.yml
     deploy:
       needs: contract-test
+      secrets: inherit
       uses: ./.github/workflows/job.deploy-cloudrun.yml

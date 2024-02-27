@@ -24,4 +24,5 @@ on:
 
 jobs:
   contract-test:
+    secrets: inherit
     uses: ./.github/workflows/job.contract-test.yml
