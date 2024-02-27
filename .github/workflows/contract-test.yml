@@ -33,8 +33,7 @@ jobs:
         shell: bash
         run: |
           echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} > .env
-          docker compose -f ${{ env.FILE }} up --exit-code-from newman
-
+          docker compose --env-file ./.env -f ${{ env.FILE }} up --exit-code-from newman
         
         # docker compose -f "${compose_file}" up database storage api newman --build --exit-code-from newman
 
