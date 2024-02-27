@@ -1,20 +1,7 @@
 name: Build and Deploy to Cloud Run
 
 on:
-  workflow_dispatch:
-    inputs:
-      migration_input:
-        description: 'Perform Migration'
-        default: false
-        required: true
-        type: boolean
-      seed_input:
-        description: 'Perform Seed'
-        default: false
-        required: true
-        type: boolean
-  push:
-    branches: [ "main", "develop", "test" ]
+  workflow_call:
 
 jobs:
   deploy:

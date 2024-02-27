@@ -1,0 +1,24 @@
+name: Test, Build, and Deploy to Cloud Run
+
+on:
+  push: 
+    branches: [develop, test, production]
+    
+  workflow_dispatch:
+    inputs:
+      migration_input:
+        description: 'Perform Migration'
+        default: false
+        required: true
+        type: boolean
+      seed_input:
+        description: 'Perform Seed'
+        default: false
+        required: true
+        type: boolean
+
+jobs:
+    contract-test:
+        uses: ./.github/workflows/components/contract-test.yml
+    deploy:
+        uses: ./.github/workflows/components/deploy-cloudrun.yml
