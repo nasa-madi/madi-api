@@ -1,9 +1,8 @@
 name: Contract Tests
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - dockertest
 
 env:
   WORKDIR: "./"
