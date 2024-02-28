@@ -14,9 +14,14 @@ const defineRules = (can, cannot, user) => {
       break;
 
     case "admin":
-      can("create", "users");
+      can("manage", "chunks");
 
     default:
+      can("read", "chunks");
+
+      can("read",   "tools");
+      can("create", "tools");
+  
       can("read",   "tools");
       can("create", "tools");
       

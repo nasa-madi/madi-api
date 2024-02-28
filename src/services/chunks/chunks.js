@@ -1,5 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
+import { authorizeHook } from '../../auth/authorize.hook.js'
 
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
@@ -34,21 +35,30 @@ export const chunks = (app) => {
   app.service(chunksPath).hooks({
     around: {
       all: [
-        authenticate('jwt'),
         schemaHooks.resolveExternal(chunksExternalResolver),
         schemaHooks.resolveResult(chunksResolver)
       ]
     },
     before: {
-      all: [schemaHooks.validateQuery(chunksQueryValidator), schemaHooks.resolveQuery(chunksQueryResolver)],
-      find: [schemaHooks.resolveQuery(chunksQueryResolver)],
+      all: [
+        authenticate('googleIAP'),
+        authorizeHook,
+        schemaHooks.validateQuery(chunksQueryValidator), 
+        schemaHooks.resolveQuery(chunksQueryResolver)
+      ],
+      find: [
+        schemaHooks.resolveQuery(chunksQueryResolver)
+      ],
       get: [],
       create: [
         schemaHooks.validateData(chunksDataValidator), 
         schemaHooks.resolveData(chunksDataResolver),
         schemaHooks.resolveData(chunksVectorResolver) // This inserts the embedding field
       ],
-      patch: [schemaHooks.validateData(chunksPatchValidator), schemaHooks.resolveData(chunksPatchResolver)],
+      patch: [
+        schemaHooks.validateData(chunksPatchValidator), 
+        schemaHooks.resolveData(chunksPatchResolver)
+      ],
       remove: []
     },
     after: {

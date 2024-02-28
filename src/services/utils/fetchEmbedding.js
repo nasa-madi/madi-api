@@ -7,5 +7,6 @@ export const fetchEmbedding = async (text, model)=>{
         encoding_format: "float",
     });
     return embedding?.data?.[0]?.embedding
-
 }
+
+

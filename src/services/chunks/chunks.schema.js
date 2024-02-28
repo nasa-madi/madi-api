@@ -3,22 +3,24 @@ import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { BadRequest } from '@feathersjs/errors'
-import { fetchEmbedding } from '../utils/fetchEmbedding.js'
+// import { fetchEmbedding } from '../utils/fetchEmbedding.js'
 import { getIdFromText } from '../utils/getIdFromText.js'
-
+import config from 'config'
 
 // Main data model schema
 export const chunksSchema = Type.Object(
   {
     id: Type.Number(),
-    hash: Type.String(),
+    hash: Type.String(),  //unique hash of the pageContent
     metadata: Type.Any(),  // JSON objects can be used here
-    pageContent: Type.String(),
+    pageContent: Type.String({
+      maxLength: config.get('chunks')?.maxLength || 4000
+    }),
     embedding:  Type.Array(Type.Number()), // Representing a vector as an array of numbers
     documentId:  Type.Optional(Type.Number()),
     documentIndex:  Type.Optional(Type.Number()), // order of the chunk in the final document
     toolName: Type.Optional(Type.String()), // The tool the created the specific chunk (if applicable)
-    userId:  Type.Optional(Type.Number()),
+    userId:  Type.Optional(Type.Number()), // The user that created the specific chunk (if applicable)
   },
   { $id: 'Chunks', additionalProperties: false }
 )
@@ -52,7 +54,10 @@ export const chunksVectorResolver = resolve({
         throw new BadRequest(`Hash ${chunk.hash} is not unique. Document already exists.`)
       }
 
-      let embedding = await fetchEmbedding(chunk.pageContent)
+      let embedding = await context.self.fetchEmbedding(chunk.pageContent)
+      if (!embedding){
+        throw new BadRequest('Embedding could not be generated')
+      }
       return `[${embedding.join(",")}]`
     })
 })
@@ -115,7 +120,7 @@ export const chunksPatchValidator = getValidator(chunksPatchSchema, dataValidato
 export const chunksPatchResolver = resolve({
   embedding: virtual(async(chunk,context)=>{
     if(chunk.pageContent){
-      let embedding = await fetchEmbedding(chunk.pageContent)
+      let embedding = await context.self.fetchEmbedding(chunk.pageContent)
       return `[${embedding.join(",")}]`
     }else{
       return undefined

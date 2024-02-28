@@ -13,29 +13,28 @@ export class EmbeddingKnexService extends KnexService {
         })
     }
 
-    async fetchEmbedding (text, model){
-        const embedding = await this.app.openai.embeddings.create({
-            model: model || "text-embedding-ada-002",
-            input: text,
-            encoding_format: "float",
-        });
-        return embedding?.data?.[0]?.embedding
+    async fetchEmbedding (input, options){
+        throw new Error('The fetchEmbedding function must be overwritten for this to function.')
     }
 
     async _find(params){
       const { filters, paginate } = this.filterQuery(params);
-      const { name, id } = this.getOptions(params);
+      const { name, id='id' } = this.getOptions(params);
       let search = null
+      let distanceDirection = 'asc'
   
       if(params?.query?.$search){
         search = params?.query?.$search;
         delete params.query.$search
+        if(params?.query?.$direction){
+            distanceDirection = params.query.$direction === 'desc' ? 'desc' : 'asc';
+        }
       }
       const builder = params.knex ? params.knex.clone() : this.createQuery(params);
       if(search){
-        let embedding = await this.fetchEmbedding(search, this.embeddingModel)
+        let embedding = await this.fetchEmbedding(search)
         builder.select(this.getModel().cosineDistanceAs('embedding', embedding,'_distance'))
-        builder.orderBy('_distance','asc')
+        builder.orderBy('_distance',distanceDirection)
       }
   
       const countBuilder = builder.clone().clearSelect().clearOrder().count(`${name}.${id} as total`);

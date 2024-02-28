@@ -1158,10 +1158,877 @@
 					]
 				},
 				{
-					"name": "teardown",
-					"item": []
+					"name": "restricted",
+					"item": [
+						{
+							"name": "chunks",
+							"item": [
+								{
+									"name": "Create Short Chunk",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(201);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('pageContent');",
+													"    pm.expect(result).to.have.property('metadata');",
+													"    pm.collectionVariables.set(\"chunkId_0\", (result.id))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0,\n    \"toolName\": \"{{tool_name}}\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Duplicate Chunk (Error)",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"    // Code is correct",
+													"    pm.response.to.have.status(400);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\":1,\n    \"documentIndex\":0\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Patch Chunk",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(200);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('pageContent');",
+													"    pm.expect(result).to.have.property('metadata');",
+													"    pm.expect(result.metadata).to.have.property('int');",
+													"    pm.expect(result.metadata.int).to.equal(2);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"metadata\":{\n        \"int\":2\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks",
+												"{{chunkId_0}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Patch Chunk with pageContent",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(200);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('pageContent');",
+													"    pm.expect(result).to.have.property('metadata');",
+													"    pm.expect(result).to.have.property('hash');",
+													"    pm.expect(result.metadata).to.have.property('int');",
+													"    pm.expect(result.metadata.int).to.equal(2);",
+													"    pm.collectionVariables.set(\"chunkHash_0\", (result.hash))",
+													"",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"pageContent\": \"Now principles discovered off increasing how reasonably middletons men. Add seems out man met plate court sense. His joy she worth truth given. All year feet led view went sake. You agreeable breakfast his set perceived immediate. Stimulated man are projecting favourable middletons can cultivated.\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks",
+												"{{chunkId_0}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Long Chunk 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(201);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('pageContent');",
+													"    pm.expect(result).to.have.property('metadata');",
+													"    pm.collectionVariables.set(\"chunkId_1\", (result.id))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The interior walls behind an arrow loop are often cut away at an oblique angle so that the archer has a wide field of view and field of fire. Arrow slits come in a variety of forms. A common one is the cross, accommodating the use of both the longbow and the crossbow. The narrow vertical aperture permits the archer large degrees of freedom to vary the elevation and direction of their bowshot but makes it difficult for attackers to harm the archer since there is only a small target at which to aim.\",\n    \"documentId\":2,\n    \"documentIndex\":0\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Long Chunk 2",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(201);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('pageContent');",
+													"    pm.expect(result).to.have.property('metadata');",
+													"    pm.collectionVariables.set(\"chunkId_2\", (result.id))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The invention of the arrowslit is attributed to Archimedes during the siege of Syracuse in 214–212 BC (although archaeological evidence supports their existence in Egyptian Middle Kingdom forts around 1860 BC).[3]\",\n    \"documentId\":2,\n    \"documentIndex\":1\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Long Chunk 3",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(201);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('pageContent');",
+													"    pm.expect(result).to.have.property('metadata');",
+													"    pm.collectionVariables.set(\"chunkId_3\", (result.id))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The Benz Patent-Motorwagen was a motor tricycle with a rear-mounted engine. The vehicle contained many new inventions. It was constructed of steel tubing with woodwork panels. The steel-spoked wheels and solid rubber tires were Benz's own design. Steering was by way of a toothed rack that pivoted the unsprung front wheel. Fully elliptic springs were used at the back along with a beam axle and chain drive on both sides. A simple belt system served as a single-speed transmission, varying torque between an open disc and drive disc.\",\n    \"documentId\":2,\n    \"documentIndex\":2\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Too Long Chunk (Fail)",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(201);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('pageContent');",
+													"    pm.expect(result).to.have.property('metadata');",
+													"    pm.collectionVariables.set(\"chunkId_3\", (result.id))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The Benz Patent-Motorwagen was a motor tricycle with a rear-mounted engine. The vehicle contained many new inventions. It was constructed of steel tubing with woodwork panels. The steel-spoked wheels and solid rubber tires were Benz's own design. Steering was by way of a toothed rack that pivoted the unsprung front wheel. Fully elliptic springs were used at the back along with a beam axle and chain drive on both sides. A simple belt system served as a single-speed transmission, varying torque between an open disc and drive disc.\",\n    \"documentId\":2,\n    \"documentIndex\":2\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Chunk",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(200);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('id');",
+													"    pm.expect(result).to.have.property('pageContent');",
+													"    pm.expect(result).to.have.property('metadata');",
+													"    pm.expect(result.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_0\")))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks",
+												"{{chunkId_0}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find Chunk by Hash",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(200);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('data');",
+													"    pm.expect(result?.data).to.have.lengthOf.at.least(1)",
+													"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_0\")))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/chunks?hash={{chunkHash_0}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											],
+											"query": [
+												{
+													"key": "hash",
+													"value": "{{chunkHash_0}}"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Find Chunk by DocumentId",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(200);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('data');",
+													"    pm.expect(result?.data).to.have.lengthOf.at.least(3)",
+													"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_1\")))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/chunks?documentId=2",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											],
+											"query": [
+												{
+													"key": "documentId",
+													"value": "2"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Search Chunk by Embedding",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(200);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('data');",
+													"    pm.expect(result?.data.length).to.equal(4)",
+													"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_2\")))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "file",
+											"file": {}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks?$search=arrowslit",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											],
+											"query": [
+												{
+													"key": "$search",
+													"value": "arrowslit"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Search Chunk return Embedding",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(200);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('data');",
+													"    pm.expect(result?.data).to.have.lengthOf.at.least(1)",
+													"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_2\")))",
+													"    ",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/chunks?$search=arrowslit&$select[]=embedding&$select[]=id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											],
+											"query": [
+												{
+													"key": "$search",
+													"value": "arrowslit"
+												},
+												{
+													"key": "$select[]",
+													"value": "embedding"
+												},
+												{
+													"key": "$select[]",
+													"value": "id"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Search and Filter",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    var result = pm.response.json()",
+													"",
+													"    pm.response.to.have.status(200);",
+													"    // Structure is correct",
+													"    pm.expect(result).to.have.property('data');",
+													"    pm.expect(result?.data.length).to.equal(2)",
+													"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_1\")))",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/chunks?$search=arrowslit&documentIndex=0",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks"
+											],
+											"query": [
+												{
+													"key": "$search",
+													"value": "arrowslit"
+												},
+												{
+													"key": "documentIndex",
+													"value": "0"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Chunk",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    pm.response.to.have.status(200);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks",
+												"{{chunkId_0}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Chunk 1",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    pm.response.to.have.status(200);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks/{{chunkId_1}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks",
+												"{{chunkId_1}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Chunk 2",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    pm.response.to.have.status(200);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks/{{chunkId_2}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks",
+												"{{chunkId_2}}"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Chunk 3",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(pm.info.requestName, function(){",
+													"    pm.response.to.have.status(200);",
+													"})"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/chunks/{{chunkId_3}}",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"chunks",
+												"{{chunkId_3}}"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"function runFunc({res, expect, test, collvars, info, request}){",
+									"    let email  = ['x-goog-authenticated-user-email',`accounts.google.com:${collvars.get('pluginUserEmail')}`]",
+									"    let userid = ['x-goog-authenticated-user-id',   `accounts.google.com:${collvars.get('pluginUserGoogId')}`]",
+									"",
+									"    console.log(email)",
+									"    request.headers.remove('x-goog-authenticated-user-email')",
+									"    request.headers.remove('x-goog-authenticated-user-id')",
+									"    request.headers.add({key: email[0], value: email[1] })",
+									"    request.headers.add({key: userid[0], value: userid[1] })",
+									"",
+									"}",
+									"",
+									"runFunc({",
+									"    expect: pm.expect, ",
+									"    collvars: pm.collectionVariables, ",
+									"    res: pm.response, ",
+									"    test: pm.test,",
+									"    info: pm.info,",
+									"    request: pm.request",
+									"})"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
 				}
 			]
+		},
+		{
+			"name": "teardown",
+			"item": []
 		},
 		{
 			"name": "experimental",
@@ -1323,890 +2190,6 @@
 											"key": "search",
 											"value": "'this is the text I want to search by'"
 										}
-									]
-								}
-							},
-							"response": []
-						}
-					]
-				},
-				{
-					"name": "chunks",
-					"item": [
-						{
-							"name": "Create Short Chunk",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(201);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('id');",
-											"    pm.expect(result).to.have.property('pageContent');",
-											"    pm.expect(result).to.have.property('metadata');",
-											"    pm.collectionVariables.set(\"chunkId_0\", (result.id))",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0,\n    \"toolName\": \"{{tool_name}}\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									]
-								}
-							},
-							"response": [
-								{
-									"name": "Create Short Chunk",
-									"originalRequest": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0,\n    \"toolName\": \"{{tool_name}}\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/chunks",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"chunks"
-											]
-										}
-									},
-									"status": "Created",
-									"code": 201,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Vary",
-											"value": "Origin"
-										},
-										{
-											"key": "Access-Control-Allow-Origin",
-											"value": ""
-										},
-										{
-											"key": "Content-Type",
-											"value": "application/json; charset=utf-8"
-										},
-										{
-											"key": "Content-Length",
-											"value": "224"
-										},
-										{
-											"key": "Date",
-											"value": "Wed, 20 Dec 2023 14:36:19 GMT"
-										},
-										{
-											"key": "Connection",
-											"value": "keep-alive"
-										},
-										{
-											"key": "Keep-Alive",
-											"value": "timeout=5"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"id\": 56,\n    \"hash\": \"040f06fd774092478d450774f5ba30c5da78acc8\",\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0,\n    \"toolName\": \"get_current_weather\",\n    \"userId\": \"19\"\n}"
-								},
-								{
-									"name": "Create Duplicate Chunk (Error)",
-									"originalRequest": {
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"metadata\": {\n        \"int\": 1,\n        \"bool\": true,\n        \"string\": \"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\": 1,\n    \"documentIndex\": 0\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/chunks",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"chunks"
-											]
-										}
-									},
-									"status": "Bad Request",
-									"code": 400,
-									"_postman_previewlanguage": "json",
-									"header": [
-										{
-											"key": "Vary",
-											"value": "Origin"
-										},
-										{
-											"key": "Access-Control-Allow-Origin",
-											"value": ""
-										},
-										{
-											"key": "Content-Type",
-											"value": "application/json; charset=utf-8"
-										},
-										{
-											"key": "Content-Length",
-											"value": "269"
-										},
-										{
-											"key": "Date",
-											"value": "Wed, 20 Dec 2023 14:36:38 GMT"
-										},
-										{
-											"key": "Connection",
-											"value": "keep-alive"
-										},
-										{
-											"key": "Keep-Alive",
-											"value": "timeout=5"
-										}
-									],
-									"cookie": [],
-									"body": "{\n    \"name\": \"BadRequest\",\n    \"message\": \"Error resolving data\",\n    \"code\": 400,\n    \"className\": \"bad-request\",\n    \"data\": {\n        \"embedding\": {\n            \"name\": \"BadRequest\",\n            \"message\": \"Hash 040f06fd774092478d450774f5ba30c5da78acc8 is not unique. Document already exists.\",\n            \"code\": 400,\n            \"className\": \"bad-request\"\n        }\n    }\n}"
-								}
-							]
-						},
-						{
-							"name": "Create Duplicate Chunk (Error)",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"    // Code is correct",
-											"    pm.response.to.have.status(400);",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"content\",\n    \"documentId\":1,\n    \"documentIndex\":0\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Patch Chunk",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(200);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('id');",
-											"    pm.expect(result).to.have.property('pageContent');",
-											"    pm.expect(result).to.have.property('metadata');",
-											"    pm.expect(result.metadata).to.have.property('int');",
-											"    pm.expect(result.metadata.int).to.equal(2);",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"metadata\":{\n        \"int\":2\n    }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks",
-										"{{chunkId_0}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Patch Chunk with pageContent",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(200);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('id');",
-											"    pm.expect(result).to.have.property('pageContent');",
-											"    pm.expect(result).to.have.property('metadata');",
-											"    pm.expect(result).to.have.property('hash');",
-											"    pm.expect(result.metadata).to.have.property('int');",
-											"    pm.expect(result.metadata.int).to.equal(2);",
-											"    pm.collectionVariables.set(\"chunkHash_0\", (result.hash))",
-											"",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"pageContent\": \"Now principles discovered off increasing how reasonably middletons men. Add seems out man met plate court sense. His joy she worth truth given. All year feet led view went sake. You agreeable breakfast his set perceived immediate. Stimulated man are projecting favourable middletons can cultivated.\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks",
-										"{{chunkId_0}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Patch Chunk with duplicate pageContent (Error)",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(200);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('id');",
-											"    pm.expect(result).to.have.property('pageContent');",
-											"    pm.expect(result).to.have.property('metadata');",
-											"    pm.expect(result.metadata).to.have.property('int');",
-											"    pm.expect(result.metadata.int).to.equal(2);",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"pageContent\": \"Now principles discovered off increasing how reasonably middletons men. Add seems out man met plate court sense. His joy she worth truth given. All year feet led view went sake. You agreeable breakfast his set perceived immediate. Stimulated man are projecting favourable middletons can cultivated.\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks",
-										"{{chunkId_0}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create Long Chunk 1",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(201);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('id');",
-											"    pm.expect(result).to.have.property('pageContent');",
-											"    pm.expect(result).to.have.property('metadata');",
-											"    pm.collectionVariables.set(\"chunkId_1\", (result.id))",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The interior walls behind an arrow loop are often cut away at an oblique angle so that the archer has a wide field of view and field of fire. Arrow slits come in a variety of forms. A common one is the cross, accommodating the use of both the longbow and the crossbow. The narrow vertical aperture permits the archer large degrees of freedom to vary the elevation and direction of their bowshot but makes it difficult for attackers to harm the archer since there is only a small target at which to aim.\",\n    \"documentId\":2,\n    \"documentIndex\":0\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create Long Chunk 2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(201);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('id');",
-											"    pm.expect(result).to.have.property('pageContent');",
-											"    pm.expect(result).to.have.property('metadata');",
-											"    pm.collectionVariables.set(\"chunkId_2\", (result.id))",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The invention of the arrowslit is attributed to Archimedes during the siege of Syracuse in 214–212 BC (although archaeological evidence supports their existence in Egyptian Middle Kingdom forts around 1860 BC).[3]\",\n    \"documentId\":2,\n    \"documentIndex\":1\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create Long Chunk 3",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(201);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('id');",
-											"    pm.expect(result).to.have.property('pageContent');",
-											"    pm.expect(result).to.have.property('metadata');",
-											"    pm.collectionVariables.set(\"chunkId_3\", (result.id))",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"metadata\":{\n        \"int\":1,\n        \"bool\":true,\n        \"string\":\"this is the text\"\n    },\n    \"pageContent\": \"The Benz Patent-Motorwagen was a motor tricycle with a rear-mounted engine. The vehicle contained many new inventions. It was constructed of steel tubing with woodwork panels. The steel-spoked wheels and solid rubber tires were Benz's own design. Steering was by way of a toothed rack that pivoted the unsprung front wheel. Fully elliptic springs were used at the back along with a beam axle and chain drive on both sides. A simple belt system served as a single-speed transmission, varying torque between an open disc and drive disc.\",\n    \"documentId\":2,\n    \"documentIndex\":2\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get Chunk",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(200);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('id');",
-											"    pm.expect(result).to.have.property('pageContent');",
-											"    pm.expect(result).to.have.property('metadata');",
-											"    pm.expect(result.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_0\")))",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks",
-										"{{chunkId_0}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Find Chunk by Hash",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(200);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('data');",
-											"    pm.expect(result?.data).to.have.lengthOf.at.least(1)",
-											"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_0\")))",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/chunks?hash={{chunkHash_0}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									],
-									"query": [
-										{
-											"key": "hash",
-											"value": "{{chunkHash_0}}"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Search Chunk return Embedding",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(200);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('data');",
-											"    pm.expect(result?.data).to.have.lengthOf.at.least(1)",
-											"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_3\")))",
-											"    ",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/chunks?$search=\"arrowslit\"&$select[]=embedding&$select[]=id",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									],
-									"query": [
-										{
-											"key": "$search",
-											"value": "\"arrowslit\""
-										},
-										{
-											"key": "$select[]",
-											"value": "embedding"
-										},
-										{
-											"key": "$select[]",
-											"value": "id"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Search Chunk by Embedding",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(200);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('data');",
-											"    pm.expect(result?.data.length).to.equal(4)",
-											"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_3\")))",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "file",
-									"file": {}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks?$search=\"arrowslit\"",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									],
-									"query": [
-										{
-											"key": "$search",
-											"value": "\"arrowslit\""
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Search and Filter",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    var result = pm.response.json()",
-											"",
-											"    pm.response.to.have.status(200);",
-											"    // Structure is correct",
-											"    pm.expect(result).to.have.property('data');",
-											"    pm.expect(result?.data.length).to.equal(3)",
-											"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_3\")))",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{baseUrl}}/chunks?$search=\"arrowslit\"&documentId=2",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks"
-									],
-									"query": [
-										{
-											"key": "$search",
-											"value": "\"arrowslit\""
-										},
-										{
-											"key": "documentId",
-											"value": "2"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete Chunk",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    pm.response.to.have.status(200);",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks/{{chunkId_0}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks",
-										"{{chunkId_0}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete Chunk 1",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    pm.response.to.have.status(200);",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks/{{chunkId_1}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks",
-										"{{chunkId_1}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete Chunk 2",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    pm.response.to.have.status(200);",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks/{{chunkId_2}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks",
-										"{{chunkId_2}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete Chunk 3",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(pm.info.requestName, function(){",
-											"    pm.response.to.have.status(200);",
-											"})"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{baseUrl}}/chunks/{{chunkId_3}}",
-									"host": [
-										"{{baseUrl}}"
-									],
-									"path": [
-										"chunks",
-										"{{chunkId_3}}"
 									]
 								}
 							},
@@ -4000,6 +3983,21 @@
 		{
 			"key": "uploadFileId-1",
 			"value": ""
+		},
+		{
+			"key": "pluginUserEmail",
+			"value": "admin@example.com",
+			"type": "string"
+		},
+		{
+			"key": "pluginUserGoogId",
+			"value": "11111111",
+			"type": "string"
+		},
+		{
+			"key": "pluginUserId",
+			"value": "2",
+			"type": "string"
 		}
 	]
 }
