@@ -13,9 +13,16 @@ export class EmbeddingKnexService extends KnexService {
         })
     }
 
+    /**
+     * fetchEmbedding - Fetches the embedding from the AI service of your choice
+     * @param {string} input The string you want to convert into an embedding
+     * @param {object} options Any additional options needed to be passed to the function to correctly fetch the embedding
+     * @returns {Float32Array} The embedding as an array of floats
+     */
     async fetchEmbedding (input, options){
         throw new Error('The fetchEmbedding function must be overwritten for this to function.')
     }
+    
 
     async _find(params){
       const { filters, paginate } = this.filterQuery(params);

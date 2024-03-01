@@ -3,9 +3,13 @@ import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { BadRequest } from '@feathersjs/errors'
-// import { fetchEmbedding } from '../utils/fetchEmbedding.js'
 import { getIdFromText } from '../utils/getIdFromText.js'
-import config from 'config'
+import config from '@feathersjs/configuration'
+
+
+const MAX_LENGTH = config()().chunks.maxLength
+
+
 
 // Main data model schema
 export const chunksSchema = Type.Object(
@@ -14,7 +18,7 @@ export const chunksSchema = Type.Object(
     hash: Type.String(),  //unique hash of the pageContent
     metadata: Type.Any(),  // JSON objects can be used here
     pageContent: Type.String({
-      maxLength: config.get('chunks')?.maxLength || 4000
+      maxLength: MAX_LENGTH || 4000
     }),
     embedding:  Type.Array(Type.Number()), // Representing a vector as an array of numbers
     documentId:  Type.Optional(Type.Number()),
