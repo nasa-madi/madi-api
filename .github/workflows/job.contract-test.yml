@@ -6,7 +6,7 @@ on:
 
 env:
   WORKDIR: "./"
-  FILE: ".cicd/contract.docker-compose.yml"
+  FILE: "./test/contracts/contract.docker-compose.yml"
   ENTRYPOINT: "entrypoint-command"
   SERVICE: "newman"
   COMMAND: run /etc/newman/contract.collection.json
