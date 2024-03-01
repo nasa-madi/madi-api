@@ -3,11 +3,12 @@ name: Test
 on:
   push: 
     branches: 
-      - "**"
-      - "!develop"
-      - "!test"
-      - "!production"
-      - "!main"
+      - '**'
+      - '*/*'
+      - '!develop'
+      - '!test'
+      - '!production'
+      - '!main'
 
   workflow_dispatch:
     inputs:
