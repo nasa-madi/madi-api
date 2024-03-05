@@ -1,15 +1,19 @@
 import { EmbeddingKnexService } from '../utils/EmbeddingKnexAdapter.js'
+import config from '@feathersjs/configuration'
 
 
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class ChunksService extends EmbeddingKnexService{
+export class ChunkService extends EmbeddingKnexService{
   constructor(options) {
     super(options)
     this.options = options
     this.openai = options.app.openai
   }
 
+  get maxLength(){
+    return config()().chunks.maxLength
+  }
 
 
   async fetchEmbedding(input, options={}){

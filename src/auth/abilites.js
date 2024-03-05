@@ -21,9 +21,12 @@ const defineRules = (can, cannot, user) => {
 
       can("read",   "tools");
       can("create", "tools");
-  
-      can("read",   "tools");
-      can("create", "tools");
+
+      can("read",   "documents");
+      can("create", "documents");
+      can("update", "documents", {userId: user.id});
+      can("delete", "documents", {userId: user.id});
+
       
       can("create", "chats");
 

@@ -1,7 +1,7 @@
 // // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
 import { resolve } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
-import { passwordHash } from '@feathersjs/authentication-local'
+// import { passwordHash } from '@feathersjs/authentication-local'
 import { dataValidator, queryValidator } from '../../validators.js'
 
 // Password fields have been left behind for temporary development in case auth strategy needs to change

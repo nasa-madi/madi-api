@@ -1,4 +1,4 @@
-import { chunks } from './chunks/chunks.js'
+import { chunk } from './chunks/chunks.js'
 import { upload } from './uploads/uploads.js'
 import { tool } from './tools/tools.js'
 import { chat } from './chats/chats.js'
@@ -9,7 +9,7 @@ import { user } from './users/users.js'
 
 export const services = (app) => {
   app.configure(user)
-  app.configure(chunks)
+  app.configure(chunk)
   app.configure(document)
   app.configure(upload)
   app.configure(tool)

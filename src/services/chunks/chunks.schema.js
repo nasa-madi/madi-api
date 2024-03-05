@@ -12,7 +12,7 @@ const MAX_LENGTH = config()().chunks.maxLength
 
 
 // Main data model schema
-export const chunksSchema = Type.Object(
+export const chunkSchema = Type.Object(
   {
     id: Type.Number(),
     hash: Type.String(),  //unique hash of the pageContent
@@ -26,12 +26,12 @@ export const chunksSchema = Type.Object(
     toolName: Type.Optional(Type.String()), // The tool the created the specific chunk (if applicable)
     userId:  Type.Optional(Type.Number()), // The user that created the specific chunk (if applicable)
   },
-  { $id: 'Chunks', additionalProperties: false }
+  { $id: 'Chunk', additionalProperties: false }
 )
 
 
 
-export const chunksDataResolver = resolve({
+export const chunkDataResolver = resolve({
   // converts the content into a hash
   hash: virtual(async(chunk,context)=>{
     // let [data, params] = context.arguments
@@ -48,7 +48,7 @@ export const chunksDataResolver = resolve({
 
 
 // separated out so that we have access to the hash for prefiltering
-export const chunksVectorResolver = resolve({
+export const chunkVectorResolver = resolve({
     // Converts the content in an embedding
     embedding: virtual(async(chunk,context)=>{
       // this is where you prefetch by the hash and see if you can get it
@@ -69,33 +69,34 @@ export const chunksVectorResolver = resolve({
 
 
 
-export const chunksValidator = getValidator(chunksSchema, dataValidator)
-export const chunksResolver = resolve({
+export const chunkValidator = getValidator(chunkSchema, dataValidator)
+export const chunkResolver = resolve({
 
   /**
-   * Adds the user and document information back in, but only if requested.  
-   */
-  user: virtual(async (chunk, context) => {
-    if(context?.params?.query?.$select?.includes('user')){
-      // Populate the user associated via `userId`
-      // TODO restrict this to only the current user or admins
-      // if (params.user.admin){
-        return context.app.service('users').get(chunk.userId)
-      // }
-    }else{
-      return undefined
-    }
-  }),
-  document: virtual(async (chunk, context) => {
-    if(context?.params?.query?.$select?.includes('document')){
-      // Populate the user associated via `userId`
-      return context.app.service('documents').get(chunk.documentId).catch(e=>{})|| null
-    }else{
-      return undefined
-    }
-  })
+  * Adds the user and document information back in, but only if requested.  
+  */
+  // user: virtual(async (chunk, context) => {
+  //   if(context?.params?.query?.$select?.includes('user')){
+  //     // Populate the user associated via `userId`
+  //     // TODO restrict this to only the current user or admins
+  //     // if (params.user.admin){
+  //       return context.app.service('users').get(chunk.userId)
+  //     // }
+  //   }else{
+  //     return undefined
+  //   }
+  // }),
+  // document: virtual(async (chunk, context) => {
+  //   if(context?.params?.query?.$select?.includes('document')){
+  //     // Populate the user associated via `userId`
+  //     return context.app.service('documents').get(chunk.documentId).catch(e=>{})|| null
+  //   }else{
+  //     return undefined
+  //   }
+  // })
 })
-export const chunksExternalResolver = resolve({
+
+export const chunkExternalResolver = resolve({
   embedding: virtual(async(chunk,context)=>{
     if(!context?.params?.query?.$select?.includes('embedding')){
       return undefined  // this hides the embedding from the end user
@@ -108,20 +109,20 @@ export const chunksExternalResolver = resolve({
 
 
 // Schema for creating new entries
-export const chunksDataSchema = Type.Partial( Type.Pick(chunksSchema,
+export const chunkDataSchema = Type.Partial( Type.Pick(chunkSchema,
     [ 'metadata', 'pageContent','documentId','documentIndex','toolName'] // prevents user from manually overriding generated fields
   ), {$id: 'ChunksData'})
-export const chunksDataValidator = getValidator(chunksDataSchema, dataValidator)
+export const chunkDataValidator = getValidator(chunkDataSchema, dataValidator)
 
 
 
 
 // Schema for updating existing entries
-export const chunksPatchSchema = Type.Partial(Type.Pick(chunksSchema, 
+export const chunkPatchSchema = Type.Partial(Type.Pick(chunkSchema, 
     [ 'metadata', 'pageContent','documentId','documentIndex','toolName'] // prevents user from manually overriding generated fields
   ),{$id: 'ChunksPatch'})
-export const chunksPatchValidator = getValidator(chunksPatchSchema, dataValidator)
-export const chunksPatchResolver = resolve({
+export const chunkPatchValidator = getValidator(chunkPatchSchema, dataValidator)
+export const chunkPatchResolver = resolve({
   embedding: virtual(async(chunk,context)=>{
     if(chunk.pageContent){
       let embedding = await context.self.fetchEmbedding(chunk.pageContent)
@@ -143,10 +144,10 @@ export const chunksPatchResolver = resolve({
 
 
 // Schema for allowed query properties
-export const chunksQueryProperties = Type.Pick(chunksSchema, ['id', 'hash', 'metadata','embedding'])
-export const chunksQuerySchema = Type.Intersect(
+export const chunkQueryProperties = Type.Pick(chunkSchema, ['id', 'hash', 'metadata','embedding'])
+export const chunkQuerySchema = Type.Intersect(
   [
-    querySyntax(chunksQueryProperties),
+    querySyntax(chunkQueryProperties),
     Type.Object({
         // TODO fix this so that $search is allowed on input but not required on output
         $search: Type.Optional(Type.String()) //added for vector search
@@ -155,5 +156,5 @@ export const chunksQuerySchema = Type.Intersect(
     )],
   { additionalProperties: true }
 )
-export const chunksQueryValidator = getValidator(chunksQuerySchema, queryValidator)
-export const chunksQueryResolver = resolve({})
+export const chunkQueryValidator = getValidator(chunkQuerySchema, queryValidator)
+export const chunkQueryResolver = resolve({})
