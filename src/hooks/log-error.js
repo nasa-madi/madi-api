@@ -20,15 +20,15 @@ export const logError = async (context, next) => {
 
 
 export const logErrorExternal = async (context, next) => {
-    throw rewriteErrorMessage(context.error);
+    throw rewriteErrorMessage(context.error, context.path);
 }
 
-function rewriteErrorMessage(error) {
+function rewriteErrorMessage(error, path) {
     // Define the match and message pairs
     let matchMessagePairs = [
         {
             match: 'duplicate key value violates unique constraint',
-            message: 'You cannot create a duplicate entity.'
+            message: `You cannot create a duplicate entity.`
         },
         // Add more pairs here as needed
     ];
@@ -42,6 +42,7 @@ function rewriteErrorMessage(error) {
         if (regex.test(error.message)) {
             // If there's a match, replace the error message and exit the loop
             error.cleanMessage = pair.message;
+            error.requestPath = `/${path}`
             break;
         }
     }
