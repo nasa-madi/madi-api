@@ -39,6 +39,8 @@ verbose: false
 
 chunks:
   maxLength: 2000
+  overlap: 200
+  size: 2000
 
 storage:
   bucket: sample-bucket

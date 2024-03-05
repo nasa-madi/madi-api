@@ -1,6 +1,13 @@
 import { KnexService } from '@feathersjs/knex'
 import pMap from 'p-map'
+import {
+  SupportedTextSplitterLanguages,
+  RecursiveCharacterTextSplitter,
+} from "langchain/text_splitter";
+import config from '@feathersjs/configuration'
 
+const OVERLAP = config()().chunks.overlap || 200
+const SIZE = config()().chunks.size || 2000
 
 
 export class DocumentService extends KnexService {
@@ -8,10 +15,16 @@ export class DocumentService extends KnexService {
   constructor(options) {
     super(options)
     this.options = options
+    
   }
 
   async splitDoc(document){
-    return document.content
+    const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
+      chunkSize: SIZE,
+      chunkOverlap: OVERLAP
+    });
+    return splitter.createDocuments([document.content]);
+    
   }
 
 
@@ -19,22 +32,26 @@ export class DocumentService extends KnexService {
 
     let newDoc = await this._create(data, params)
     
-    let chunks = await this.splitDoc(newDoc)
+    try{
+      let chunks = await this.splitDoc(newDoc)
 
-    // uses pMap to limit concurrent chunks to 10.
-    // TODO convert to a pubsub or queue
-    const mapper = (c, index) => 
-        this.options.chunks.create({
-          pageContent: c,
-          metadata: {},
-          documentId: newDoc.id,
-          documentIndex: index,
-          toolName: data.toolName,
-          userId: newDoc.userId
-    });
-      
-    await pMap(chunks, mapper, {concurrency: 10});
-
+      // uses pMap to limit concurrent chunks to 10.
+      // TODO convert to a pubsub or queue
+      const mapper = (c, index) => 
+          this.options.chunks.create({
+            pageContent: c.pageContent,
+            metadata: c.metadata,
+            documentId: newDoc.id,
+            documentIndex: index,
+            toolName: data.toolName,
+      }, {...params, provider:'internal'});
+        
+      await pMap(chunks, mapper, {concurrency: 10});
+    }catch(e){
+      this._remove(newDoc.id)
+      throw e
+    }
+    return newDoc
   }
 
   async delete(id, params){
@@ -142,6 +159,7 @@ export const getOptions = (app) => {
     paginate: app.get('paginate'),
     Model: app.get('postgresqlClient'),
     name: 'documents',
+    id: 'id',
     chunks: app.service('chunks')
   }
 }

@@ -3,9 +3,10 @@ import { feathers } from '@feathersjs/feathers'
 import configuration from '@feathersjs/configuration'
 import { koa, rest, bodyParser, errorHandler, parseAuthentication, cors, serveStatic } from '@feathersjs/koa'
 import { feathersCasl } from "feathers-casl";
+import { iff, isProvider } from 'feathers-hooks-common'
 
 import { configurationValidator } from './configuration.js'
-import { logError } from './hooks/log-error.js'
+import { logError, logErrorExternal } from './hooks/log-error.js'
 import { postgresql } from './postgresql.js'
 
 import { authentication } from './auth/authentication.js'
@@ -44,11 +45,17 @@ app.configure(feathersCasl());
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [logError]
+    all: [
+      logError,
+    ]
   },
   before: {},
   after: {},
-  error: {}
+  error: {
+    all:[
+      iff(isProvider('external'),logErrorExternal)
+    ]
+  }
 })
 // Register application setup and teardown hooks here
 app.hooks({

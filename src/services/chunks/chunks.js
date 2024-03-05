@@ -1,7 +1,7 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
 import { authorizeHook } from '../../auth/authorize.hook.js'
-
+import { isProvider, isNot, iff } from 'feathers-hooks-common'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
   chunkDataValidator,
@@ -42,7 +42,7 @@ export const chunk = (app) => {
     before: {
       all: [
         authenticate('googleIAP'),
-        authorizeHook,
+        iff(isNot(isProvider('internal')), authorizeHook),
         schemaHooks.validateQuery(chunkQueryValidator), 
         schemaHooks.resolveQuery(chunkQueryResolver)
       ],
