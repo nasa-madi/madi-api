@@ -44,7 +44,7 @@ export const document = (app) => {
         authenticate('googleIAP'),
         schemaHooks.validateQuery(documentQueryValidator),
         authorizeHook,
-        // schemaHooks.resolveQuery(documentQueryResolver)
+        schemaHooks.resolveQuery(documentQueryResolver)
       ],
       find: [],
       get: [],

@@ -48,20 +48,21 @@ export class DocumentService extends KnexService {
         
       await pMap(chunks, mapper, {concurrency: 10});
     }catch(e){
-      this._remove(newDoc.id)
+      await this.remove(newDoc.id)
       throw e
     }
     return newDoc
   }
 
-  async delete(id, params){
 
-    // delete chunks
+  async remove(id, params) {
+    // Delete all chunks where 'documentId' is equal to 'id'
+    await this.options.chunks.getModel().from('chunks').where('documentId', id).del();
 
-    // delete upload
+    // Remove the document
+    let newDoc = await this._remove(id, params);
 
-    // run doc delete    
-
+    return newDoc;
   }
 
 
@@ -81,24 +82,36 @@ export class DocumentService extends KnexService {
     }
 
     const builder = params.knex ? params.knex.clone() : this.createQuery(params);
-    if(search){
-      let embedding = await this.options.chunks.fetchEmbedding(search)
 
-      // Perform a LEFT JOIN on the 'chunks' table
-      builder.leftJoin('chunks', `${name}.id`, 'chunks.documentId')
-      
-      let a = this.getModel()
-      let b = this
+    if (search) {
+        let embedding = await this.options.chunks.fetchEmbedding(search);
 
-      // Modify the select and order queries to use the 'chunks' table
-      builder.select(this.getModel().cosineDistanceAs('chunks.embedding', embedding,'_distance'))
-      builder.select(this.getModel().raw('distinct on (chunks.??) chunks.??', ['documentId', 'documentId']))
-      builder.orderBy('chunks.documentId')
-      builder.orderBy('_distance',distanceDirection)
 
+        // takes the cosine distance of the nearest doucment chunk as representative of the document's value
+        const subquery = this.options.chunks
+          .getModel()
+          .from('chunks')
+          // .select('documentId', this.getModel().cosineDistanceAs('embedding', embedding, '_distance'))
+          .select(this.getModel().raw('to_json(chunks.*) as chunks'),this.getModel().cosineDistanceAs('embedding', embedding, '_distance'))
+          .distinctOn('chunks.documentId')
+          .orderBy(['chunks.documentId', '_distance']);
+
+          let result = await subquery.catch(e=>{
+            console.log(e)
+          })
+
+
+        //TODO Build an AVERAGE chunk distance or a MEDIAN chunk distance or a TOP 10% chunk distance (Avg of window)
+
+        builder.select('*').leftJoin(subquery.as('sub'), 'documents.id', 'chunks.documentId')
+        builder.orderBy('_distance', distanceDirection);
     }
 
-    const countBuilder = builder.clone().clearSelect().clearOrder().count(`${name}.${id} as total`);
+    const countBuilder = builder
+        .clone()
+        .clearSelect()
+        .clearOrder()
+        .count(`${name}.${id} as total`);
     
     // Handle $limit
     if (filters.$limit) {
@@ -113,7 +126,9 @@ export class DocumentService extends KnexService {
         builder.orderBy(`${name}.${id}`, 'asc');
     }
 
-    const data = filters.$limit === 0 ? [] : await builder.catch(e=>{});
+    const data = filters.$limit === 0 ? [] : await builder.catch(e=>{
+      console.log(e)
+    });
     if (paginate && paginate.default) {
         const total = await countBuilder.then((count) => parseInt(count[0] ? count[0].total : 0));
         return {
