@@ -67,6 +67,8 @@ export class DocumentService extends KnexService {
 
 
 
+
+  
   async _find(params){
     const { filters, paginate } = this.filterQuery(params);
     const { name, id='id' } = this.getOptions(params);
@@ -83,6 +85,7 @@ export class DocumentService extends KnexService {
 
     const builder = params.knex ? params.knex.clone() : this.createQuery(params);
 
+    // TODO This should be pulled out as a separate RAG service on the /search endpoint. But this is a placeholder for now.
     if (search) {
         let embedding = await this.options.chunks.fetchEmbedding(search);
 
