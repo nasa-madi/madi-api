@@ -3,7 +3,7 @@ import { resolve, virtual } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import { dataValidator, queryValidator } from '../../validators.js'
 import { getIdFromText } from '../utils/getIdFromText.js'
-
+import { filterUnlessSelected } from '../utils/filterUnlessSelected.js'
 
 
 
@@ -54,7 +54,11 @@ export const documentSchema = Type.Object(
 
 export const documentValidator = getValidator(documentSchema, dataValidator)
 export const documentResolver = resolve({})
-export const documentExternalResolver = resolve({})
+export const documentExternalResolver = resolve({
+  embedding: filterUnlessSelected('embedding'),
+  content: filterUnlessSelected('content'),
+})
+
 
 
 // Schema for creating new entries
@@ -66,7 +70,7 @@ export const documentDataResolver = resolve({
     let [data, params] = context.arguments
     return getIdFromText(data.content + data.abstract + data.toolName + data.uploadId 
       // + Math.random()
-      )
+    )
   }),
   userId: virtual(async (chunk,context) => {
     let [data, params] = context.arguments
@@ -78,14 +82,13 @@ export const documentDataResolver = resolve({
 
 
 // Schema for updating existing entries
-export const documentPatchSchema = Type.Omit(Type.Partial(documentSchema, {$id: 'DocumentPatch'}),'content') //['content']) // can't patch the content field
+export const documentPatchSchema = Type.Omit(Type.Partial(documentSchema, {$id: 'DocumentPatch'}),'content') // can't patch the content field
 export const documentPatchValidator = getValidator(documentPatchSchema, dataValidator)
 export const documentPatchResolver = resolve({})
 
 
-
 // Schema for allowed query properties
-export const documentQueryProperties = Type.Pick(documentSchema, ['id', 'hash', 'metadata','userId','abstract','toolName','uploadId'])
+export const documentQueryProperties = Type.Pick(documentSchema, ['id', 'hash', 'metadata','userId','abstract','toolName','uploadId','content'])
 export const documentQuerySchema = Type.Intersect(
   [
     querySyntax(documentQueryProperties),

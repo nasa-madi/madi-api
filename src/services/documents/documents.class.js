@@ -126,9 +126,8 @@ export class DocumentService extends KnexService {
         builder.orderBy(`${name}.${id}`, 'asc');
     }
 
-    const data = filters.$limit === 0 ? [] : await builder.catch(e=>{
-      console.log(e)
-    });
+    //TODO Swallows an error here.  Needs to bubble up appropriately.
+    const data = filters.$limit === 0 ? [] : await builder.catch(e=>{console.log(e)});
     if (paginate && paginate.default) {
         const total = await countBuilder.then((count) => parseInt(count[0] ? count[0].total : 0));
         return {
