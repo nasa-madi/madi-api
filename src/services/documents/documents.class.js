@@ -86,24 +86,21 @@ export class DocumentService extends KnexService {
     if (search) {
         let embedding = await this.options.chunks.fetchEmbedding(search);
 
-
         // takes the cosine distance of the nearest doucment chunk as representative of the document's value
         const subquery = this.options.chunks
           .getModel()
           .from('chunks')
-          // .select('documentId', this.getModel().cosineDistanceAs('embedding', embedding, '_distance'))
-          .select(this.getModel().raw('to_json(chunks.*) as chunks'),this.getModel().cosineDistanceAs('embedding', embedding, '_distance'))
+          .select(
+            this.getModel().raw('json_build_object(\'pageContent\', "chunks"."pageContent", \'metadata\', "chunks"."metadata") as chunk'),
+            "documentId",
+            this.getModel().cosineDistanceAs('embedding', embedding, '_distance')
+          )
           .distinctOn('chunks.documentId')
           .orderBy(['chunks.documentId', '_distance']);
 
-          let result = await subquery.catch(e=>{
-            console.log(e)
-          })
-
-
         //TODO Build an AVERAGE chunk distance or a MEDIAN chunk distance or a TOP 10% chunk distance (Avg of window)
 
-        builder.select('*').leftJoin(subquery.as('sub'), 'documents.id', 'chunks.documentId')
+        builder.select('documents.*','sub._distance', 'sub.chunk').leftJoin(subquery.as('sub'), 'documents.id', 'sub.documentId')
         builder.orderBy('_distance', distanceDirection);
     }
 
