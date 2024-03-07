@@ -1,8 +1,9 @@
 #!/bin/bash
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-compose_file="${script_dir}/../../.cicd/contract.docker-compose.yml"
+compose_file="${script_dir}/contract.docker-compose.yml"
 
+echo "${compose_file}"
 
 # Check if OPENAI_API_KEY is set
 if [[ -z "${OPENAI_API_KEY}" ]]; then
@@ -11,6 +12,6 @@ if [[ -z "${OPENAI_API_KEY}" ]]; then
 fi
 
 docker compose -f "${compose_file}" up database storage api newman --build --exit-code-from newman
-docker compose -f "${compose_file}" down
+docker compose -f "${compose_file}" down -v
 
 

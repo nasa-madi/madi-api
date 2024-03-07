@@ -46,8 +46,8 @@ services:
       - POSTGRES_USER=unicorn_user
       - POSTGRES_PASSWORD=magical_password
       - POSTGRES_DB=rainbow_database
-    volumes:
-      - database-data:/var/lib/postgresql/data/
+    # volumes:  # Commented out so that every DB is migrated and seeded fresh.
+    #   - database-data:/var/lib/postgresql/data/
     ports:
       - "5432:5432"
     networks:

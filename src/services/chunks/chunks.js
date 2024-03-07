@@ -1,54 +1,64 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
-
+import { authorizeHook } from '../../auth/authorize.hook.js'
+import { isProvider, isNot, iff } from 'feathers-hooks-common'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import {
-  chunksDataValidator,
-  chunksPatchValidator,
-  chunksQueryValidator,
-  chunksResolver,
-  chunksExternalResolver,
-  chunksDataResolver,
-  chunksPatchResolver,
-  chunksQueryResolver,
-  chunksVectorResolver
+  chunkDataValidator,
+  chunkPatchValidator,
+  chunkQueryValidator,
+  chunkResolver,
+  chunkExternalResolver,
+  chunkDataResolver,
+  chunkPatchResolver,
+  chunkQueryResolver,
+  chunkVectorResolver
 } from './chunks.schema.js'
-import { ChunksService, getOptions } from './chunks.class.js'
+import { ChunkService, getOptions } from './chunks.class.js'
 
-export const chunksPath = 'chunks'
-export const chunksMethods = ['find', 'get', 'create', 'patch', 'remove']
+export const chunkPath = 'chunks'
+export const chunkMethods = ['find', 'get', 'create', 'patch', 'remove']
 
 export * from './chunks.class.js'
 export * from './chunks.schema.js'
 
 // A configure function that registers the service and its hooks via `app.configure`
-export const chunks = (app) => {
+export const chunk = (app) => {
   // Register our service on the Feathers application
-  app.use(chunksPath, new ChunksService(getOptions(app)), {
+  app.use(chunkPath, new ChunkService(getOptions(app)), {
     // A list of all methods this service exposes externally
-    methods: chunksMethods,
+    methods: chunkMethods,
     // You can add additional custom events to be sent to clients here
     events: []
   })
   // Initialize hooks
-  app.service(chunksPath).hooks({
+  app.service(chunkPath).hooks({
     around: {
       all: [
-        authenticate('jwt'),
-        schemaHooks.resolveExternal(chunksExternalResolver),
-        schemaHooks.resolveResult(chunksResolver)
+        schemaHooks.resolveExternal(chunkExternalResolver),
+        schemaHooks.resolveResult(chunkResolver)
       ]
     },
     before: {
-      all: [schemaHooks.validateQuery(chunksQueryValidator), schemaHooks.resolveQuery(chunksQueryResolver)],
-      find: [schemaHooks.resolveQuery(chunksQueryResolver)],
+      all: [
+        authenticate('googleIAP'),
+        iff(isNot(isProvider('internal')), authorizeHook),
+        schemaHooks.validateQuery(chunkQueryValidator), 
+        schemaHooks.resolveQuery(chunkQueryResolver)
+      ],
+      find: [
+        schemaHooks.resolveQuery(chunkQueryResolver)
+      ],
       get: [],
       create: [
-        schemaHooks.validateData(chunksDataValidator), 
-        schemaHooks.resolveData(chunksDataResolver),
-        schemaHooks.resolveData(chunksVectorResolver) // This inserts the embedding field
+        schemaHooks.validateData(chunkDataValidator), 
+        schemaHooks.resolveData(chunkDataResolver),
+        schemaHooks.resolveData(chunkVectorResolver) // This inserts the embedding field
       ],
-      patch: [schemaHooks.validateData(chunksPatchValidator), schemaHooks.resolveData(chunksPatchResolver)],
+      patch: [
+        schemaHooks.validateData(chunkPatchValidator), 
+        schemaHooks.resolveData(chunkPatchResolver)
+      ],
       remove: []
     },
     after: {
