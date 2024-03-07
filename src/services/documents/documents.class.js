@@ -6,6 +6,7 @@ import {
 } from "langchain/text_splitter";
 import config from '@feathersjs/configuration'
 
+
 const OVERLAP = config()().chunks.overlap || 200
 const SIZE = config()().chunks.size || 2000
 
@@ -43,7 +44,7 @@ export class DocumentService extends KnexService {
             metadata: c.metadata,
             documentId: newDoc.id,
             documentIndex: index,
-            toolName: data.toolName,
+            toolName: newDoc.toolName,
       }, {...params, provider:'internal'});
         
       await pMap(chunks, mapper, {concurrency: 10});
@@ -66,14 +67,16 @@ export class DocumentService extends KnexService {
   }
 
 
-
-
   
   async _find(params){
     const { filters, paginate } = this.filterQuery(params);
     const { name, id='id' } = this.getOptions(params);
     let search = null
     let distanceDirection = 'asc'
+
+    const _filter = params?.query?.metadata || {}
+    delete params.query.metadata
+
 
     if(params?.query?.$search){
       search = params?.query?.$search;
@@ -83,7 +86,14 @@ export class DocumentService extends KnexService {
       }
     }
 
+
     const builder = params.knex ? params.knex.clone() : this.createQuery(params);
+
+    // TODO Needs a better filter.  Numeric values like 2, become string '2' which prevents the _filter from work on numeric values. This is resolved with the custom decoder with koa-qs in src/app.js
+    if(_filter){
+      builder.whereJsonSupersetOf('metadata',_filter)
+    }
+    // console.log(builder.toSQL())
 
     // TODO This should be pulled out as a separate RAG service on the /search endpoint. But this is a placeholder for now.
     if (search) {
@@ -103,9 +113,11 @@ export class DocumentService extends KnexService {
 
         //TODO Build an AVERAGE chunk distance or a MEDIAN chunk distance or a TOP 10% chunk distance (Avg of window)
 
-        builder.select('documents.*','sub._distance', 'sub.chunk').leftJoin(subquery.as('sub'), 'documents.id', 'sub.documentId')
+        builder.select('documents.*','sub._distance', 'sub.chunk')
+        builder.leftJoin(subquery.as('sub'), 'documents.id', 'sub.documentId')
         builder.orderBy('_distance', distanceDirection);
     }
+
 
     const countBuilder = builder
         .clone()

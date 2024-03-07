@@ -12,8 +12,10 @@ import { postgresql } from './postgresql.js'
 import { authentication } from './auth/authentication.js'
 import multer from '@koa/multer';
 import { services } from './services/index.js'
+import koaQs from 'koa-qs' //override koa's default query string function to allow nested fields
+import { decoder } from './services/utils/numericDecoder.js';
 
-const app = koa(feathers())
+const app = koaQs(koa(feathers()),'extended',{ decoder }) 
 
 import { openaiConfig } from './services/utils/cacheProxy.js'
 
