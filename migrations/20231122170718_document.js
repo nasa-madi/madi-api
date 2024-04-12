@@ -1,5 +1,6 @@
 export async function up(knex) {
   await knex.raw('CREATE EXTENSION IF NOT EXISTS vector;')
+  await knex.schema.dropTableIfExists('documents');
   await knex.schema.createTable('documents', (table) => {
     table.increments('id')
     table.string('hash').unique()
