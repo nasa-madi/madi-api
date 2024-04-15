@@ -16,7 +16,7 @@ import {
 import { ToolService, getOptions } from './tools.class.js'
 
 export const toolPath = 'tools'
-export const toolMethods = ['find', 'get', 'create']
+export const toolMethods = ['find', 'get', 'create','refreshData']
 
 
 export * from './tools.class.js'

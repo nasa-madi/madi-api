@@ -1,4 +1,4 @@
-import { toolFuncs, toolDescs, defaultTools } from "../../plugin-tools/index.js";
+import { toolFuncs, toolDescs, toolRefreshFuncs, defaultTools } from "../../plugin-tools/index.js";
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
 export class ToolService {
@@ -8,7 +8,6 @@ export class ToolService {
 
 
   async getAuthorizedTools(params){
-
 
     // get the user
     let user = params.user || {}
@@ -42,6 +41,26 @@ export class ToolService {
     return data.find(item => item.function.name === toolName);
   }
 
+  async refreshData (data, params) { 
+    let authorizedTools = await this.getAuthorizedTools(params)
+
+    let toolName = data?.toolName
+    if(!toolName){
+      throw new Error(`You must set a toolName in your refreshData call.`)
+    }
+
+    let refreshResponse = {}
+    if(authorizedTools.map(t=>t?.function?.name).includes(toolName)){
+      const refreshFunction = toolRefreshFuncs[toolName];
+      refreshResponse = await refreshFunction(data, params);
+    }else{
+      throw new Error(`Tool ${toolName} is not allowed or not available.`)
+    }
+    return refreshResponse
+  }
+
+
+
   async create(data, params) {
     // get available tools
     let authorizedTools = await this.getAuthorizedTools(params)
@@ -58,7 +77,7 @@ export class ToolService {
         const functionArgs = typeof toolCall.function.arguments === 'string' 
           ? JSON.parse(toolCall?.function?.arguments)
           : toolCall?.function?.arguments
-        functionResponse = await functionToCall(functionArgs);
+        functionResponse = await functionToCall({data:functionArgs}, params);
       }else{
         throw new Error(`Tool ${functionName} is not allowed or not available.`)
       }

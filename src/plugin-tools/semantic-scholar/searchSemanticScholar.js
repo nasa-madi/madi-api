@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 
-export async function searchSemanticScholar({ query }) {
+export async function searchSemanticScholar({ data  }, params) {
+  let {query} = data
   const fields = [
     'paperId',
     'url',

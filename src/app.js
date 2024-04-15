@@ -14,6 +14,7 @@ import multer from '@koa/multer';
 import { services } from './services/index.js'
 import koaQs from 'koa-qs' //override koa's default query string function to allow nested fields
 import { decoder } from './services/utils/numericDecoder.js';
+import { plugins } from './plugin-tools/index.js'
 import parseRpcVerb from 'feathers-rpc'
 
 const app = koaQs(koa(feathers()),'extended',{ decoder }) 
@@ -29,7 +30,9 @@ app.use(cors())
 app.use(serveStatic('specifications/build'))
 app.use(errorHandler())
 app.use(parseAuthentication())
-app.use(bodyParser())
+app.use(bodyParser({
+  jsonLimit: '10mb'
+}));
 app.configure(openaiConfig)
 
 
@@ -46,6 +49,8 @@ app.configure(authentication)
 app.configure(services)
 
 app.configure(feathersCasl());
+
+app.configure(plugins);
 
 // Register hooks that run on all service methods
 app.hooks({

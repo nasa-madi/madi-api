@@ -33,9 +33,13 @@ export const chunkSchema = Type.Object(
 
 export const chunkDataResolver = resolve({
   // converts the content into a hash
+  // hash: virtual(async(chunk,context)=>{
+  //   // let [data, params] = context.arguments
+  //   return getIdFromText(chunk.pageContent)
+  // }),
   hash: virtual(async(chunk,context)=>{
-    // let [data, params] = context.arguments
-    return getIdFromText(chunk.pageContent)
+    let [data, params] = context.arguments
+    return getIdFromText(data.pageContent + data.documentId + data.toolName )
   }),
   userId: virtual(async (chunk,context) => {
     let [data, params] = context.arguments
@@ -55,6 +59,7 @@ export const chunkVectorResolver = resolve({
       // and prevents extra calls to the embedding api
       let result = await context.self.find({query:{hash:chunk.hash}})
       if(result?.total > 0 ){
+        
         throw new BadRequest(`Hash ${chunk.hash} is not unique. Document already exists.`)
       }
 
@@ -144,7 +149,7 @@ export const chunkPatchResolver = resolve({
 
 
 // Schema for allowed query properties
-export const chunkQueryProperties = Type.Pick(chunkSchema, ['id', 'hash', 'metadata','embedding'])
+export const chunkQueryProperties = Type.Pick(chunkSchema, ['id', 'hash', 'metadata', 'pageContent','documentId','documentIndex','toolName'])
 export const chunkQuerySchema = Type.Intersect(
   [
     querySyntax(chunkQueryProperties),
