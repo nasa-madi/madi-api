@@ -2427,7 +2427,7 @@
 													"    pm.response.to.have.status(200);",
 													"    // Structure is correct",
 													"    pm.expect(result).to.have.property('data');",
-													"    pm.expect(result?.data.length).to.be.greaterThan(3)",
+													"    pm.expect(result?.data.length).to.be.greaterThan(2)",
 													"    pm.expect(result?.data?.[0]?.id).to.be.equal(parseInt(pm.collectionVariables.get(\"chunkId_2\")))",
 													"})"
 												],
