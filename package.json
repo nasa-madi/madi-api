@@ -75,6 +75,7 @@
     "feathers-blob": "^2.6.0",
     "feathers-casl": "^2.1.1",
     "feathers-hooks-common": "^8.1.2",
+    "feathers-rpc": "^1.0.5",
     "flat": "^6.0.1",
     "fs-blob-store": "^6.0.0",
     "js-yaml": "^4.1.0",
