@@ -19,14 +19,6 @@ export class ChatService {
       tool_choice: (tools)?tool_choice:undefined
     }
 
-
-    // if(data.model === 'gemini-pro'){
-    //   return geminiAdapter.makeRequest(
-    //     options, // params
-    //     this.options.app.gemini,  // shared instance
-    //     this.options.app.get('gemini').key // API KEY
-    //   )
-    // }
     return openaiAdapter.makeRequest(
       options, // params
       this.options.app.openai,  // shared instance

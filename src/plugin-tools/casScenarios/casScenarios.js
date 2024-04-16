@@ -4,7 +4,7 @@
  * Class representing the SemanticScholar plugin.
  */
 
-const TOOLNAME = 'search_cas_confluence'
+const TOOLNAME = 'create_cas_scenario'
 
 export class Plugin {
 
@@ -27,45 +27,22 @@ export class Plugin {
   async run(runOptions, params) {
     // Destructure the search parameters or set defaults
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const related = await this.chunks?.find({
-      ...params,
-      query: {
-        $search: runOptions?.data?.query,
-        toolName: TOOLNAME,
-        $select: ['pageContent'],
-        $limit: 20
-      }
-    });
-    const snippets = '##Snippet\n' + related?.data.map(d => d.pageContent).join('\n\n##Snippet\n');
-    return JSON.stringify(snippets);
+    // const related = await this.chunks?.find({
+    //   ...params,
+    //   query: {
+    //     $search: runOptions?.data?.query,
+    //     toolName: TOOLNAME,
+    //     $select: ['pageContent'],
+    //     $limit: 20
+    //   }
+    // });
+    // const snippets = '##Snippet\n' + related?.data.map(d => d.pageContent).join('\n\n##Snippet\n');
+    // return JSON.stringify(snippets);
+    return 'hi!'
   }
 
   async refresh(_data, params) {
-    let data = _data.data;
-    let converted = data.map((d) => ({
-      metadata: {
-        pageId: d.page_id,
-        title: d.title,
-        link: d.link,
-        last_update: d.last_update,
-      },
-      toolName: TOOLNAME,
-      content: d.content,
-    }));
-
-    const createPromises = converted.map((doc) => 
-      this.documents.create(doc, params)
-        .catch(e => {
-            if(e.message.includes('duplicate') || e.message.includes('unique') ){
-              return null
-            }
-            throw e
-          }
-        )
-    );
-
-    let result = await Promise.all(createPromises)
-    return result.filter(e=>!!e)
+    return null
   }
 
     /**
@@ -94,20 +71,36 @@ export class Plugin {
     type: 'function',
     plugin: 'CAS Discovery',
     // Identifier for the plugin
-    display: 'Search CAS\'s Confluence',
+    display: 'Scenario Creation',
     // Display name for the UI
     function: {
       name: TOOLNAME,
-      description: 'Search in NASA\'s CAS Confluence for new opportunity concept reports, problem prompts, and other information related to CAS Discovery and their futurism and wicked problem solutioning',
+      description: 'Generate a scenario using CAS\'s futurist scenario creation tool.  The tool is a complex prompt that goes through several steps in order to output a rich futuristic scenario.',
       parameters: {
         type: 'object',
         properties: {
-          query: {
+          topic: {
             type: 'string',
-            description: 'Search query for papers, e.g. "covid"'
+            description: 'The topic that the futurist scenario should be about. Can be a whole article or simply a text string.'
+          },
+          timeline: {
+            type: 'string',
+            description: 'How far in the future the scenario should imagine.  Defaults to 2050.'
+          },
+          need: {
+            type: 'string',
+            description: 'The specific need facing humanity or industry that the scenario should be addressing.' 
+          },
+          capability: {
+            type: 'string',
+            description: 'The technical capability that is new or emerging or being applied in a new way that the scenario should be focused on.' 
+          },
+          trend: {
+            type: 'string',
+            description: 'A macro trend, good or bad, that is pointing towards a future crisis or capability or change that the scenario should also include.' 
           }
         },
-        required: ['query']
+        required: ['topic']
       }
     }
   };
