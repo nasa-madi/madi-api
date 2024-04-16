@@ -521,6 +521,10 @@ For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/St
 
 ---
 
+
+
+
+
 ##  Getting Started
 
 ***Requirements***
@@ -574,6 +578,64 @@ npm test
 - [ ] `► ...`
 
 ---
+
+
+
+
+## **Connecting to an IAP-Protected API on GCP**
+
+To securely connect to an API protected by Google Cloud's Identity-Aware Proxy (IAP), follow these detailed steps to authenticate requests using a service account or user-managed identity. This guide assumes that you have already set up IAP to protect your API and have appropriate permissions configured for accessing the resource.
+
+#### **1. Setting Up Environment Variables**
+
+First, define the environment and client ID variables that you will use in your authentication requests. These variables are essential for acquiring an authentication token and for making API requests to the IAP-protected service.
+
+```shell
+ENV="dev"  #or 'test' or 'prod'
+DOMAIN="example.app" # or simliar domain where the app is hosted
+CLIENT_ID="XXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com"
+TOKEN=$(gcloud auth print-identity-token --audiences=$CLIENT_ID)
+```
+
+- **ENV**: This variable represents the deployment environment (e.g., `dev`, `prod`). Adjust it according to your specific environment names.
+- **CLIENT_ID**: This is the client ID associated with the IAP. You can find this ID in your Google Cloud Console under the IAP section.
+- **TOKEN**: This command generates an identity token for the specified client ID using the currently authenticated gcloud session. Ensure your gcloud is authenticated with a user or service account that has permission to access the IAP-protected resource.
+
+#### **2. Verify Service Account or User Access**
+
+Before making broader API calls, verify that the service account or user has the necessary permissions and can authenticate through IAP by creating a test user. This step confirms that your setup can successfully post data to the IAP-protected API.
+
+```shell
+curl --location --request POST "https://$ENV.$DOMAIN/api/users/" \
+--header "Authorization: Bearer $TOKEN" \ 
+--data '{}'
+```
+
+- This `curl` command makes a POST request to the API to create a new user.  If the users exists for the provided token it will error and say that you cannot create new users.
+- It uses the Bearer token obtained in the previous step for authentication.
+- Ensure that there is no trailing whitespace or additional characters that might break the header formatting or the URL.
+
+#### **3. General Usage of Token**
+
+After successfully verifying that the token works for a simple POST request, you can use the same method to authenticate other types of requests to the API. Adjust the HTTP method and endpoint according to the specific actions you need to perform.  For example, here's a request that lists the available tools (provided by plugins):
+
+```shell
+curl --location 'https://$ENV.$DOMAIN/api/tools' \
+--header "Authorization: Bearer $TOKEN"
+```
+
+
+
+#### **Best Practices and Troubleshooting**
+
+- **Token Expiry**: Be aware that the tokens generated are temporary. For long-term operations, ensure your application can handle token renewal.
+- **Error Handling**: Implement robust error handling in your code to manage and log errors returned by the IAP or the API.
+- **Security Practices**: Keep your client IDs and service account credentials secure. Avoid hard-coding sensitive information directly in your application's source code.
+
+This setup ensures that your applications can securely access APIs protected by Google's Identity-Aware Proxy using authenticated tokens that verify the identity and permissions of the requester.
+
+
+
 
 ##  Contributing
 

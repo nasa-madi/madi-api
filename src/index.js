@@ -1,8 +1,7 @@
 import { logger } from './logger.js'
 import { app } from './app.js'
 
-console.log(process.env)
-
+// console.log(process.env)
 
 const port = app.get('port')
 const host = app.get('host')
