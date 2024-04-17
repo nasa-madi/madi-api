@@ -12,6 +12,7 @@ export const authentication = async (app) => {
 
   // This code should set the superadmin credentials of the emails listed in the config files
   let { superadmin } = app.get('authentication');
+  superadmin = superadmin || []
   for (const email of superadmin) {
     await knex('users')
       .where({ email })
