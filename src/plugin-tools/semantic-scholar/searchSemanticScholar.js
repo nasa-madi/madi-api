@@ -1,41 +1,86 @@
 import fetch from 'node-fetch';
 
-export async function searchSemanticScholar({ data  }, params) {
-  let {query} = data
-  const fields = [
-    'paperId',
-    'url',
-    'title',
-    'venue',
-    'publicationVenue',
-    'year',
-    'authors',
-    'abstract',
-    'publicationDate',
-    'tldr'
-  ].join(',');
+/************** NEW STRUCTURE VERSION *************/  
+const TOOLNAME = 'search_semantic_scholar'
 
-  const url = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(
-    query
-  )}&fields=${fields}`;
+export class Plugin {
 
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Error fetching data: ${response.statusText}`);
-    }
-    const data = await response.json();
-    return JSON.stringify(data);
-  } catch (error) {
-    return JSON.stringify({ error: error.message });
+  /**
+   * Create a CAS Scenario plugin.
+   * @param {PluginOptions} [options] - The plugin options.
+   */
+  constructor(options) {
+    this.documents = options?.documents;
+    this.chunks = options?.chunks;
+    this.uploads = options?.uploads;
   }
-}
-export const searchSemanticScholarDesc = {
+
+
+  /**
+   * Run the CAS Scenario operation.
+   * @param {RunOptions} options - The options for the search operation.
+   * @returns {Promise<string>} - The search results in string format.
+   */
+  async run(runOptions, params) {
+    const { data } = runOptions;
+    let { query } = data;
+    const fields = [
+      'paperId',
+      'url',
+      'title',
+      'venue',
+      'publicationVenue',
+      'year',
+      'authors',
+      'abstract',
+      'publicationDate',
+      'tldr'
+    ].join(',');
+
+    const url = `https://api.semanticscholar.org/graph/v1/paper/search?query=${encodeURIComponent(
+      query
+    )}&fields=${fields}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Error fetching data: ${response.statusText}`);
+      }
+      const data = await response.json();
+      return JSON.stringify(data);
+    } catch (error) {
+      return JSON.stringify({ error: error.message });
+    }
+  }
+
+  async refresh(_data, params) {
+    return null
+  }
+    /**
+     * Describe the tool for integration with other systems or UI.
+     * @returns {Tool} - The tool description object.
+     */
+    describe() {
+      // Return the static description of the Semantic Scholar search function
+      return description;
+    }
+  
+    /**
+     * Runs at initialization of the plugin. Will run asynchronously, so do not depend on completion for a startup event
+     * @returns {void}
+     */
+    async init() {
+      
+    }
+
+  }
+
+export const description = {
   type: "function",
   plugin: "Semantic Scholar",
   display: "Search Semantic Scholar",
   function: {
-    name: "searchSemanticScholar",
+    name: TOOLNAME,
     description: "Search for academic papers from Semantic Scholar.",
     parameters: {
       type: "object",

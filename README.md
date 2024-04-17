@@ -591,6 +591,12 @@ To securely connect to an API protected by Google Cloud's Identity-Aware Proxy (
 First, define the environment and client ID variables that you will use in your authentication requests. These variables are essential for acquiring an authentication token and for making API requests to the IAP-protected service.
 
 ```shell
+
+
+```
+
+
+```shell
 ENV="dev"  #or 'test' or 'prod'
 DOMAIN="example.app" # or simliar domain where the app is hosted
 CLIENT_ID="XXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXX.apps.googleusercontent.com"
