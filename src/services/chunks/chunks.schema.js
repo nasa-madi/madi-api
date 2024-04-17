@@ -5,6 +5,7 @@ import { dataValidator, queryValidator } from '../../validators.js'
 import { BadRequest } from '@feathersjs/errors'
 import { getIdFromText } from '../utils/getIdFromText.js'
 import config from '@feathersjs/configuration'
+import {Composite} from '@sinclair/typebox/type'
 
 
 const MAX_LENGTH = config()().chunks.maxLength
@@ -72,17 +73,12 @@ export const chunkVectorResolver = resolve({
 
 export const chunkValidator = getValidator(chunkSchema, dataValidator)
 export const chunkResolver = resolve({
-
-  /**
-  * Adds the user and document information back in, but only if requested.  
-  */
   // user: virtual(async (chunk, context) => {
-  //   if(context?.params?.query?.$select?.includes('user')){
-  //     // Populate the user associated via `userId`
-  //     // TODO restrict this to only the current user or admins
-  //     // if (params.user.admin){
-  //       return context.app.service('users').get(chunk.userId)
-  //     // }
+  //   if(
+  //     context?.params?.query?.$select?.includes('user')
+  //     && params.user.admin
+  //   ){
+  //     return context.app.service('users').get(chunk.userId)
   //   }else{
   //     return undefined
   //   }
@@ -90,11 +86,15 @@ export const chunkResolver = resolve({
   // document: virtual(async (chunk, context) => {
   //   if(context?.params?.query?.$select?.includes('document')){
   //     // Populate the user associated via `userId`
-  //     return context.app.service('documents').get(chunk.documentId).catch(e=>{})|| null
+  //     return context.app.service('documents').get(chunk.documentId,{
+  //       $select:['metadata','id','abstract','toolName']
+  //     }).catch(e=>{})|| null
   //   }else{
   //     return undefined
   //   }
   // })
+
+
 })
 
 export const chunkExternalResolver = resolve({
@@ -145,13 +145,23 @@ export const chunkPatchResolver = resolve({
 
 
 // Schema for allowed query properties
-export const chunkQueryProperties = Type.Pick(chunkSchema, ['id', 'hash', 'metadata', 'pageContent','documentId','documentIndex','toolName','embedding'])
+export const chunkQueryProperties = Composite([
+  Type.Pick(chunkSchema, ['id', 'hash', 'metadata', 'pageContent', 'documentId', 'documentIndex', 'toolName', 'embedding']),
+  // Type.Object({ // added so that they can be resolved via a query select
+  //   document: Type.Optional(Type.Object({},{additionalProperties:true})),
+  //   user: Type.Optional(Type.Object({},{additionalProperties:true}))
+  // })
+]);
+
+
 export const chunkQuerySchema = Type.Intersect(
   [
     querySyntax(chunkQueryProperties),
     Type.Object({
         // TODO fix this so that $search is allowed on input but not required on output
-        $search: Type.Optional(Type.String()) //added for vector search
+        $search: Type.Optional(Type.String()), //added for vector search
+        // document: Type.Optional(Type.Object()),
+        // user: Type.Optional(Type.Object())
       }, 
       { additionalProperties: true }
     )],

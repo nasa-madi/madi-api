@@ -49,7 +49,9 @@ export const chunk = (app) => {
       find: [
         schemaHooks.resolveQuery(chunkQueryResolver)
       ],
-      get: [],
+      get: [
+        schemaHooks.resolveQuery(chunkQueryResolver)
+      ],
       create: [
         schemaHooks.validateData(chunkDataValidator), 
         schemaHooks.resolveData(chunkDataResolver),

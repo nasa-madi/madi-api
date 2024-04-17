@@ -2,6 +2,7 @@ import * as Weather from "./weather/getCurrentWeather.js"
 import * as CASC from './casConfluence/casConfluence.js'
 import * as CASS from './casScenarios/casScenarios.js'
 import * as SemanticScholarSearch from "./semantic-scholar/searchSemanticScholar.js"
+import * as openaiAdapter from '../services/chats/chats.openai.js'
 
 let isDeployed = !!process.env.GOOGLE_CLOUD_PROJECT
 
@@ -34,7 +35,12 @@ export const plugins = async (app) => {
     let options = {
         chunks: app.service('chunks'),
         documents: app.service('documents'),
-        uploads: app.service('documents')
+        uploads: app.service('documents'),
+        makeRequest: (args)=>openaiAdapter.makeRequest(
+            args,
+            app.openai,  // shared instance
+            app.get('openai').key // API KEY
+        )
     }
 
     for (const plugin of pluginList) {

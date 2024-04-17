@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
+import Turndown from 'turndown'
+var turndownService = new Turndown()
 /**
  * Class representing the SemanticScholar plugin.
  */
@@ -27,17 +28,45 @@ export class Plugin {
   async run(runOptions, params) {
     // Destructure the search parameters or set defaults
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const related = await this.chunks?.find({
+    const related = (await this.chunks?.find({
       ...params,
       query: {
         $search: runOptions?.data?.query,
         toolName: TOOLNAME,
-        $select: ['pageContent'],
+        $select: ['metadata','pageContent','documentId','toolName'],
         $limit: 20
       }
+    })).data
+
+    const filled = await Promise.all(
+      related.map(async (c) => {
+        let doc = await this.documents.get(c.documentId, {
+          ...params,
+          query: {
+            $select: ['metadata', 'abstract', 'toolName'],
+            toolName: TOOLNAME,
+          },
+        });
+        if (doc) {
+          c.document = doc;
+        }
+        return c;
+      })
+    );
+
+    const cleaned = filled.map(c => {
+      // c.pageContent = c.pageContent.replace(/\\\\\\/gm, '')
+      c.pageContent = turndownService.turndown(c.pageContent);
+      // c.pageContent = c.pageContent
+      c.pageContent = c.pageContent.replace(/\\{1,12}/g, '\\')
+      console.log(c.pageContent)
+      return c;
     });
-    const snippets = '##Snippet\n' + related?.data.map(d => d.pageContent).join('\n\n##Snippet\n');
-    return JSON.stringify(snippets);
+
+
+    const INSTRUCTION = `INSTRUCTIONS: Below are several snippets from Confluence documents pertaining to your request. They are in order of closeness depending on the cosine similarity of the embeddings of the query and the snippet.  They also include links and ID numbers for pages in the confluence space.  When responding make sure to include the relevant links to the documents and name the document from which the snippet was pulled.`
+    const snippets = '##Snippet\n' + cleaned?.map(d => JSON.stringify(d)).join('\n\n##Snippet\n');
+    return {"content":INSTRUCTION + snippets}
   }
 
   async refresh(_data, params) {

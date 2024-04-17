@@ -78,6 +78,13 @@ export class ToolService {
           ? JSON.parse(toolCall?.function?.arguments)
           : toolCall?.function?.arguments
         functionResponse = await functionToCall({data:functionArgs}, params);
+        if (typeof functionResponse !== 'string') {
+          if (typeof functionResponse === 'object' && functionResponse !== null) {
+            functionResponse = JSON.stringify(functionResponse);
+          } else {
+            throw new Error('Function response must be a string or an object.');
+          }
+        }
       }else{
         throw new Error(`Tool ${functionName} is not allowed or not available.`)
       }
