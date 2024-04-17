@@ -94,7 +94,7 @@ export const description = {
   }
 };
 
-export const scenariosPrompt = `
+const scenariosPrompt = `
 You are an A.I. assistant with expert skill in strategic foresight and scenario development.  You will follow the four stages of analysis below.
 
 ## STAGE 1: "Basic Analysis" 

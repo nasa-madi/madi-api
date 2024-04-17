@@ -12,7 +12,7 @@ export let defaultTools = []
 export let toolRefreshFuncs = {}
 
 
-const pluginList = [
+let pluginList = [
     { name: 'casConfluence', module: CASC },
     { name: 'casScenarios', module: CASS },
     { name: 'semanticScholarSearch', module: SemanticScholarSearch }
@@ -21,10 +21,10 @@ const pluginList = [
 const developPluginList = [
     { name: 'getCurrentWeather', module: Weather },
 ];
-if (!isDeployed) {
-    defaultTools.concat(developPluginList)
-}
 
+if (!isDeployed) {
+    pluginList = pluginList.concat(developPluginList)
+}   
 
 /**
  * Initializes the plugins.
@@ -54,5 +54,6 @@ export const plugins = async (app) => {
 
         await instance.init();
     }
+ 
 
 }
