@@ -591,10 +591,32 @@ To securely connect to an API protected by Google Cloud's Identity-Aware Proxy (
 First, define the environment and client ID variables that you will use in your authentication requests. These variables are essential for acquiring an authentication token and for making API requests to the IAP-protected service.
 
 ```shell
-
-
+gcloud config set project <PROJECT_ID>
+gcloud iap oauth-brands list
 ```
 
+This will respond with something like:
+```
+name: projects/[PROJECT_NUMBER]/brands/[BRAND_ID]
+applicationTitle: [APPLICATION_TITLE]
+supportEmail: [SUPPORT_EMAIL]
+orgInternalOnly: true
+```
+Next, copy the projects and brands link and run the following command
+
+```shell
+gcloud iap oauth-clients list projects/351312167908/brands/351312167908
+```
+
+You should see a response like the following
+
+```
+name: projects/[PROJECT_NUMBER]/brands/[BRAND_NAME]/identityAwareProxyClients/[CLIENT_ID]
+secret: [CLIENT_SECRET]
+displayName: [NAME]
+```
+
+Now you have sufficient information to generate a token.  Use the `[CLIENT_ID]` and the right env variables below.
 
 ```shell
 ENV="dev"  #or 'test' or 'prod'
@@ -604,16 +626,17 @@ TOKEN=$(gcloud auth print-identity-token --audiences=$CLIENT_ID)
 ```
 
 - **ENV**: This variable represents the deployment environment (e.g., `dev`, `prod`). Adjust it according to your specific environment names.
+- **DOMAIN**: This variable represents the domain that you will be connecting to through IAP.
 - **CLIENT_ID**: This is the client ID associated with the IAP. You can find this ID in your Google Cloud Console under the IAP section.
 - **TOKEN**: This command generates an identity token for the specified client ID using the currently authenticated gcloud session. Ensure your gcloud is authenticated with a user or service account that has permission to access the IAP-protected resource.
 
 #### **2. Verify Service Account or User Access**
 
-Before making broader API calls, verify that the service account or user has the necessary permissions and can authenticate through IAP by creating a test user. This step confirms that your setup can successfully post data to the IAP-protected API.
+Before making broader API calls, verify that the service account or user has the necessary permissions and can authenticate through IAP by creating a test user. This step confirms that your setup can successfully post data to the IAP-protected API.  For more information [see instructions here](https://cloud.google.com/iap/docs/programmatic-oauth-clients)
 
 ```shell
 curl --location --request POST "https://$ENV.$DOMAIN/api/users/" \
---header "Authorization: Bearer $TOKEN" \ 
+--header "Authorization: Bearer $TOKEN" \
 --data '{}'
 ```
 
@@ -626,11 +649,9 @@ curl --location --request POST "https://$ENV.$DOMAIN/api/users/" \
 After successfully verifying that the token works for a simple POST request, you can use the same method to authenticate other types of requests to the API. Adjust the HTTP method and endpoint according to the specific actions you need to perform.  For example, here's a request that lists the available tools (provided by plugins):
 
 ```shell
-curl --location 'https://$ENV.$DOMAIN/api/tools' \
+curl --location "https://$ENV.$DOMAIN/api/tools" \
 --header "Authorization: Bearer $TOKEN"
 ```
-
-
 
 #### **Best Practices and Troubleshooting**
 
@@ -640,6 +661,18 @@ curl --location 'https://$ENV.$DOMAIN/api/tools' \
 
 This setup ensures that your applications can securely access APIs protected by Google's Identity-Aware Proxy using authenticated tokens that verify the identity and permissions of the requester.
 
+
+## **Connecting to the Database Directly**
+
+The easiest way to connect to the database is through a bastion host.  The commands for this can be fetched from the terraform output with the following command:
+
+```shell
+cd ../terraform
+terraform workspace select <ENV> #develop #test #production
+terraform output
+```
+
+You must be in the `/terraformm` folder of the main `/madi` project and must have permissions to run the terraform.
 
 
 

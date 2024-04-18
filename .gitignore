@@ -62,3 +62,4 @@ gcloud_scratch.sh
 test.sh
 test.groovy
 cloudrun-curl.sh
+TOKEN_GENERATOR.sh
