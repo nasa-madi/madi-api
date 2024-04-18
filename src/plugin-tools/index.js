@@ -4,7 +4,7 @@ import * as CASS from './casScenarios/casScenarios.js'
 import * as SemanticScholarSearch from "./semantic-scholar/searchSemanticScholar.js"
 import * as openaiAdapter from '../services/chats/chats.openai.js'
 
-let isDeployed = !!process.env.GOOGLE_CLOUD_PROJECT
+let isProduction = process.env.NODE_CONFIG_ENV === 'production'
 
 export let toolFuncs = {}
 export let toolDescs = {}
@@ -22,7 +22,7 @@ const developPluginList = [
     { name: 'getCurrentWeather', module: Weather },
 ];
 
-if (!isDeployed) {
+if (!isProduction) {
     pluginList = pluginList.concat(developPluginList)
 }   
 
