@@ -36,7 +36,7 @@ export const chunkDataResolver = resolve({
   // converts the content into a hash
   hash: virtual(async(chunk,context)=>{
     let [data, params] = context.arguments
-    return getIdFromText(data.pageContent + data.documentId + data.toolName )
+    return getIdFromText(data.pageContent + data.documentId + data.toolName + data.documentIndex)
   }),
   userId: virtual(async (chunk,context) => {
     let [data, params] = context.arguments
@@ -56,11 +56,10 @@ export const chunkVectorResolver = resolve({
       // and prevents extra calls to the embedding api
       let result = await context.self.find({query:{hash:chunk.hash}})
       if(result?.total > 0 ){
-        
-        throw new BadRequest(`Hash ${chunk.hash} is not unique. Document already exists.`)
+        throw new BadRequest(`Hash ${chunk.hash} is not unique. Chunk already exists.`)
       }
 
-      let embedding = await context.self.fetchEmbedding(chunk.pageContent)
+      let embedding = await context.self.fetchEmbedding(chunk)
       if (!embedding){
         throw new BadRequest('Embedding could not be generated')
       }
@@ -72,30 +71,7 @@ export const chunkVectorResolver = resolve({
 
 
 export const chunkValidator = getValidator(chunkSchema, dataValidator)
-export const chunkResolver = resolve({
-  // user: virtual(async (chunk, context) => {
-  //   if(
-  //     context?.params?.query?.$select?.includes('user')
-  //     && params.user.admin
-  //   ){
-  //     return context.app.service('users').get(chunk.userId)
-  //   }else{
-  //     return undefined
-  //   }
-  // }),
-  // document: virtual(async (chunk, context) => {
-  //   if(context?.params?.query?.$select?.includes('document')){
-  //     // Populate the user associated via `userId`
-  //     return context.app.service('documents').get(chunk.documentId,{
-  //       $select:['metadata','id','abstract','toolName']
-  //     }).catch(e=>{})|| null
-  //   }else{
-  //     return undefined
-  //   }
-  // })
-
-
-})
+export const chunkResolver = resolve({})
 
 export const chunkExternalResolver = resolve({
   embedding: virtual(async(chunk,context)=>{
@@ -126,7 +102,7 @@ export const chunkPatchValidator = getValidator(chunkPatchSchema, dataValidator)
 export const chunkPatchResolver = resolve({
   embedding: virtual(async(chunk,context)=>{
     if(chunk.pageContent){
-      let embedding = await context.self.fetchEmbedding(chunk.pageContent)
+      let embedding = await context.self.fetchEmbedding(chunk)
       return `[${embedding.join(",")}]`
     }else{
       return undefined
@@ -147,10 +123,6 @@ export const chunkPatchResolver = resolve({
 // Schema for allowed query properties
 export const chunkQueryProperties = Composite([
   Type.Pick(chunkSchema, ['id', 'hash', 'metadata', 'pageContent', 'documentId', 'documentIndex', 'toolName', 'embedding']),
-  // Type.Object({ // added so that they can be resolved via a query select
-  //   document: Type.Optional(Type.Object({},{additionalProperties:true})),
-  //   user: Type.Optional(Type.Object({},{additionalProperties:true}))
-  // })
 ]);
 
 

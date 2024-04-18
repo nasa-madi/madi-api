@@ -71,16 +71,10 @@ export class Plugin {
 
   async refresh(_data, params) {
     let data = _data.data;
-    let converted = data.map((d) => ({
-      metadata: {
-        pageId: d.page_id,
-        title: d.title,
-        link: d.link,
-        last_update: d.last_update,
-      },
-      toolName: TOOLNAME,
-      content: d.content,
-    }));
+    let converted = data.map((d) => {
+      d.toolName = TOOLNAME;
+      return d
+    })
 
     const createPromises = converted.map((doc) => 
       this.documents.create(doc, params)

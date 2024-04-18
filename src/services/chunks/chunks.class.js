@@ -16,7 +16,9 @@ export class ChunkService extends EmbeddingKnexService{
   }
 
 
-  async fetchEmbedding(input, options={}){
+  async fetchEmbedding(chunk, options={}){
+    let input = JSON.stringify(chunk)
+
     const embedding = await this.openai.embeddings.create({
         model: options.model || "text-embedding-ada-002",
         input,
