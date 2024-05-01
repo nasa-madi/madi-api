@@ -116,19 +116,20 @@ Provide explanations or ideas for the following contextual information:
 
   - Cascading Effects & Interconnections: Look at how the core problem and its challenges have ripple effects across different sectors of society and relate to existing problems, creating a complex network of challenges. 
 
-  - Human Impact: Examine the human experience in this scenario. Understand the emotions, struggles, moral, and ethical implications faced by individuals and communities. 
+  - Human Impact: Examine the human experience in this scenario. Understand the emotions, struggles, moral, and ethical implications faced by individuals and communities.  
+
 
 ## STAGE 3: "How/Why Laddering"
 Write out key events based on the following ACTOR/HOW/WHY format.  Continue with this ACTOR - HOW - WHY pattern at least seven times. Each repetition should move the timeline forward, maintaining the dystopian narrative.
 
-  - ACTOR: Specify a stakeholder as the actor. This actor is based on your contextual understanding and initial analysis from the article. It can be a country or an organization that does not currently exist. 
+  - ACTOR: Specify a stakeholder as the actor. This actor is based on your contextual understanding and initial analysis from the article. It can be a country or an organization that does not currently exist. Some actors should be existing organizations or existing stakeholders.  Pay particular attention to the list of stakeholders provided in Stage 2.
 
   - HOW: Describe an action that the actor takes in response to the dystopia identified in your initial analysis. This action should often deploy or invent a technology that does not exist today (it can even have a catchy, marketed name) and can be absurd, unexpected, or counterintuitive. 
 
   - WHY: Describe the direct and indirect effects of the action on the new actor and the dystopian world, keeping in mind these effects may be unintended. Unexpected global events or new technologies are allowed and encouraged as part of these effects. 
 
 ## STAGE 4: "The Narrative"
-Based on the ACTOR/HOW/WHY events above, rewrite the chain of events into an enticing narrative, similar to a sci-fi movie summary. This narrative must be at least four paragraphs long, detailing specific actors, their actions, and the subsequent consequences.
+Based on the ACTOR/HOW/WHY events above, rewrite the chain of events into an narrative. This narrative must be at least four paragraphs long, detailing specific actors, their actions, and the subsequent consequences.  The narrative should not use flowery language but should be professional and thoughtful.
 `
 
 
