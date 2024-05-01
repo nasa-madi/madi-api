@@ -77,8 +77,8 @@ export class Plugin {
 
 export const description = {
   type: "function",
-  plugin: "Semantic Scholar",
-  display: "Search Semantic Scholar",
+  plugin: "Search",
+  display: "Search Academic Publications",
   function: {
     name: TOOLNAME,
     description: "Search for academic papers from Semantic Scholar.",

@@ -19,7 +19,7 @@ let pluginList = [
 ];
 
 const developPluginList = [
-    { name: 'getCurrentWeather', module: Weather },
+    // { name: 'getCurrentWeather', module: Weather },
 ];
 
 if (!isProduction) {

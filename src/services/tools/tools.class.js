@@ -22,6 +22,68 @@ export class ToolService {
   async find(_params) {
     let authorizedTools = await this.getAuthorizedTools(_params)
 
+    // authorizedTools.push({
+    //     type: "function",
+    //     plugin: "Search",
+    //     display: "Search Google",
+    //     function: {
+    //       name: 'search_google',
+    //       description: "Get the current weather in a given location",
+    //     }
+    // })
+
+    // authorizedTools.push({
+    //   type: "function",
+    //   plugin: "Search",
+    //   display: "Search Patents",
+    //   function: {
+    //     name: 'search_patents',
+    //     description: "Get the current weather in a given location",
+    //   }
+    // })
+
+    // authorizedTools.push({
+    //   type: "function",
+    //   plugin: "CAS Discovery",
+    //   display: "Run SCAMPER Analysis",
+    //   function: {
+    //     name: 'run_cas_scamper',
+    //     description: "Get the current weather in a given location",
+    //   }
+    // })
+
+    // authorizedTools.push({
+    //   type: "function",
+    //   plugin: "ARMD",
+    //   display: "Search ARMD Aero E-Books",
+    //   function: {
+    //     name: 'run_cas_scamper',
+    //     description: "Get the current weather in a given location",
+    //   }
+    // })
+
+    // authorizedTools.push({
+    //   type: "function",
+    //   plugin: "CAS Discovery",
+    //   display: "Run HIT Analysis",
+    //   function: {
+    //     name: 'run_cas_scamper',
+    //     description: "Get the current weather in a given location",
+    //   }
+    // })
+
+
+    // authorizedTools.push({
+    //   type: "function",
+    //   plugin: "TTT",
+    //   display: "Search Green Aviation Submissions",
+    //   function: {
+    //     name: 'run_ttt_green_aviation',
+    //     description: "Get the current weather in a given location",
+    //   }
+    // })
+
+
     const sortedData = authorizedTools.sort((a, b) => {
       if(a.function.name < b.function.name) { return -1; }
       if(a.function.name > b.function.name) { return 1; }
