@@ -13,7 +13,8 @@ export const userSchema = Type.Object(
     email: Type.String(),
     // password: Type.Optional(Type.String()),
     googleId: Type.Optional(Type.String()),
-    role: Type.Optional(Type.String(), { default: 'member' })
+    role: Type.Optional(Type.String(), { default: 'member' }),
+    // tools: Type.Optional(Type.Array(Type.String()), { default: [''] })
   },
   { $id: 'User', additionalProperties: false }
 )
