@@ -1,22 +1,48 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Turndown from 'turndown'
+import BasePlugin from '../plugin.class.js'
 var turndownService = new Turndown()
+
+const TOOLNAME = 'search_cas_confluence'
+export const test = true;
+
+// The static description object for the Confluence search tool.
+export const description = {
+  type: 'function',
+  plugin: 'CAS Discovery',
+  // Identifier for the plugin
+  display: 'Search CAS\'s Confluence',
+  // Display name for the UI
+  function: {
+    name: TOOLNAME,
+    description: 'Search in NASA\'s CAS Confluence for new opportunity concept reports, problem prompts, and other information related to CAS Discovery and their futurism and wicked problem solutioning',
+    parameters: {
+      type: 'object',
+      properties: {
+        query: {
+          type: 'string',
+          description: 'Search query for papers, e.g. "covid"'
+        }
+      },
+      required: ['query']
+    }
+  }
+};
+
 /**
  * Class representing the SemanticScholar plugin.
  */
-
-const TOOLNAME = 'search_cas_confluence'
-
-export class Plugin {
+export class Plugin extends BasePlugin {
 
   /**
    * Create a CAS Scenario plugin.
    * @param {PluginOptions} [options] - The plugin options.
    */
   constructor(options) {
-    this.documents = options?.documents;
-    this.chunks = options?.chunks;
-    this.uploads = options?.uploads;
+    super({
+      ...options,
+      description
+    })
   }
 
 
@@ -91,46 +117,6 @@ export class Plugin {
     return result.filter(e=>!!e)
   }
 
-    /**
-     * Describe the tool for integration with other systems or UI.
-     * @returns {Tool} - The tool description object.
-     */
-    describe() {
-      // Return the static description of the Semantic Scholar search function
-      return description;
-    }
-  
-    /**
-     * Runs at initialization of the plugin. Will run asynchronously, so do not depend on completion for a startup event
-     * @returns {void}
-     */
-    async init() {
-      
-    }
+}
 
-  }
-
-  export const test = true;
   
-  // The static description object for the Semantic Scholar search tool.
-  export const description = {
-    type: 'function',
-    plugin: 'CAS Discovery',
-    // Identifier for the plugin
-    display: 'Search CAS\'s Confluence',
-    // Display name for the UI
-    function: {
-      name: TOOLNAME,
-      description: 'Search in NASA\'s CAS Confluence for new opportunity concept reports, problem prompts, and other information related to CAS Discovery and their futurism and wicked problem solutioning',
-      parameters: {
-        type: 'object',
-        properties: {
-          query: {
-            type: 'string',
-            description: 'Search query for papers, e.g. "covid"'
-          }
-        },
-        required: ['query']
-      }
-    }
-  };
