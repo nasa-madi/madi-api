@@ -72,6 +72,12 @@ services:
       timeout: 5s
       retries: 5
 
+  # https://github.com/nlmatics/nlm-ingestor
+  nlm-ingestor:
+    image: jamesmtc/nlm-ingestor:latest
+    ports:
+      - 5001:5001
+
 networks:
   madi:
 
