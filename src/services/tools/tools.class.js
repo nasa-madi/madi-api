@@ -1,4 +1,4 @@
-import { toolFuncs, toolDescs, toolRefreshFuncs, defaultTools } from "../../plugin-tools/index.js";
+import { toolFuncs, toolDescs, toolRefreshFuncs, defaultTools } from "../../plugins/index.js";
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
 export class ToolService {

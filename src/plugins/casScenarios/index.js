@@ -1,20 +1,20 @@
-
+import BasePlugin from '../plugin.class.js'
 /**
  * Class representing the SemanticScholar plugin.
  */
 const TOOLNAME = 'create_cas_scenario'
 
-export class Plugin {
+export class Plugin extends BasePlugin {
 
   /**
    * Create a CAS Scenario plugin.
    * @param {PluginOptions} [options] - The plugin options.
    */
   constructor(options) {
-    this.documents = options.documents;
-    this.chunks = options.chunks;
-    this.uploads = options.uploads;
-    this.makeRequest = options.makeRequest;
+    super({
+      ...options,
+      description
+    })
   }
 
   /**
@@ -22,30 +22,8 @@ export class Plugin {
    * @param {RunOptions} options - The options for the search operation.
    * @returns {Promise<string>} - The search results in string format.
    */
-  async run({ data }, params) {
-    const { topic, timeline, need, capability, trend } = data;
+  async run() {
     return {content: scenariosPrompt}
-  }
-
-  async refresh(_data, params) {
-    return null
-  }
-
-  /**
-   * Describe the tool for integration with other systems or UI.
-   * @returns {Tool} - The tool description object.
-   */
-  describe() {
-    // Return the static description of the Semantic Scholar search function
-    return description;
-  }
-
-  /**
-   * Runs at initialization of the plugin. Will run asynchronously, so do not depend on completion for a startup event
-   * @returns {void}
-   */
-  async init() {
-
   }
 }
 

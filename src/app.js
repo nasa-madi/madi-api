@@ -14,7 +14,7 @@ import multer from '@koa/multer';
 import { services } from './services/index.js'
 import koaQs from 'koa-qs' //override koa's default query string function to allow nested fields
 import { decoder } from './services/utils/numericDecoder.js';
-import { plugins } from './plugin-tools/index.js'
+import { plugins } from './plugins/index.js'
 import parseRpcVerb from 'feathers-rpc'
 
 const app = koaQs(koa(feathers()),'extended',{ decoder }) 

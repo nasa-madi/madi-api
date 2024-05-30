@@ -1,7 +1,8 @@
-import * as Weather from "./weather/getCurrentWeather.js"
-import * as CASC from './casConfluence/casConfluence.js'
-import * as CASS from './casScenarios/casScenarios.js'
-import * as SemanticScholarSearch from "./semantic-scholar/searchSemanticScholar.js"
+import * as Weather from "./devGetWeather/index.js"
+import * as CASC from './casConfluence/index.js'
+import * as CASS from './casScenarios/index.js'
+import * as ARMDEBooks from './armdEBooks/index.js'
+import * as SemanticScholarSearch from "./searchSemanticScholar/index.js"
 import * as openaiAdapter from '../services/chats/chats.openai.js'
 
 let isProduction = process.env.NODE_CONFIG_ENV === 'production'
@@ -15,7 +16,8 @@ export let toolRefreshFuncs = {}
 let pluginList = [
     { name: 'casConfluence', module: CASC },
     { name: 'casScenarios', module: CASS },
-    { name: 'semanticScholarSearch', module: SemanticScholarSearch }
+    { name: 'semanticScholarSearch', module: SemanticScholarSearch },
+    { name: 'armdEBooks', module: ARMDEBooks }
 ];
 
 const developPluginList = [
