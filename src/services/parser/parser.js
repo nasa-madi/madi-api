@@ -1,16 +1,3 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-
-import { hooks as schemaHooks } from '@feathersjs/schema'
-import {
-  parserDataValidator,
-  parserPatchValidator,
-  parserQueryValidator,
-  parserResolver,
-  parserExternalResolver,
-  parserDataResolver,
-  parserPatchResolver,
-  parserQueryResolver
-} from './parser.schema.js'
 import { ParserService, getOptions } from './parser.class.js'
 
 export const parserPath = 'parser'
@@ -31,14 +18,14 @@ export const parser = (app) => {
   // Initialize hooks
   app.service(parserPath).hooks({
     around: {
-      all: [schemaHooks.resolveExternal(parserExternalResolver), schemaHooks.resolveResult(parserResolver)]
+      all: []
     },
     before: {
-      all: [schemaHooks.validateQuery(parserQueryValidator), schemaHooks.resolveQuery(parserQueryResolver)],
+      all: [],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(parserDataValidator), schemaHooks.resolveData(parserDataResolver)],
-      patch: [schemaHooks.validateData(parserPatchValidator), schemaHooks.resolveData(parserPatchResolver)],
+      create: [],
+      patch: [],
       remove: []
     },
     after: {

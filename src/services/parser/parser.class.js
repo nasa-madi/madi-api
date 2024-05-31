@@ -5,8 +5,6 @@ import TurndownService from 'turndown'
 var turndownService = new TurndownService({headingStyle: 'atx'})
 
 
-
-
 export class ParserService {
   constructor(options) {
     this.options = options
@@ -26,7 +24,7 @@ export class ParserService {
       return markdown
     }else if(params.format === 'chunks'){
       const splitter = new SbdSplitter({...this.options.splitter, ...params.splitter});
-      return splitter.split(markdown)
+      return splitter.splitText(markdown)
     }
     
   }
@@ -52,7 +50,8 @@ export class ParserService {
           headers: headers,
           body: form
       });
-      return response.data;
+      const data = await response.json(); // Parse the response as JSON
+      return data
     } catch (error) {
         console.error(error);
     }
@@ -129,10 +128,35 @@ export const getOptions = (app) => {
     renderFormat: app.get('parser')?.nlm?.renderFormat || 'all',
     splitter:{
       chunkSize: app.get('parser')?.nlm?.splitter?.chunkSize || 10000,
-      chunkSize: app.get('parser')?.nlm?.splitter?.softChunkSize || 3000,
+      softMaxChunkSize: app.get('parser')?.nlm?.splitter?.softMaxChunkSize || 3000,
+      delimiters: app.get('parser')?.nlm?.splitter?.delimiters || [
+          '\n# ',
+          '\n## ',
+          '\n### ',
+          '\n#### ',
+          '\n##### ',
+          '\n###### ',
+          '```\n\n',
+          '\n\n***\n\n',
+          '\n\n---\n\n',
+          '\n\n___\n\n',
+          '\n\n',
+          '\n',
+          '&#&#&#',
+          ' ',
+          ''
+      ]
     }
   }
 }
 
 
 
+function replaceUnicodeFFFD(str) {
+  if (typeof str !== 'string') {
+      console.log(typeof String)
+      console.log(str)
+      return str;
+  }
+  return str.replace(/\ufffd/g, ' ');
+}
