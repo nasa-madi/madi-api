@@ -1,8 +1,9 @@
 import { ParserService, getOptions } from './parser.class.js'
+import { authorizeHook } from '../../auth/authorize.hook.js'
+import { authenticate } from '@feathersjs/authentication'
 
 export const parserPath = 'parser'
 export const parserMethods = ['create']
-
 export * from './parser.class.js'
 export * from './parser.schema.js'
 
@@ -21,7 +22,10 @@ export const parser = (app) => {
       all: []
     },
     before: {
-      all: [],
+      all: [
+        authenticate('googleIAP'),
+        authorizeHook,
+      ],
       find: [],
       get: [],
       create: [],
