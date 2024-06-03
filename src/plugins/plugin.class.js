@@ -5,10 +5,7 @@ const ajv = new Ajv();
 
 
 export default class BasePlugin {
-  /**
-   * Create a CAS Scenario plugin.
-   * @param {PluginOptions} [options] - The plugin options.
-   */
+
   constructor(options) {
     this.documents = options.documents || [];
     this.chunks = options.chunks || [];
