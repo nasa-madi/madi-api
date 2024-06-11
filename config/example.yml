@@ -1,0 +1,28 @@
+## These have to be uploaded to each environment as a secret
+# gcloud secrets create example-env-overrides --data-file="./config/example.yml"
+
+file: example
+host: dev.example.com
+debug: true
+verbose: true
+postgresql:
+  connection:
+    host: 10.0.0.1
+    user: example_user
+    password: example_password
+    database: example_db
+  debug: true
+api_keys:
+  serpapi_key: XXXXXXXXXXXXXXXXXXXXXXXXXXX
+  google_search_api_key: XXXXXXXXXXXXXXXXXXXXXXXXXXX
+  google_search_api_id: XXXXXXXXXXXXXXXXXXXXXXXXXXX
+openai: 
+  key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXX
+  use_proxy: false
+storage:
+  bucket: sample-bucket2
+  local: false
+authentication:
+  secret: XXXXXXXXXXXXXXXXXXXXXXXXXXX
+  superadmin:
+    - superadmin@example.com
