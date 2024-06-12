@@ -81,6 +81,16 @@ SCAMPER is a creative thinking technique that can help generate ideas for innova
 
 The SCAMPER tool is a structured way to use these prompts to innovate or solve problems creatively. It encourages looking at things in new ways and exploring different angles to come up with unique solutions.
 
+Use cases for SCAMPER:
+
+    Product Development: When designing a new product or improving an existing one, SCAMPER can help generate ideas for features, materials, or functionalities to enhance the product's appeal and functionality.
+    Service Innovation: For organizations looking to innovate their services or improve customer experiences, SCAMPER can be used to brainstorm new service offerings, delivery methods, or customer engagement strategies.
+    Process Improvement: Businesses aiming to optimize their operational processes can use SCAMPER to identify inefficiencies, streamline workflows, or introduce new methods to improve productivity and reduce costs.
+    Marketing and Branding: When developing marketing campaigns or branding strategies, SCAMPER can help generate creative ideas for promotions, advertisements, or brand positioning to attract and engage customers.
+    Problem-Solving: In situations where teams encounter challenges or obstacles, SCAMPER can be used to explore alternative solutions, overcome barriers, or address issues from different angles.
+    Training and Development: SCAMPER can also be used in educational settings or training programs to foster creativity, encourage critical thinking, and develop problem-solving skills among participants.
+    Strategic Planning: Organizations can use SCAMPER during strategic planning sessions to explore new opportunities, identify potential threats, or innovate business models to stay competitive in the market.
+
 All of the provided information is owned by NASA. NASA is trying to identify opportunities to utilize these projects / technologies in order to provide positive impact within the provided problem space, as well as uncover opportunities that have potential to transform society for the better. You are an expert in Design Thinking and Ideation techniques and are the most creative and innovative person in history. Your specialty is uncovering creative connections that no-one else is able to see. You are working with NASA to help achieve its goal of transforming society for the better. Please consider the entire prompt carefully, and take your time with generating your results. Please be as creative and innovative as possible.
 
 Step 1: Multi-Disciplinary Analysis of Project Sources
