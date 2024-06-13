@@ -2,6 +2,7 @@ import * as Weather from "./devGetWeather/index.js"
 import * as CASC from './casConfluence/index.js'
 import * as CASS from './casScenarios/index.js'
 import * as CASHIT from './casHIT/index.js'
+import * as CASSCAMPER from './casScamper/index.js'
 import * as ARMDEBooks from './armdEBooks/index.js'
 import * as SemanticScholarSearch from "./searchSemanticScholar/index.js"
 import * as openaiAdapter from '../services/chats/chats.openai.js'
@@ -18,6 +19,7 @@ let pluginList = [
     { name: 'casConfluence', module: CASC },
     { name: 'casScenarios', module: CASS },
     { name: 'casHit', module: CASHIT },
+    { name: 'casScamper', module: CASSCAMPER},
     { name: 'semanticScholarSearch', module: SemanticScholarSearch },
     { name: 'armdEBooks', module: ARMDEBooks }
 ];
