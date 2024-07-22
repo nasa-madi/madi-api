@@ -7,7 +7,7 @@ import { iff, isProvider } from 'feathers-hooks-common'
 
 import { configurationValidator } from './configuration.js'
 import { logError, logErrorExternal } from './hooks/log-error.js'
-import { postgresql } from './postgresql.js'
+import { postgresql, automigrate, autoseed } from './postgresql.js'
 
 import { authentication } from './auth/authentication.js'
 import multer from '@koa/multer';

@@ -24,6 +24,8 @@ postgresql:
   #   createTimeoutMillis: 30000
   #   acquireTimeoutMillis: 60000
   debug: false
+  automigrate: false
+  autoseed: false
 
 # API KEYS
 openai: 
