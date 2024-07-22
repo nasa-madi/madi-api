@@ -1,3 +1,4 @@
 config/local.*
 config/develop.*
+config/test.*
 config/production.*
