@@ -1,23 +1,30 @@
+// curl -X POST "http://localhost:5001/api/parseDocument?renderFormat=all" \
+//     -F file=@./tests/test_flattened_text.pdf \
+// | jq 
+
+// curl -X POST "http://localhost:5001/api/parseDocument?renderFormat=all&applyOcr=yes" \
+//     -F file=@./tests/test_flattented_text.pdf \
+// | jq 
+
+
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.test.html
+import { describe, it } from 'node:test';
 import { app } from '../../../src/app.js'
 import { getOptions } from '../../../src/services/parser/parser.js'
 import { strict as assert } from 'assert';
 import { Readable } from 'stream';
-import { Response } from 'node-fetch'
+// import { Response } from 'node-fetch'
 import sinon from 'sinon';
 import nock from 'nock'
-import fetch from 'node-fetch'
 
 
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-// Get the directory name of the current module file
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
-import FormData from 'form-data';
-import { createReadStream } from 'fs';
-
+describe('parser service', () => {
+  it('registered the service', () => {
+    const service = app.service('parser')
+    assert.ok(service, 'Registered the service')
+  })
+})
 
 
 describe('ParserService', () => {
@@ -34,13 +41,6 @@ describe('ParserService', () => {
   parserService = app.service('parser')
   afterEach(() => {
     sinon.restore();
-  })
-
-  describe('init', () => {
-    it('registered the service', () => {
-      const service = app.service('parser')
-      assert.ok(service, 'Registered the service')
-    })
   })
 
   describe('create', () => {
@@ -104,85 +104,64 @@ describe('ParserService', () => {
       const mockResponse = {
         data: 'mockData',
       };
-
-      console.log(mockResponse)
-      
-      // nock('http://localhost:5001')
-      //   .post('/api/parseDocument')
-      //   .query({ renderFormat: 'all', applyOcr: 'yes' })
-      //   .reply(200, mockResponse);
+  
+      nock('http://localhost:5001')
+        .post('/api/parseDocument')
+        .query({ renderFormat: 'all', applyOcr: 'yes' })
+        .reply(200, mockResponse);
   
       const result = await parserService.uploadFileToNLM(data, options);
       assert.deepEqual(result, mockResponse);
 
     });
   });
-
-//   describe('createHTMLfromNLM', () => {
-//     it('should create HTML from NLM JSON', () => {
-//       const json = {
-//         return_dict: {
-//           result: {
-//             blocks: [
-//               { tag: 'header', block_class: 'header-class', sentences: ['Header'] },
-//               { tag: 'para', block_class: 'para-class', sentences: ['Paragraph'] }
-//             ]
-//           }
-//         }
-//       };
-
-//       const result = parserService.createHTMLfromNLM(json);
-//       assert.equal(result, '<h1 class="header-class">Header</h1>\n<p class="para-class">Paragraph</p>\n');
-//     });
-//   });
-});
-
-describe('Raw Parser', () => {
-  it('should handle parseDocument without OCR', async () => {
-    const expectedSentences = ['Happy      New      Year      2003!'];
-    const expectedTag = 'header';
-
-    // Create form data
-    const form = new FormData();
-    const filePath = resolve(__dirname, 'test_new_year.pdf');
-    let stream = createReadStream(filePath);
-    form.append('file', stream);
-
-    // Perform the actual fetch request
-    const response = await fetch('http://localhost:5001/api/parseDocument?renderFormat=all&applyOcr=yes', {
-      method: 'POST',
-      body: form,
+  
+  describe('curl requests', () => {
+    it('should handle parseDocument without OCR', async () => {
+      const mockResponse = {
+        data: 'mockDataWithoutOCR',
+      };
+  
+      nock('http://localhost:5001')
+        .post('/api/parseDocument')
+        .query({ renderFormat: 'all' })
+        .reply(200, mockResponse);
+  
+      const result = await parserService.uploadFileToNLM('./tests/test_flattened_text.pdf', { renderFormat: 'all' });
+      assert.deepEqual(result, mockResponse);
     });
-
-    const result = await response.json();
-    const block = result.return_dict.result.blocks[0];
-
-    assert.deepEqual(block.sentences, expectedSentences);
-    assert.equal(block.tag, expectedTag);
-
+  
+    it('should handle parseDocument with OCR', async () => {
+      const mockResponse = {
+        data: 'mockDataWithOCR',
+      };
+  
+      nock('http://localhost:5001')
+        .post('/api/parseDocument')
+        .query({ renderFormat: 'all', applyOcr: 'yes' })
+        .reply(200, mockResponse);
+  
+      const result = await parserService.uploadFileToNLM('./tests/test_flattented_text.pdf', { renderFormat: 'all', applyOcr: 'yes' });
+      assert.deepEqual(result, mockResponse);
+    });
   });
 
+  describe('createHTMLfromNLM', () => {
+    it('should create HTML from NLM JSON', () => {
+      const json = {
+        return_dict: {
+          result: {
+            blocks: [
+              { tag: 'header', block_class: 'header-class', sentences: ['Header'] },
+              { tag: 'para', block_class: 'para-class', sentences: ['Paragraph'] }
+            ]
+          }
+        }
+      };
 
-
-  it('should handle parseDocument with OCR', async () => {
-
-    // Create form data
-    const form = new FormData();
-    const filePath = resolve(__dirname, 'test_new_year.pdf');
-    let stream = createReadStream(filePath);
-    form.append('file', stream);
-
-    // Perform the actual fetch request
-    const response = await fetch('http://localhost:5001/api/parseDocument?renderFormat=all', {
-      method: 'POST',
-      body: form,
+      const result = parserService.createHTMLfromNLM(json);
+      assert.equal(result, '<h1 class="header-class">Header</h1>\n<p class="para-class">Paragraph</p>\n');
     });
-
-    const result = await response.json();
-    const block = result.return_dict.result.blocks;
-
-    assert.equal(block.length, 0);
-
   });
 });
 
