@@ -30,7 +30,7 @@ export const automigrate = async (app) => {
   // knex.migrate.list([config])
   let list = await db.migrate.list()
   if(list.length < 3 && config.automigrate){
-    await knex.migrate.latest()
+    await db.migrate.latest()
     logger.info('AUTOMIGRATE: Migrations complete')
 
   }else{
@@ -44,10 +44,9 @@ export const autoseed = async (app) => {
   if(config.autoseed){
     logger.info('AUTOSEED: Automigrating database')  
     const db = knex(config)
-    // knex.migrate.list([config])
     let list = await db.migrate.list()
-    if(list.length < 3 && config.automigrate){
-      await knex.seed.run()
+    if(list.length < 3 && config.autoseed){
+      await db.seed.run()
       logger.info('AUTOSEED: Seeding complete')
     }else{
       logger.info('AUTOSEED: Seeding skipped')
