@@ -13,4 +13,6 @@ storage:
   bucket: docker-bucket
   apiEndpoint: http://storage:9023
   baseUrl: storage:9023
-
+authentication:
+  superadmin: 
+    - superadmin@example.com

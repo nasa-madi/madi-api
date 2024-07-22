@@ -44,6 +44,10 @@ app.configure(rest())
 
 app.configure(postgresql)
 
+app.configure(automigrate) // determines if migrations should be run for new build
+
+app.configure(autoseed) // determines if seeds should be run for new build
+
 app.configure(authentication)
 
 app.configure(services)
