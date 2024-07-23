@@ -7,10 +7,9 @@ import { iff, isProvider } from 'feathers-hooks-common'
 
 import { configurationValidator } from './configuration.js'
 import { logError, logErrorExternal } from './hooks/log-error.js'
-import { postgresql } from './postgresql.js'
+import { postgresql, automigrate, autoseed } from './postgresql.js'
 
 import { authentication } from './auth/authentication.js'
-import multer from '@koa/multer';
 import { services } from './services/index.js'
 import koaQs from 'koa-qs' //override koa's default query string function to allow nested fields
 import { decoder } from './services/utils/numericDecoder.js';
@@ -24,6 +23,8 @@ import { openaiConfig } from './services/utils/cacheProxy.js'
 
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))
+
+console.log('\n\nCONFIGURATION: ', app.get('file'),'\n\n')
 
 // Set up Koa middleware
 app.use(cors())
@@ -44,9 +45,9 @@ app.configure(rest())
 
 app.configure(postgresql)
 
-app.configure(authentication)
-
 app.configure(services)
+
+app.configure(authentication)
 
 app.configure(feathersCasl());
 
@@ -67,6 +68,7 @@ app.hooks({
     ]
   }
 })
+
 // Register application setup and teardown hooks here
 app.hooks({
   setup: [],

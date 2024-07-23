@@ -19,6 +19,9 @@ services:
     environment:
       - NODE_ENV=development
       - NODE_CONFIG_ENV=docker
+      # - MIGRATION=true
+      # - SEED=true
+      # TODO: Setup instructions for this step in docs
     ports:
       - "3030:3030"
     networks:

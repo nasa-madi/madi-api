@@ -1,7 +1,8 @@
 ## These have to be uploaded to each environment as a secret
 # gcloud secrets create ${ENV}-env-overrides --data-file="./config/${ENV}.yml"
-file: docker.yml
+file: simple.yml
 postgresql:
+  debug: false
   connection:
     host: database
   automigrate: true

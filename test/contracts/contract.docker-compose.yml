@@ -13,7 +13,7 @@ services:
     build: ${PWD}/ # must be relative to the compose file
     environment:
       - NODE_ENV=development
-      - NODE_CONFIG_ENV=docker
+      - NODE_CONFIG_ENV=contract-test
       - MIGRATION=true
       - SEED=true
       - OPENAI_API_KEY=${OPENAI_API_KEY}
