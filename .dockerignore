@@ -2,3 +2,7 @@ config/local.*
 config/develop.*
 config/test.*
 config/production.*
+node_modules
+ignore
+cache
+.git

@@ -2,7 +2,6 @@
 # gcloud secrets create ${ENV}-env-overrides --data-file="./config/${ENV}.yml"
 file: docker.yml
 postgresql:
-  debug: false
   connection:
     host: database
   automigrate: true

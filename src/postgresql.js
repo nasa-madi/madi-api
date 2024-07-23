@@ -14,27 +14,30 @@ knex.QueryBuilder.extend('cosineDistanceAs', function(column, value, name) {
   return this.client.raw('?? <=> ? as ??', [column, toSql(value), name]);
 });
 
-export const postgresql = (app) => {
+export const postgresql = async (app) => {
   const config = app.get('postgresql')
   const db = knex(config)
-
   app.set('postgresqlClient', db)
+
+  await automigrate(app)
+  await autoseed(app)
+
 }
 
 
 export const automigrate = async (app) => {
-  logger.info('AUTOMIGRATE: Automigrating database')
   const config = app.get('postgresql')
+  if(config.automigrate){
+    logger.info('AUTOMIGRATE: Automigrating database')
+    const db = knex(config)
+    let list = await db.migrate.list()
+    if(list[0].length < 3){
+      await db.migrate.latest()
+      logger.info('AUTOMIGRATE: Migrations complete')
   
-  const db = knex(config)
-  // knex.migrate.list([config])
-  let list = await db.migrate.list()
-  if(list.length < 3 && config.automigrate){
-    await db.migrate.latest()
-    logger.info('AUTOMIGRATE: Migrations complete')
-
-  }else{
-    logger.info('AUTOMIGRATE: Migrations skipped')
+    }else{
+      logger.info('AUTOMIGRATE: Migrations skipped')
+    }
   }
 }
 
@@ -42,10 +45,10 @@ export const autoseed = async (app) => {
   const config = app.get('postgresql')
 
   if(config.autoseed){
-    logger.info('AUTOSEED: Automigrating database')  
+    logger.info('AUTOSEED: Autoseeding database')  
     const db = knex(config)
-    let list = await db.migrate.list()
-    if(list.length < 3 && config.autoseed){
+    let users = await db('users').select()
+    if(users.length < 3){
       await db.seed.run()
       logger.info('AUTOSEED: Seeding complete')
     }else{
