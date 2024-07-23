@@ -41,6 +41,7 @@
     "test:services:mocha:dev": "cross-env NODE_CONFIG_ENV=local-test npm run mocha",
     "test:contract": "npx newman run ./specifications/contract.postman_collection.json --folder setup --folder chunks",
     "bundle:client": "npm pack --pack-destination ./public",
+    "knex": "knex --debug",
     "migrate": "knex migrate:latest --debug",
     "migrate:make": "knex migrate:make",
     "seed:admin": "knex seed:run --specific=dev-admin.js",

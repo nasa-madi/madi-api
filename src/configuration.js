@@ -12,11 +12,3 @@ export const configurationSchema = Type.Intersect([
 ])
 
 export const configurationValidator = getValidator(configurationSchema, dataValidator)
-
-export const automigrate = (app) => {
-  
-}
-
-export const autoseed = (app) => {
-  
-}

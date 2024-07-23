@@ -50,6 +50,8 @@ config/*
 !config/default*
 !config/custom*
 !config/docker.yml
+!config/simple.yml
+!config/contract-test.yml
 
 cache/*
 ignore/

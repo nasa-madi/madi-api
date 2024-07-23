@@ -2,4 +2,6 @@ port:
   __name: "PORT"
   __format: number
 openai:
-  key: OPENAI_API_KEY
+  key: 
+    __name: "OPENAI_API_KEY"
+    __format: string
