@@ -1,14 +1,15 @@
-openapi: '3.0.2'
+openapi: 3.0.2
 info:
   title: API Title
-  version: '1.0'
+  version: "1.0"
 servers:
   - url: https://api.server.test/v1
 security:
   - bearerAuth: []
 tags:
   - name: Tool
-    description: Tools available to the authenticated user that will be included with their chat completion requests.
+    description: Tools available to the authenticated user that will be included
+      with their chat completion requests.
 paths:
   /tools:
     get:
@@ -16,7 +17,8 @@ paths:
         - Tool
       summary: Returns tool based on query parameters
       operationId: getTools
-      description: By including the appropriate query string parameters, search &return relevant tools records.
+      description: By including the appropriate query string parameters, search
+        &return relevant tools records.
       responses:
         "200":
           description: includes the results matching query string criteria
@@ -25,7 +27,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ToolResponseArray"
               examples:
-                "example_tool_get_res_0":
+                example_tool_get_res_0:
                   $ref: "#/components/examples/example_tool_get_res_0"
         "400":
           description: bad input parameter
@@ -45,7 +47,7 @@ paths:
             schema:
               $ref: "#/components/schemas/Tool"
             examples:
-              "example_tool_post_req_0":
+              example_tool_post_req_0:
                 $ref: "#/components/examples/example_tool_post_req_0"
       responses:
         "201":
@@ -59,9 +61,8 @@ paths:
                     items:
                       $ref: "#/components/schemas/Tool"
               examples:
-                "example_tool_post_res_0":
+                example_tool_post_res_0:
                   $ref: "#/components/examples/example_tool_post_res_0"
-                  
         "400":
           description: invalid input, object invalid
           content:
@@ -74,6 +75,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /undefined:
+    get: {}
+    post: {}
 components:
   schemas:
     Error:
@@ -103,7 +107,6 @@ components:
           $ref: "#/components/schemas/Error"
       required:
         - error
-    
     ToolResponseArray:
       type: object
       required:
@@ -122,7 +125,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Tool"
-    
     Tool:
       type: object
       properties:
@@ -153,15 +155,13 @@ components:
               - id
               - type
               - function
-
-
   examples:
     example_tool_get_res_0:
       value:
         total: 1
         limit: 10
         skip: 0
-        data: 
+        data:
           - type: function
             function:
               name: get_current_weather
@@ -175,11 +175,10 @@ components:
                   unit:
                     type: string
                     enum:
-                    - celsius
-                    - fahrenheit
+                      - celsius
+                      - fahrenheit
                 required:
-                - location
-    
+                  - location
     example_tool_post_req_0:
       value:
         id: call_XXXXIYR0JNTemNUCW8oBcxzpD
@@ -187,10 +186,62 @@ components:
         function:
           name: get_current_weather
           arguments: '{"location": "San Francisco, CA","unit": "celsius"}'
-
     example_tool_post_res_0:
       value:
         role: tool
         tool_call_id: call_JWCIYR0JNTemNUCW8oBcxzpD
         name: get_current_weather
-        content: '{"location": "San Francisco, CA", "temperature": "10", "unit": "celsius"}'
+        content: '{"location": "San Francisco, CA", "temperature": "10", "unit":
+          "celsius"}'
+    tools_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    tools_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: []
+    tools_post_default:
+      value: {}
+    tools_post_array:
+      value: []
+    tools_id_default:
+      $ref: "#/components/examples/tools_post_default"
+    tools_id_patch_default:
+      value: {}
+    tools_id_put_default:
+      value: {}
+    tools_id_delete_default:
+      value: {}
+  responses:
+    Tool_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tool"
+          examples:
+            tools_default:
+              $ref: "#/components/examples/tools_default"
+            tools_zero:
+              $ref: "#/components/examples/tools_zero"

@@ -38,9 +38,9 @@ paths:
                   items:
                     $ref: "#/components/schemas/Upload"
             examples:
-              "${names}_post_default":
+              ${names}_post_default:
                 $ref: "#/components/examples/uploads_post_default"
-              "${names}_post_array":
+              ${names}_post_array:
                 $ref: "#/components/examples/uploads_post_array"
       responses:
         "201":
@@ -54,9 +54,9 @@ paths:
                     items:
                       $ref: "#/components/schemas/Upload"
               examples:
-                "${names}_post_default":
+                ${names}_post_default:
                   $ref: "#/components/examples/uploads_post_default"
-                "${names}_post_array":
+                ${names}_post_array:
                   $ref: "#/components/examples/uploads_post_array"
         "400":
           description: invalid input, object invalid
@@ -76,7 +76,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  "/uploads/{uploadId}":
+  /uploads/{uploadId}:
     get:
       tags:
         - uploads
@@ -178,6 +178,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /undefined:
+    get: {}
+    post: {}
 components:
   responses:
     Upload_FJS_Array:
@@ -227,13 +230,16 @@ components:
         total: 2
         limit: 10
         skip: 0
-        data: uploads_default
+        data: []
     uploads_post_default:
       value: {}
-    uploads_post_array: {}
+    uploads_post_array:
+      value: []
     uploads_id_default:
       $ref: "#/components/examples/uploads_post_default"
     uploads_id_patch_default:
       value: {}
-    uploads_id_put_default: {}
-    uploads_id_delete_default: {}
+    uploads_id_put_default:
+      value: {}
+    uploads_id_delete_default:
+      value: {}

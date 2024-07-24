@@ -1,0 +1,62 @@
+paths:
+  /utils:
+    get: {}
+    post: {}
+components:
+  responses:
+    Util_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Util"
+          examples:
+            utils_default:
+              $ref: "#/components/examples/utils_default"
+            utils_zero:
+              $ref: "#/components/examples/utils_zero"
+  schemas:
+    Util:
+      type: object
+      properties: {}
+  examples:
+    utils_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    utils_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: []
+    utils_post_default:
+      value: {}
+    utils_post_array:
+      value: []
+    utils_id_default:
+      $ref: "#/components/examples/utils_post_default"
+    utils_id_patch_default:
+      value: {}
+    utils_id_put_default:
+      value: {}
+    utils_id_delete_default:
+      value: {}

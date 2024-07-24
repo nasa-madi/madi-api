@@ -28,7 +28,8 @@ console.log('\n\nCONFIGURATION: ', app.get('file'),'\n\n')
 
 // Set up Koa middleware
 app.use(cors())
-app.use(serveStatic('specifications/build'))
+// app.use(serveStatic('specifications/build'))
+app.use(serveStatic('public'))
 app.use(errorHandler())
 app.use(parseAuthentication())
 app.use(bodyParser({

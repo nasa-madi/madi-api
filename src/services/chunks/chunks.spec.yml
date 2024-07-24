@@ -1,0 +1,62 @@
+paths:
+  /undefined:
+    get: {}
+    post: {}
+components:
+  responses:
+    Chunk_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Chunk"
+          examples:
+            chunks_default:
+              $ref: "#/components/examples/chunks_default"
+            chunks_zero:
+              $ref: "#/components/examples/chunks_zero"
+  schemas:
+    Chunk:
+      type: object
+      properties: {}
+  examples:
+    chunks_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    chunks_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: []
+    chunks_post_default:
+      value: {}
+    chunks_post_array:
+      value: []
+    chunks_id_default:
+      $ref: "#/components/examples/chunks_post_default"
+    chunks_id_patch_default:
+      value: {}
+    chunks_id_put_default:
+      value: {}
+    chunks_id_delete_default:
+      value: {}

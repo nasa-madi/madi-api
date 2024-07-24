@@ -1,0 +1,110 @@
+paths:
+  /parser:
+    get: {}
+    post:
+      tags:
+        - parsers
+      summary: adds a new parser
+      operationId: postParser
+      description: Creates a new parser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/Parser"
+                - type: array
+                  items:
+                    $ref: "#/components/schemas/Parser"
+      responses:
+        "201":
+          description: Parser created.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Parser"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Parser"
+              examples:
+                ${names}_post_default:
+                  $ref: "#/components/examples/parsers_post_default"
+                ${names}_post_array:
+                  $ref: "#/components/examples/parsers_post_array"
+        "400":
+          description: invalid input, object invalid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: that parser already exists
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  responses:
+    Parser_FJS_Array:
+      description: includes the results matching query string criteria
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - total
+              - limit
+              - skip
+              - data
+            properties:
+              total:
+                type: integer
+              limit:
+                type: integer
+              skip:
+                type: integer
+              data:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Parser"
+          examples:
+            parsers_default:
+              $ref: "#/components/examples/parsers_default"
+            parsers_zero:
+              $ref: "#/components/examples/parsers_zero"
+  schemas:
+    Parser:
+      type: object
+      properties: {}
+  examples:
+    parsers_zero:
+      value:
+        total: 0
+        limit: 10
+        skip: 0
+        data: []
+    parsers_default:
+      value:
+        total: 2
+        limit: 10
+        skip: 0
+        data: []
+    parsers_post_default:
+      value: {}
+    parsers_post_array:
+      value: []
+    parsers_id_default:
+      $ref: "#/components/examples/parsers_post_default"
+    parsers_id_patch_default:
+      value: {}
+    parsers_id_put_default:
+      value: {}
+    parsers_id_delete_default:
+      value: {}

@@ -38,9 +38,9 @@ paths:
                   items:
                     $ref: "#/components/schemas/User"
             examples:
-              "${names}_post_default":
+              ${names}_post_default:
                 $ref: "#/components/examples/users_post_default"
-              "${names}_post_array":
+              ${names}_post_array:
                 $ref: "#/components/examples/users_post_array"
       responses:
         "201":
@@ -54,9 +54,9 @@ paths:
                     items:
                       $ref: "#/components/schemas/User"
               examples:
-                "${names}_post_default":
+                ${names}_post_default:
                   $ref: "#/components/examples/users_post_default"
-                "${names}_post_array":
+                ${names}_post_array:
                   $ref: "#/components/examples/users_post_array"
         "400":
           description: invalid input, object invalid
@@ -76,7 +76,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  "/users/{userId}":
+  /users/{userId}:
     get:
       tags:
         - users
@@ -178,6 +178,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /undefined:
+    get: {}
+    post: {}
 components:
   responses:
     User_FJS_Array:
@@ -229,13 +232,16 @@ components:
         total: 2
         limit: 10
         skip: 0
-        data: users_default
+        data: []
     users_post_default:
       value: {}
-    users_post_array: {}
+    users_post_array:
+      value: []
     users_id_default:
       $ref: "#/components/examples/users_post_default"
     users_id_patch_default:
       value: {}
-    users_id_put_default: {}
-    users_id_delete_default: {}
+    users_id_put_default:
+      value: {}
+    users_id_delete_default:
+      value: {}
