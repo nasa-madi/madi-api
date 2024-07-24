@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Turndown from 'turndown'
-import BasePlugin from '../plugin.class.js'
+import { BasePlugin } from 'madi-plg-base-class'
 var turndownService = new Turndown()
 
 const TOOLNAME = 'search_cas_confluence'

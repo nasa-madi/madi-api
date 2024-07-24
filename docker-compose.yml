@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   ## This is the mock API available at port 8080
   api_mock:
@@ -16,14 +14,18 @@ services:
   ##     and may not be the same image as built under the /api folder directly
   api:
     build: .
+    command: node src/index.js
     environment:
       - NODE_ENV=development
       - NODE_CONFIG_ENV=docker
-      # - MIGRATION=true
-      # - SEED=true
-      # TODO: Setup instructions for this step in docs
+      - PLUGINS={"development":["casConfluence"]}
     ports:
       - "3030:3030"
+    volumes:
+      # adds the plugin folder
+      - ./plugins:/app/plugins
+      # adds the base class plugin
+      - ./plugins/madi-plg-base-class:/app/node_modules/madi-plg-base-class
     networks:
       - madi
     depends_on:

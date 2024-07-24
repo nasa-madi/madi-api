@@ -1,9 +1,10 @@
 import fetch from 'node-fetch';
+import { BasePlugin } from 'madi-plg-base-class'
 
 /************** NEW STRUCTURE VERSION *************/  
 const TOOLNAME = 'search_semantic_scholar'
 
-export class Plugin {
+export class Plugin extends BasePlugin {
 
   constructor(options) {
     this.documents = options?.documents;

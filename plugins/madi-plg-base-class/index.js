@@ -4,7 +4,7 @@ import Ajv from 'ajv';
 const ajv = new Ajv();
 
 
-export default class BasePlugin {
+export class BasePlugin {
 
   constructor(options) {
     this.documents = options.documents || [];
@@ -43,6 +43,7 @@ export default class BasePlugin {
   }
 }
 
+export default BasePlugin;
 
 // Define the schema using TypeBox
 const descriptionSchema = Type.Object({

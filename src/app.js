@@ -13,7 +13,7 @@ import { authentication } from './auth/authentication.js'
 import { services } from './services/index.js'
 import koaQs from 'koa-qs' //override koa's default query string function to allow nested fields
 import { decoder } from './services/utils/numericDecoder.js';
-import { plugins } from './plugins/index.js'
+import { plugins } from './plugins.js'
 import parseRpcVerb from 'feathers-rpc'
 
 const app = koaQs(koa(feathers()),'extended',{ decoder }) 

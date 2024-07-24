@@ -8,21 +8,32 @@ RUN apk update && apk add --no-cache curl
 COPY package.json ./
 COPY package-lock.json ./
 
-RUN npm ci --production
+# Install dependencies (include dev dependencies for development)
+RUN npm ci
 
-COPY . ./
+COPY . .
 
-# RUN npm run spec:build
+# Ensure the proper user permissions (adjust the user as necessary)
+RUN chown -R node:node /app
+
+# Switch to a non-root user
+USER node
+
+# Expose the port
+EXPOSE 3030
+
+# Start the application
+CMD ["npm", "start"]
 
 
-CMD sh -c ' \
-  echo "SEED $SEED"; \
-  echo "MIGRATION $MIGRATION"; \
-  if [ "${MIGRATION:-false}" = "true" ]; then \
-    npm run migrate; \
-  fi; \
-  if [ "${SEED:-false}" = "true" ]; then \
-    npm run seed:admin; \
-  fi; \
-  npm start \
-'
+# CMD sh -c ' \
+#   echo "SEED $SEED"; \
+#   echo "MIGRATION $MIGRATION"; \
+#   if [ "${MIGRATION:-false}" = "true" ]; then \
+#     npm run migrate; \
+#   fi; \
+#   if [ "${SEED:-false}" = "true" ]; then \
+#     npm run seed:admin; \
+#   fi; \
+#   npm start \
+# '

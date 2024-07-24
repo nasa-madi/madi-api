@@ -1,4 +1,5 @@
-import BasePlugin from '../plugin.class.js'
+import { BasePlugin } from 'madi-plg-base-class'
+
 
 const TOOLNAME = "get_current_weather"
 
