@@ -8,14 +8,17 @@ export const authentication = async (app) => {
   authentication.register('googleIAP', new GoogleIAPStrategy());
 
   app.use('authentication', authentication)
-  let knex = app.get('postgresqlClient')
+}
 
-  // This code should set the superadmin credentials of the emails listed in the config files
+// This code should set the superadmin credentials of the emails listed in the config files
+export const registerSuperAdmins = async ({app}, next) => {
   let { superadmin } = app.get('authentication');
+  let knex = app.get('postgresqlClient')
   superadmin = superadmin || []
   for (const email of superadmin) {
     await knex('users')
       .where({ email })
       .update({ role: 'superadmin' });
   }
+  await next()
 }

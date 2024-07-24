@@ -18,14 +18,10 @@ export const postgresql = async (app) => {
   const config = app.get('postgresql')
   const db = knex(config)
   app.set('postgresqlClient', db)
-
-  await automigrate(app)
-  await autoseed(app)
-
 }
 
 
-export const automigrate = async (app) => {
+export const automigrate = async ({app},next) => {
   const config = app.get('postgresql')
   if(config.automigrate){
     logger.info('AUTOMIGRATE: Automigrating database')
@@ -39,9 +35,10 @@ export const automigrate = async (app) => {
       logger.info('AUTOMIGRATE: Migrations skipped')
     }
   }
+  await next()
 }
 
-export const autoseed = async (app) => {
+export const autoseed = async ({app},next) => {
   const config = app.get('postgresql')
 
   if(config.autoseed){
@@ -55,4 +52,5 @@ export const autoseed = async (app) => {
       logger.info('AUTOSEED: Seeding skipped')
     }
   }
+  await next()
 }
