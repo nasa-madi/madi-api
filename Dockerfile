@@ -13,27 +13,15 @@ COPY package-lock.json ./
 RUN npm ci
 
 # Copy the rest of the application code
-COPY . .
-
-# Ensure the proper user permissions (adjust the user as necessary)
-RUN chown -R node:node /app
+COPY --chown=node:node . .
 
 # Switch to a non-root user
 USER node
+
+RUN du -h /app --max-depth=3 | sort -hr | head -n 20
 
 # Expose the port
 EXPOSE 3030
 
 # Start the application
 CMD ["npm", "start"]
-# CMD sh -c ' \
-#   echo "SEED $SEED"; \
-#   echo "MIGRATION $MIGRATION"; \
-#   if [ "${MIGRATION:-false}" = "true" ]; then \
-#     npm run migrate; \
-#   fi; \
-#   if [ "${SEED:-false}" = "true" ]; then \
-#     npm run seed:admin; \
-#   fi; \
-#   npm start \
-# '
