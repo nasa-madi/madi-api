@@ -5,12 +5,14 @@ WORKDIR /app
 # Curl is required for health checks
 RUN apk update && apk add --no-cache curl 
 
+# Copy package.json and package-lock.json first to leverage Docker cache
 COPY package.json ./
 COPY package-lock.json ./
 
 # Install dependencies (include dev dependencies for development)
 RUN npm ci
 
+# Copy the rest of the application code
 COPY . .
 
 # Ensure the proper user permissions (adjust the user as necessary)
@@ -24,8 +26,6 @@ EXPOSE 3030
 
 # Start the application
 CMD ["npm", "start"]
-
-
 # CMD sh -c ' \
 #   echo "SEED $SEED"; \
 #   echo "MIGRATION $MIGRATION"; \
