@@ -2,9 +2,6 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Curl is required for health checks
-RUN apk update && apk add --no-cache curl 
-
 # Copy package.json and package-lock.json first to leverage Docker cache
 COPY package.json ./
 COPY package-lock.json ./
@@ -18,7 +15,8 @@ COPY --chown=node:node . .
 # Switch to a non-root user
 USER node
 
-RUN du -h /app --max-depth=3 | sort -hr | head -n 20
+# Curl is required for health checks
+RUN apk update && apk add --no-cache curl 
 
 # Expose the port
 EXPOSE 3030

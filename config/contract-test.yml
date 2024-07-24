@@ -1,5 +1,3 @@
-## These have to be uploaded to each environment as a secret
-# gcloud secrets create ${ENV}-env-overrides --data-file="./config/${ENV}.yml"
 file: contract-test.yml
 postgresql:
   debug: false
@@ -15,3 +13,19 @@ storage:
   bucket: docker-bucket
   apiEndpoint: http://storage:9023
   baseUrl: storage:9023
+plugins:
+  failOnImportError: true
+  path: ../plugins
+  start: index.js
+  default:
+    # - armdEBooks:
+    #     path: ../plugins
+    #     start: index.js
+    # - casHIT
+    # - casScamper
+    # - casScenarios
+    # - searchSemanticScholar
+  restricted:
+    # - searchPatents
+  development:
+    - devGetWeather
