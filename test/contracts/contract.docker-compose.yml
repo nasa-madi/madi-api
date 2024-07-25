@@ -12,7 +12,6 @@ services:
     build: ${PWD}/ # must be relative to the compose file
     environment:
       - NODE_ENV=development
-      - NODE_CONFIG_ENV=contract-test
       - MIGRATION=true
       - SEED=true
       - OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -21,7 +20,8 @@ services:
     networks:
       - madi
     volumes:
-      - ./contract-test.yml:/app/config/local.yml
+      - ${PWD}/test/contracts/plugin-loader/plugins/devGetTime:/app/plugins/devGetTime # Only used for plugin-loader tests
+      - ./${CONTRACT_TYPE}/${CONTRACT_TYPE}.yml:/app/config/local.yml
     depends_on:
       database:
         condition: service_healthy
@@ -91,7 +91,7 @@ services:
     image: postman/newman:alpine
     volumes:
       - ${PWD}/test/contracts:/etc/newman
-    command: run /etc/newman/contract.collection.json --env-var storageUrl=http://storage:9023 --env-var baseUrl=http://api:3030 --folder blueprint
+    command: run /etc/newman/contract.collection.json --env-var storageUrl=http://storage:9023 --env-var baseUrl=http://api:3030 --folder ${CONTRACT_TYPE}
     networks:
       - madi
     depends_on:
