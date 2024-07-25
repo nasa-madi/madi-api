@@ -12,11 +12,11 @@ RUN npm ci
 # Copy the rest of the application code
 COPY --chown=node:node . .
 
-# Switch to a non-root user
-USER node
-
 # Curl is required for health checks
 RUN apk update && apk add --no-cache curl 
+
+# Switch to a non-root user
+USER node
 
 # Expose the port
 EXPOSE 3030
