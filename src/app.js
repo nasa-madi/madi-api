@@ -15,6 +15,12 @@ import koaQs from 'koa-qs' //override koa's default query string function to all
 import { decoder } from './services/utils/numericDecoder.js';
 import { plugins } from './plugins.js'
 import parseRpcVerb from 'feathers-rpc'
+import { logger } from './logger.js'
+
+
+
+
+
 
 const app = koaQs(koa(feathers()),'extended',{ decoder }) 
 
@@ -24,7 +30,7 @@ import { openaiConfig } from './services/utils/cacheProxy.js'
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))
 
-console.log('\n\nCONFIGURATION: ', app.get('file'),'\n\n')
+logger.info(`CONFIGURATION: ${app.get('file')}`)
 
 // Set up Koa middleware
 app.use(cors())

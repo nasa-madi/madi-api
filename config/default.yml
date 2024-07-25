@@ -58,10 +58,10 @@ plugins:
     # - armdEBooks:
     #     path: ../plugins
     #     start: index.js
-    # - casHIT
+    - casHIT
     - casScamper
-    # - casScenarios
-    # - searchSemanticScholar
+    - casScenarios
+    - searchSemanticScholar
   restricted:
     # - searchPatents
   development:

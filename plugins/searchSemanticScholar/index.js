@@ -6,12 +6,16 @@ const TOOLNAME = 'search_semantic_scholar'
 
 export class Plugin extends BasePlugin {
 
-  constructor(options) {
-    this.documents = options?.documents;
-    this.chunks = options?.chunks;
-    this.uploads = options?.uploads;
-  }
-
+    /**
+   * Create a CAS Scenario plugin.
+   * @param {PluginOptions} [options] - The plugin options.
+   */
+    constructor(options) {
+      super({
+        ...options,
+        description
+      })
+    }
 
   /**
    * Run the SemanticScholar operation.

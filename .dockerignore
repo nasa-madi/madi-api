@@ -2,7 +2,6 @@ config/local.*
 config/develop.*
 config/test.*
 config/production.*
-plugins
 node_modules
 ignore
 cache

@@ -28,15 +28,15 @@ export const postgresql = async (app) => {
 export const automigrate = async (app) => {
   const config = app.get('postgresql')
   if(config.automigrate){
-    logger.info('AUTOMIGRATE: Automigrating database')
+    logger.info('MIGRATE: Automigrating database')
     const db = knex(config)
     let list = await db.migrate.list()
     if(list[0].length < 3){
       await db.migrate.latest()
-      logger.info('AUTOMIGRATE: Migrations complete')
+      logger.info('MIGRATE: Migrations complete')
   
     }else{
-      logger.info('AUTOMIGRATE: Migrations skipped')
+      logger.info('MIGRATE: Migrations skipped')
     }
   }
 }
@@ -45,14 +45,14 @@ export const autoseed = async (app) => {
   const config = app.get('postgresql')
 
   if(config.autoseed){
-    logger.info('AUTOSEED: Autoseeding database')  
+    logger.info('SEED: Autoseeding database')  
     const db = knex(config)
     let users = await db('users').select()
     if(users.length < 3){
       await db.seed.run()
-      logger.info('AUTOSEED: Seeding complete')
+      logger.info('SEED: Autoseeding complete')
     }else{
-      logger.info('AUTOSEED: Seeding skipped')
+      logger.info('SEED: Autoseeding skipped')
     }
   }
 }
