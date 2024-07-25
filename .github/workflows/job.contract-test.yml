@@ -1,4 +1,4 @@
-name: Plugin Tests
+name: Contract Tests
 
 on:
   workflow_call:
@@ -11,6 +11,7 @@ env:
 
 jobs:
   blueprint:
+    name: "API Blueprint Tests"
     env:
       CONTRACT_TYPE: "blueprint"
     runs-on: ubuntu-latest
@@ -43,6 +44,7 @@ jobs:
           docker compose -f ${{ env.FILE }} down
   
   plugin-loader:
+    name: "Plugin Loader Test"
     env:
       CONTRACT_TYPE: "plugin-loader"
     runs-on: ubuntu-latest
