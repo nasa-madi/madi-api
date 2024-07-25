@@ -7,9 +7,9 @@ import { iff, isProvider } from 'feathers-hooks-common'
 
 import { configurationValidator } from './configuration.js'
 import { logError, logErrorExternal } from './hooks/log-error.js'
-import { postgresql } from './postgresql.js'
+import { automigrate, autoseed, postgresql } from './postgresql.js'
 
-import { authentication } from './auth/authentication.js'
+import { authentication, registerSuperAdmins } from './auth/authentication.js'
 import { services } from './services/index.js'
 import koaQs from 'koa-qs' //override koa's default query string function to allow nested fields
 import { decoder } from './services/utils/numericDecoder.js';
@@ -57,7 +57,7 @@ app.configure(authentication)
 
 app.configure(feathersCasl());
 
-app.configure(plugins);
+// app.configure(plugins);
 
 // Register hooks that run on all service methods
 app.hooks({
@@ -77,8 +77,12 @@ app.hooks({
 
 // Register application setup and teardown hooks here
 app.hooks({
-  setup: [],
-  teardown: []
+  setup: [
+    automigrate,
+    autoseed,
+    registerSuperAdmins,
+  ],
+  teardown: [],
 })
 
 export { app }
