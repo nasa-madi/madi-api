@@ -81,16 +81,23 @@ export const plugins = async (app) => {
     let pluginList = [...defaults, ...restricted, ...development];
     logger.info(`${LOG_KEY}Initializing plugins...`);
     for (const plugin of pluginList) {
-        logger.info(`${LOG_KEY}Initializing plugin: ${plugin.name}`);
-        const instance = new plugin.module.Plugin(options);
-        const functionName = instance.describe().function.name;
 
-        toolFuncs[functionName] = (...args) => instance.run(...args);
-        toolRefreshFuncs[functionName] = (...args) => instance.refresh(...args);
-        toolDescs[functionName] = instance.describe();
-        defaultTools.push(functionName);
+        logger.info(`${LOG_KEY}Initializing plugin: ${plugin.name}`);
+
+        // create instance
+        const instance = new plugin.module.Plugin(options);
+
+        registerTools(instance)
 
         await instance.init();
     }
     logger.info(`${LOG_KEY}Plugins successfully initialized.`);
 };
+
+function registerTools(instance){
+    const functionName = instance.describe().function.name;
+    toolFuncs[functionName] = (...args) => instance.run(...args);
+    toolRefreshFuncs[functionName] = (...args) => instance.refresh(...args);
+    toolDescs[functionName] = instance.describe();
+    defaultTools.push(functionName);
+}

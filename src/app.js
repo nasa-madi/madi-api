@@ -57,7 +57,7 @@ app.configure(authentication)
 
 app.configure(feathersCasl());
 
-// app.configure(plugins);
+app.configure(plugins);
 
 // Register hooks that run on all service methods
 app.hooks({
