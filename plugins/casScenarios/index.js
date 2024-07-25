@@ -1,4 +1,4 @@
-import BasePlugin from '../plugin.class.js'
+import { BasePlugin } from 'madi-plg-base-class'
 /**
  * Class representing the SemanticScholar plugin.
  */

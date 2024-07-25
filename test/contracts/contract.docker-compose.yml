@@ -2,7 +2,6 @@
 
 services:
 
-
   #-----------------------------
   # API SERVICE
   #-----------------------------
@@ -21,6 +20,8 @@ services:
       - "3030:3030"
     networks:
       - madi
+    volumes:
+      - ./contract-test.yml:/app/config/local.yml
     depends_on:
       database:
         condition: service_healthy
@@ -65,7 +66,7 @@ services:
   # This mocks out a Google Cloud Storage server so that local testing
   # can be done with a GCS Bucket library.
   storage:
-    image: jamesmtc/madi-gcp-emulator:latest
+    image: "nasamadi/madi-storage-gcp-emulator:latest"
     environment:
       - PORT=9023
       # If you want to user ./api/uploads as the storage folder

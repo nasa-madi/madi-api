@@ -1,4 +1,4 @@
-import { toolFuncs, toolDescs, toolRefreshFuncs, defaultTools } from "../../plugins/index.js";
+import { toolFuncs, toolDescs, toolRefreshFuncs, defaultTools } from "../../plugins.js";
 
 // This is a skeleton for a custom service class. Remove or add the methods you need here
 export class ToolService {
@@ -20,6 +20,7 @@ export class ToolService {
   }
 
   async find(_params) {
+
     let authorizedTools = await this.getAuthorizedTools(_params)
 
     const sortedData = authorizedTools.sort((a, b) => {
@@ -37,6 +38,7 @@ export class ToolService {
   }
 
   async get(toolName, _params) {
+    console.log(toolFuncs,toolDescs,defaultTools)
     let { data } = await this.find(_params)
     return data.find(item => item.function.name === toolName);
   }

@@ -5,3 +5,7 @@ openai:
   key: 
     __name: "OPENAI_API_KEY"
     __format: string
+
+plugins:
+  __name: "PLUGINS"
+  __format: json

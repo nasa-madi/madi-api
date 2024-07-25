@@ -3,6 +3,7 @@ import OpenAI from 'openai'
 import fs from 'fs';
 import {default as fetch, Response } from 'node-fetch';
 import crypto from 'crypto';
+import { logger } from '../../logger.js';
 
 // dotenv.config()
 
@@ -42,10 +43,10 @@ const openaiProxy = (app) => new OpenAI({
 export const openaiConfig = (app)=>{
     let openai;
     if(app.get('openai').use_proxy){
-        console.log('Cache Enabled')
+        logger.info(`CONFIGURATION: Cache Enabled`)
         openai = openaiProxy(app)
     }else{
-        console.log('Cache Disabled')
+      logger.info(`CONFIGURATION: Cache Disabled`)
         const openaiNormal = new OpenAI({
           apiKey: app.get('openai').key
         })

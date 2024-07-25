@@ -50,7 +50,25 @@ storage:
 uploads:
   embeddingModel: text-embedding-3-small 
 
-  
+plugins:
+  failOnImportError: true
+  path: ../plugins
+  start: index.js
+  default:
+    # - armdEBooks:
+    #     path: ../plugins
+    #     start: index.js
+    - casHIT
+    - casScamper
+    - casScenarios
+    - searchSemanticScholar
+  restricted:
+    # - searchPatents
+  development:
+    - devGetWeather
+
+    
+
 authentication:
   entity: user
   service: users
