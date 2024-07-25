@@ -21,7 +21,7 @@ services:
     networks:
       - madi
     volumes:
-      - ./${CONTRACT_TYPE}.yml:/app/config/local.yml
+      - ./${CONTRACT_TYPE}/${CONTRACT_TYPE}.yml:/app/config/local.yml
     depends_on:
       database:
         condition: service_healthy
