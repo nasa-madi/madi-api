@@ -20,7 +20,6 @@ export class ToolService {
   }
 
   async find(_params) {
-    console.log(toolFuncs,toolDescs,defaultTools)
 
     let authorizedTools = await this.getAuthorizedTools(_params)
 
