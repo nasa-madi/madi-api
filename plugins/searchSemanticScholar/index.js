@@ -82,7 +82,7 @@ export const description = {
   display: "Search Semantic Scholar",
   function: {
     name: TOOLNAME,
-    description: "Search for academic papers from Semantic Scholar.",
+    description: "A powerful tool to search for academic papers and research articles from Semantic Scholar. This function allows users to perform detailed searches using various parameters such as query terms, publication dates, venues, and fields of study. It is designed to help researchers, students, and academics find relevant literature efficiently.",
     parameters: {
       type: "object",
       properties: {
