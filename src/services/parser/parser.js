@@ -23,8 +23,8 @@ export const parser = (app) => {
     },
     before: {
       all: [
-        authenticate('googleIAP'),
-        authorizeHook,
+        // authenticate('googleIAP'),
+        // authorizeHook,
       ],
       find: [],
       get: [],
