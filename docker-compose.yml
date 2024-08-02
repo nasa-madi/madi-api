@@ -83,8 +83,21 @@ services:
     ports:
       - 5001:5001
 
+  # https://github.com/adamjenkins/pillama/blob/main/docker-compose.yaml
+  ollama:
+    build: ../secureLLM
+    volumes:
+      - ollama:/root/.ollama
+    restart: always
+    container_name: ollama
+    pull_policy: always
+    tty: true
+    ports:
+      - "11434:11434"
+
 networks:
   madi:
 
 volumes:
   database-data:
+  ollama:

@@ -1,6 +1,20 @@
 import _ from 'lodash'
-import * as openaiAdapter from './chats.openai.js'
-// import * as geminiAdapter from './chats.gemini.js'
+import * as openaiAdapter from './adapters/adapter.openai.js'
+import * as ollamaAdapter from './adapters/adapter.ollama.js'
+
+
+function mapFamilyToAdapter(family){
+  switch(family){
+    // case 'gemini':
+    //   return geminiAdapter
+    case 'llama':
+      return ollamaAdapter
+    case 'gpt':
+      return openaiAdapter
+    default:
+      return openaiAdapter
+  }
+}
 
 
 export class ChatService {
@@ -13,19 +27,20 @@ export class ChatService {
     let { messages, tools, tool_choice } = data
     let stream = !!data.stream
     let options = {
-      stream,
+      stream:false,
       messages, 
       tools: (tools)?tools.map(t=>_.omit(t,['plugin','display'])):undefined, 
       tool_choice: (tools)?tool_choice:undefined
     }
 
-    return openaiAdapter.makeRequest(
-      options, // params
-      this.options.app.openai,  // shared instance
-      this.options.app.get('openai').key // API KEY
-    )
+    let Adapter = mapFamilyToAdapter(params.family)
+    let adapter = new Adapter(app)
+    return adapter.makeRequest(options)
   }
 }
+
+
+
 
 export const getOptions = (app) => {
   return { app }

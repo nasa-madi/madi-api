@@ -20,6 +20,12 @@ export * from './chats.class.js'
 export * from './chats.schema.js'
 import { Readable } from 'node:stream'
 
+function mapFamilyToParams(context) {
+  if(context.params.query.family){
+    context.params.family = context.params.query.family
+    context.params.query.family = undefined
+  }
+}
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const chat = (app) => {
@@ -47,6 +53,7 @@ export const chat = (app) => {
     },
     before: {
       all: [
+        mapFamilyToParams,
         authenticate('googleIAP'),
         authorizeHook,
         schemaHooks.validateQuery(chatQueryValidator), schemaHooks.resolveQuery(chatQueryResolver)

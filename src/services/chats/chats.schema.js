@@ -35,9 +35,10 @@ export const chatSchema = Type.Object(
           name: Type.String(),
         }, { required: ['name'] }),
       }),
-    ]))
+    ])),
+    // options: Type.Optional(Type.Object({})),
   },
-  { $id: 'Chat', additionalProperties: false }
+  { $id: 'Chat', additionalProperties: true}
 )
 export const chatValidator = getValidator(chatSchema, dataValidator)
 export const chatResolver = resolve({})
