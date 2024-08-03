@@ -2,6 +2,7 @@ import {default as fetch, Response } from 'node-fetch';
 import { SbdSplitter } from 'sbd-splitter';
 import FormData from 'form-data';
 import TurndownService from 'turndown'
+import { Readable } from 'stream'
 var turndownService = new TurndownService({headingStyle: 'atx'})
 
 
@@ -13,49 +14,69 @@ export class ParserService {
 
   async create(data, params) {
 
-    // assume data is a readStream
-    let output = await this.uploadFileToNLM(data, params)
+    let output = await this.uploadFileToNLM(params.file, this.options)
     let html = this.createHTMLfromNLM(output)
     let markdown = turndownService.turndown(html)
 
-    if(params.format === 'html'){
-      return html
-    }else if(params.format === 'markdown'){
-      return markdown
-    }else if(params.format === 'chunks'){
-      const splitter = new SbdSplitter({...this.options.splitter, ...params.splitter});
-      return splitter.splitText(markdown)
+    switch(params?.query?.format){
+      case 'html':
+        return html
+      case 'markdown':
+        return markdown
+      case 'chunks':
+        const splitter = new SbdSplitter({...this.options.splitter, ...params.splitter});
+        return splitter.splitText(markdown)
+      default:
+        return output
     }
-    
   }
 
-  async uploadFileToNLM(readStream, options){
+  async uploadFileToNLM(file, options){
     options = {...this.options, ...options} // allow overrides from local calls
     const form = new FormData();
-    form.append('file', readStream);
+    let readStream;
 
-    let url = new URL(options.path); //'http://localhost:5001/api/parseDocument'
-    url.searchParams.append('renderFormat', options.renderFormat);
-    url.searchParams.append('applyOcr', options.applyOcr);
+    // Convert buffer to readable stream if necessary
+    if (file && file.buffer && Buffer.isBuffer(file.buffer)) {
+      readStream = bufferToStream(file.buffer);
+    }
+
+    if(!readStream){
+      throw new Error('File not found')
+    }
+
+
+    form.append('file', readStream, {
+      filename: file.originalname, 
+      contentType: 'application/pdf'
+    });
+
+    let url = new URL(options.path);
+    if(options.renderFormat) url.searchParams.append('renderFormat', options.renderFormat);
+    if(options.applyOcr) url.searchParams.append('applyOcr', options.applyOcr);
 
     const headers = {
         'accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
         ...form.getHeaders()
     };
   
     try {
+      console.log('FormData contents:', form); // Debugging line
       const response = await fetch(url.toString(), {
           method: 'POST',
           headers: headers,
-          body: form
+          body: form,
+          redirect: "follow"
       });
       const data = await response.json(); // Parse the response as JSON
+      console.log('Response:', data); // Debugging line
       return data
     } catch (error) {
         console.error(error);
     }
   };
+
+
 
   createHTMLfromNLM(json) {
     const blocks = json.return_dict.result.blocks;
@@ -150,6 +171,12 @@ export const getOptions = (app) => {
   }
 }
 
+function bufferToStream(buffer) {
+  const stream = new Readable();
+  stream.push(buffer);
+  stream.push(null);
+  return stream;
+}
 
 
 function replaceUnicodeFFFD(str) {
