@@ -16,9 +16,7 @@ import { decoder } from './services/utils/numericDecoder.js';
 import { plugins } from './plugins.js'
 import parseRpcVerb from 'feathers-rpc'
 import { logger } from './logger.js'
-
-
-
+import { multer } from './hooks/multer.js'
 
 
 
@@ -32,6 +30,8 @@ app.configure(configuration(configurationValidator))
 
 logger.info(`CONFIGURATION: ${app.get('file')}`)
 
+
+
 // Set up Koa middleware
 app.use(cors())
 app.use(serveStatic('specifications/build'))
@@ -40,16 +40,20 @@ app.use(parseAuthentication())
 app.use(bodyParser({
   jsonLimit: '10mb'
 }));
+app.use(multer('file'))
+
 app.configure(openaiConfig)
 
 
 
 // Configure services and transports
-app.use(parseRpcVerb());                         
+app.use(parseRpcVerb());
 
 app.configure(rest())
 
 app.configure(postgresql)
+
+
 
 app.configure(services)
 
@@ -59,6 +63,8 @@ app.configure(feathersCasl());
 
 app.configure(plugins);
 
+
+
 // Register hooks that run on all service methods
 app.hooks({
   around: {
@@ -66,7 +72,9 @@ app.hooks({
       logError,
     ]
   },
-  before: {},
+  before: {
+    all:[]
+  },
   after: {},
   error: {
     all:[
