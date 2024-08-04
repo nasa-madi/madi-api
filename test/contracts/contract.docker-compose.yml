@@ -13,12 +13,13 @@ services:
       - MIGRATION=true
       - SEED=true
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - "3030:3030"
+    ports:
+      - 3030:3030
     networks:
       - madi
     volumes:
       - ${PWD}/test/contracts/plugin-loader/plugins/devGetTime:/app/plugins/devGetTime # Only used for plugin-loader tests
-      - ./${CONTRACT_TYPE}/${CONTRACT_TYPE}.yml:/app/config/contract.yml
+      - ./${CONTRACT_TYPE}/${CONTRACT_TYPE}.yml:/app/config/local.yml
     depends_on:
       database:
         condition: service_healthy
@@ -103,6 +104,7 @@ services:
     networks:
       - madi
 
+
   newman:
     image: postman/newman:ubuntu
     volumes:
@@ -119,8 +121,9 @@ services:
       newman run /etc/newman/contract.collection.json 
       --env-var parserUrl=http://parser:5001
       --env-var storageUrl=http://storage:9023 
-      --env-var baseUrl=http://api:3030"
-      --folder ${CONTRACT_TYPE}    
+      --env-var baseUrl=http://api:3030
+      --folder ${CONTRACT_TYPE}
+      "
 
 
 

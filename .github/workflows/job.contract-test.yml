@@ -77,7 +77,7 @@ jobs:
           docker compose -f ${{ env.FILE }} down 
 
   raw-parser:
-    name: "Plugin Loader Test"
+    name: Raw Parser Test"
     env:
       CONTRACT_TYPE: "raw-parser"
     runs-on: ubuntu-latest
