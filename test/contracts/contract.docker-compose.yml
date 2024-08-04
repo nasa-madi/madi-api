@@ -1,7 +1,5 @@
 services:
 
-  environment:
-    - CONTRACT_TYPE=contract
   #-----------------------------
   # API SERVICE
   #-----------------------------
