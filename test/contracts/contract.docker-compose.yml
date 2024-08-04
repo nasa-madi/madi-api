@@ -127,9 +127,6 @@ services:
 
 
 
-
-
-
 networks:
   madi:
 
