@@ -1,5 +1,7 @@
 services:
 
+  environment:
+    - CONTRACT_TYPE=contract
   #-----------------------------
   # API SERVICE
   #-----------------------------
@@ -13,13 +15,12 @@ services:
       - MIGRATION=true
       - SEED=true
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-    ports:
       - "3030:3030"
     networks:
       - madi
     volumes:
       - ${PWD}/test/contracts/plugin-loader/plugins/devGetTime:/app/plugins/devGetTime # Only used for plugin-loader tests
-      - ./${CONTRACT_TYPE}/${CONTRACT_TYPE}.yml:/app/config/local.yml
+      - ./${CONTRACT_TYPE}/${CONTRACT_TYPE}.yml:/app/config/contract.yml
     depends_on:
       database:
         condition: service_healthy
@@ -64,7 +65,7 @@ services:
   # This mocks out a Google Cloud Storage server so that local testing
   # can be done with a GCS Bucket library.
   storage:
-    image: "nasamadi/madi-storage-gcp-emulator:latest"
+    image: "nasamadi/madi-storage-gcs-emulator:latest"
     environment:
       - PORT=9023
       # If you want to user ./api/uploads as the storage folder
@@ -85,16 +86,47 @@ services:
       start_interval: 1s
       retries: 5
 
+
+  #-----------------------------
+  # PARSER SERVICE
+  #-----------------------------
+  # This creates a parsers services based on nlm-ingestor and Apache Tika
+  parser:
+    image: nasamadi/madi-parsers-nlm:latest
+    ports:
+      - 5001:5001
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5001 || exit 1"]
+      interval: 60s
+      timeout: 5s
+      start_period: 30s
+      start_interval: 1s
+      retries: 5
+    networks:
+      - madi
+
   newman:
-    image: postman/newman:alpine
+    image: postman/newman:ubuntu
     volumes:
       - ${PWD}/test/contracts:/etc/newman
-    command: run /etc/newman/contract.collection.json --env-var storageUrl=http://storage:9023 --env-var baseUrl=http://api:3030 --folder ${CONTRACT_TYPE}
     networks:
       - madi
     depends_on:
+      parser: 
+        condition: service_healthy
       api:
         condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "cp -r /etc/newman/files/* /etc/newman/ &&
+      newman run /etc/newman/contract.collection.json 
+      --env-var parserUrl=http://parser:5001
+      --env-var storageUrl=http://storage:9023 
+      --env-var baseUrl=http://api:3030"
+      --folder ${CONTRACT_TYPE}    
+
+
+
+
 
 
 networks:
