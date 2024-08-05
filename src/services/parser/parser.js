@@ -3,9 +3,10 @@ import { hooks as schemaHooks } from '@feathersjs/schema'
 import { authorizeHook } from '../../auth/authorize.hook.js'
 import { authenticate } from '@feathersjs/authentication'
 import { parserQueryValidator, parserDataValidator } from './parser.schema.js'
+import { softValidator } from '../../hooks/soft-validator.js'
 
 export const parserPath = 'parser'
-export const parserMethods = ['create','convert']
+export const parserMethods = ['create']
 export * from './parser.class.js'
 export * from './parser.schema.js'
 
@@ -29,12 +30,17 @@ export const parser = (app) => {
       all: [
         // authenticate('googleIAP'),
         // authorizeHook,
-        // schemaHooks.validateQuery(parserQueryValidator)
+        schemaHooks.validateQuery(parserQueryValidator)
       ],
       find: [],
       get: [],
       create: [
-        // schemaHooks.validateData(parserDataValidator)
+
+        // TODO: Hard Validation Disabled until sufficient sample docs can be collected to confirm structure
+        // See https://llmsherpa.readthedocs.io/en/latest/llmsherpa.html
+        softValidator(parserDataValidator,{verbose:true})
+        // schemaHooks.validateData(parserDataValidator, { skipOnError: true })
+
       ],
       patch: [],
       remove: []

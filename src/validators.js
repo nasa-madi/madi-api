@@ -1,7 +1,7 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/validators.html
 import { Ajv, addFormats } from '@feathersjs/schema'
 
-const formats = [
+export const formats = [
   'date-time',
   'time',
   'date',
