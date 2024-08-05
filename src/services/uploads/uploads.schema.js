@@ -6,26 +6,40 @@ import { dataValidator, queryValidator } from '../../validators.js'
 // Main data model schema
 export const uploadSchema = Type.Object(
   {
-    id: Type.Number(),
-    text: Type.String()
+    id: Type.Number(), // Unique identifier for the metadata entry
+    userId: Type.Optional(Type.String()), // User ID
+    pluginId: Type.Optional(Type.String()), // Plugin ID
+    fileId: Type.String(), // File ID
+    filePath: Type.String(),
+    filename: Type.String(), // Name of the file
+    metadata: Type.Object({}, {additionalProperties:true}),
+    embedding:  Type.Array(Type.Number()),
+    
   },
-  { $id: 'Upload', additionalProperties: false }
+  { $id: 'Uploads', additionalProperties: false }
 )
+
 export const uploadValidator = getValidator(uploadSchema, dataValidator)
 export const uploadResolver = resolve({})
 
 export const uploadExternalResolver = resolve({})
 
 // Schema for creating new entries
-export const uploadDataSchema = Type.Pick(uploadSchema, ['text'], {
-  $id: 'UploadData'
+export const uploadDataSchema = Type.Object({
+  // TODO: fix this type issue
+  // file: Type.Uint8Array()
+}, {
+  $id: 'UploadsData',
+  additionalProperties: true
 })
 export const uploadDataValidator = getValidator(uploadDataSchema, dataValidator)
-export const uploadDataResolver = resolve({})
+export const uploadDataResolver = resolve({
+  file:()=>undefined
+})
 
 // Schema for updating existing entries
 export const uploadPatchSchema = Type.Partial(uploadSchema, {
-  $id: 'UploadPatch'
+  $id: 'UploadsPatch'
 })
 export const uploadPatchValidator = getValidator(uploadPatchSchema, dataValidator)
 export const uploadPatchResolver = resolve({})
@@ -42,3 +56,11 @@ export const uploadQuerySchema = Type.Intersect(
 )
 export const uploadQueryValidator = getValidator(uploadQuerySchema, queryValidator)
 export const uploadQueryResolver = resolve({})
+
+
+export const uploadResultResolver = resolve({
+  embedding: ()=>undefined,
+  filepath: ()=>undefined,
+  userId:()=>undefined,
+  pluginId:()=>undefined
+})

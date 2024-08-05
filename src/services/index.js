@@ -5,6 +5,7 @@ import { chat } from './chats/chats.js'
 import { document } from './documents/documents.js'
 import { user } from './users/users.js'
 import { parser } from './parser/parser.js'
+import { blob } from './blobs/blobs.js'
 
 
 export const services = (app) => {
@@ -15,6 +16,7 @@ export const services = (app) => {
   app.configure(upload)
   app.configure(tool)
   app.configure(chat)
+  app.configure(blob)
   
   // All services will be registered here
 }
