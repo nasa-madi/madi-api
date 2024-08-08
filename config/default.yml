@@ -27,6 +27,11 @@ postgresql:
   automigrate: false
   autoseed: false
 
+# PARSER SERVICE
+parser:
+  nlm:
+    host: http://localhost:5001
+
 # API KEYS
 openai: 
   key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -45,10 +50,15 @@ chunks:
   size: 2000
 
 storage:
-  bucket: sample-bucket
-
-uploads:
-  embeddingModel: text-embedding-3-small 
+  default: gcs
+  gcs:
+    allowDuplicates: false
+    keyFilename: ./test/contracts/credentials.json
+    bucket: madi-sample-bucket
+    apiEndpoint: http://localhost:9023
+    local: true
+    projectId: test
+    useMetadataInHash: true
 
 plugins:
   failOnImportError: true

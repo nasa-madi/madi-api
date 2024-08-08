@@ -1,18 +1,5 @@
-import { authenticate } from '@feathersjs/authentication'
-import { authorizeHook } from '../../auth/authorize.hook.js'
-import { hooks as schemaHooks } from '@feathersjs/schema'
-import {
-  uploadDataValidator,
-  uploadPatchValidator,
-  uploadQueryValidator,
-  uploadResolver,
-  uploadExternalResolver,
-  uploadDataResolver,
-  uploadPatchResolver,
-  uploadQueryResolver,
-  uploadResultResolver
-} from './uploads.schema.js'
 import { UploadService, getOptions } from './uploads.class.js'
+import { gcs } from './providers/gcs.provider.js'
 
 
 export const uploadPath = 'uploads'
@@ -21,8 +8,14 @@ export * from './uploads.class.js'
 export * from './uploads.schema.js'
 
 
+
+
+
 // A configure function that registers the service and its hooks via `app.configure`
-export const upload = (app) => {
+export const upload= (app) => {
+  // add the additional provider services
+  app.configure(gcs)
+
   // Register our service on the Feathers application
   app.use(uploadPath, new UploadService(getOptions(app)), {
     // A list of all methods this service exposes externally
@@ -30,6 +23,7 @@ export const upload = (app) => {
     // You can add additional custom events to be sent to clients here
     events: []
   })
+
   // Initialize hooks
   app.service(uploadPath).hooks({
     around: {
