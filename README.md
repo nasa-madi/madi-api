@@ -1,6 +1,3 @@
-# TODO
- - Add Gitleaks install instructions https://github.com/gitleaks/gitleaks/blob/master/README.md
- - 
 
 
 <p align="center">
@@ -24,7 +21,16 @@
 </p>
 <hr>
 
- See [full documentation](https://nasa-madi.github.io/madi-core/api)
+See [full documentation](https://nasa-madi.github.io/madi-core/api)
+
+### TODO
+- [ ] Add Gitleaks install instructions https://github.com/gitleaks/gitleaks/blob/master/README.md
+- [ ] Add configuration explanations
+- [ ] Add example service creation (advanced)
+- [ ] Add plugin service api (advanced)
+- [ ] Add unit tests to custom helpers and methods
+- [ ] Add a Hoverfly instance to proxy against tests
+
 
 
 <!-- 
