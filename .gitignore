@@ -55,7 +55,9 @@ config/*
 
 cache/*
 ignore/
-.uploads/
+.uploads/mounted
+!.uploads/preload
+
 
 #####
 client_secret*

@@ -68,9 +68,12 @@ services:
     ports:
       - "9023:9023"
     volumes:
-      - ./uploads:/storage
+      - ${PWD}/.uploads/preload:/app/api/preload
+      - ${PWD}/.uploads/mounted:/app/api/uploads
     networks:
       - madi
+    entrypoint: > 
+      sh -c "cp -r /app/api/preload/* /app/api/uploads && gcp-storage-emulator start"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9023 | grep 'OK' || exit 1"]
       interval: 60s

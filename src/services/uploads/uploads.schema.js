@@ -6,39 +6,28 @@ import { dataValidator, queryValidator } from '../../validators.js'
 // Main data model schema
 export const uploadSchema = Type.Object(
   {
-    id: Type.Number(),
-    text: Type.String()
+
+    filePath: Type.String(), // inclusive of name, prefix
+
+    url: Type.String(), // URL of the file
+    signedUrl: Type.String(), // Signed URL of the file
+    
+    metadata: Type.Object({
+
+      // Original metadata
+      systemMetadata: Type.Object({
+        hash: Type.Optional(Type.String()), // Hash of the file exclusive of filename
+        originalName: Type.String(), // Original name of the file
+        userId: Type.Optional(Type.String()), // User ID
+        pluginId: Type.Optional(Type.String()), // Plugin ID
+      }),
+      
+      // Additional metadata
+      sourceMetadata: Type.Optional(Type.Object({
+      },{additionalProperties:true})),
+
+    }, {additionalProperties:false}),
+  
   },
-  { $id: 'Upload', additionalProperties: false }
+  { $id: 'Uploads', additionalProperties: false }
 )
-export const uploadValidator = getValidator(uploadSchema, dataValidator)
-export const uploadResolver = resolve({})
-
-export const uploadExternalResolver = resolve({})
-
-// Schema for creating new entries
-export const uploadDataSchema = Type.Pick(uploadSchema, ['text'], {
-  $id: 'UploadData'
-})
-export const uploadDataValidator = getValidator(uploadDataSchema, dataValidator)
-export const uploadDataResolver = resolve({})
-
-// Schema for updating existing entries
-export const uploadPatchSchema = Type.Partial(uploadSchema, {
-  $id: 'UploadPatch'
-})
-export const uploadPatchValidator = getValidator(uploadPatchSchema, dataValidator)
-export const uploadPatchResolver = resolve({})
-
-// Schema for allowed query properties
-export const uploadQueryProperties = Type.Pick(uploadSchema, ['id', 'text'])
-export const uploadQuerySchema = Type.Intersect(
-  [
-    querySyntax(uploadQueryProperties),
-    // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
-  ],
-  { additionalProperties: false }
-)
-export const uploadQueryValidator = getValidator(uploadQuerySchema, queryValidator)
-export const uploadQueryResolver = resolve({})

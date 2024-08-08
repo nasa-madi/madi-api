@@ -3,15 +3,12 @@
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 compose_file="${script_dir}/contract.docker-compose.yml"
 
-echo "${compose_file}"
-
 # Check if OPENAI_API_KEY is set
 if [[ -z "${OPENAI_API_KEY}" ]]; then
   echo "OPENAI_API_KEY environment variable is not set. Run \`export OPENAI_API_KEY=XXXXX\` before continuing."
   exit 1
 fi
 
-docker compose -f "${compose_file}" up database storage api newman --build --exit-code-from newman
-docker compose -f "${compose_file}" down -v
-
-
+CONTRACT_TYPE=blueprint     OPENAI_API_KEY=$OPENAI_API_KEY docker compose -f ./test/contracts/contract.docker-compose.yml up --exit-code-from newman
+CONTRACT_TYPE=plugin-loader OPENAI_API_KEY=$OPENAI_API_KEY docker compose -f ./test/contracts/contract.docker-compose.yml up --exit-code-from newman
+CONTRACT_TYPE=raw-parser    OPENAI_API_KEY=$OPENAI_API_KEY docker compose -f ./test/contracts/contract.docker-compose.yml up --exit-code-from newman

@@ -30,7 +30,7 @@
   "main": "lib/index",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:db\"  \"npm run dev:src\" ",
+    "dev": "concurrently \"npm run dev:db\"  \"npm run dev:src\" \"npm run dev:storage\"",
     "dev:db": "docker-compose up -d database parser",
     "dev:src": "nodemon --exec 'npm start'",
     "dev:storage": "docker-compose up -d storage",
@@ -74,7 +74,9 @@
     "@google-cloud/storage": "^7.7.0",
     "@koa/multer": "^3.0.2",
     "@sinclair/typebox": "^0.32.20",
+    "0x": "^5.7.0",
     "ajv": "^8.14.0",
+    "dauria": "^2.0.0",
     "dotenv": "^16.3.1",
     "feathers-blob": "^2.6.0",
     "feathers-casl": "^2.1.1",

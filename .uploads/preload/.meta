@@ -1,0 +1,53 @@
+{
+  "buckets": {
+    "test-bucket": {
+      "kind": "storage#bucket",
+      "id": "test-bucket",
+      "selfLink": "/storage/v1/b/test-bucket",
+      "projectNumber": "1234",
+      "name": "test-bucket",
+      "timeCreated": "2024-08-05T21:42:51.911696Z",
+      "updated": "2024-08-05T21:42:51.911696Z",
+      "metageneration": "1",
+      "iamConfiguration": {
+        "bucketPolicyOnly": {
+          "enabled": false
+        },
+        "uniformBucketLevelAccess": {
+          "enabled": false
+        }
+      },
+      "location": "US",
+      "locationType": "multi-region",
+      "storageClass": "STANDARD",
+      "etag": "CAE="
+    }
+  },
+  "objects": {
+    "test-bucket": {
+      "all/all/hello.txt": {
+        "kind": "storage#object",
+        "id": "test-bucket/all/all/hello.txt/1722894210",
+        "selfLink": "/storage/v1/b/test-bucket/o/all/all/hello.txt",
+        "name": "all/all/hello.txt",
+        "bucket": "test-bucket",
+        "generation": "1722894210",
+        "metageneration": "2",
+        "contentType": "text/plain",
+        "timeCreated": "2024-08-05T21:43:30.624711Z",
+        "updated": "2024-08-05T21:43:30.624711Z",
+        "storageClass": "STANDARD",
+        "timeStorageClassUpdated": "2024-08-05T21:43:30.624711Z",
+        "size": "5",
+        "md5Hash": "ixqZU8RhEpaoJ6v4xHgE1w==",
+        "mediaLink": "http://localhost:9023/download/storage/v1/b/test-bucket/o/all/all/hello.txt?generation=1722894210&alt=media",
+        "crc32c": "gdkOGw==",
+        "etag": "ixqZU8RhEpaoJ6v4xHgE1w==",
+        "metadata": {
+          "description": "Ingenuity, nicknamed Ginny, is an autonomous NASA helicopter that operated on Mars from 2021 to 2024 as part of the Mars 2020 mission. "
+        }
+      }
+    }
+  },
+  "resumable": {}
+}
