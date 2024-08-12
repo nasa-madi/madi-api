@@ -39,7 +39,7 @@ export class GcsService {
   //TODO: add force option to query
 
   async create(sourceMetadata, params) {
-
+    console.log('gcsProvideer create', sourceMetadata, params)
     // Get the buffer and original name from the file
     params.file.buffer = getSharedBuffer(sourceMetadata, params, this.options)
     params.file.filePrefix = getFilePrefix(sourceMetadata, params, this.options)
@@ -53,7 +53,7 @@ export class GcsService {
     const stream = new Readable();
     stream.push(params?.file?.buffer);
     stream.push(null); // indicates end-of-file basically - the end of the stream
-    
+
     // Create a file reference in the bucket
     let newFile = this.bucket.file(params?.file?.fullPath);
 

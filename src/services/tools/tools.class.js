@@ -38,7 +38,7 @@ export class ToolService {
   }
 
   async get(toolName, _params) {
-    console.log(toolFuncs,toolDescs,defaultTools)
+    // console.log(toolFuncs,toolDescs,defaultTools)
     let { data } = await this.find(_params)
     return data.find(item => item.function.name === toolName);
   }
@@ -79,7 +79,7 @@ export class ToolService {
         const functionArgs = typeof toolCall.function.arguments === 'string' 
           ? JSON.parse(toolCall?.function?.arguments)
           : toolCall?.function?.arguments
-        functionResponse = await functionToCall({data:functionArgs}, params);
+        functionResponse = await functionToCall({data:functionArgs}, params)(params.user)
         if (typeof functionResponse !== 'string') {
           if (typeof functionResponse === 'object' && functionResponse !== null) {
             functionResponse = JSON.stringify(functionResponse);

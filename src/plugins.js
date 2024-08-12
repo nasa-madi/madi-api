@@ -68,9 +68,11 @@ export const plugins = async (app) => {
     }
 
     let options = {
-        chunks: app.service('chunks'),
-        documents: app.service('documents'),
-        uploads: app.service('documents'),
+        chunks: createServiceWrapper(app.service('chunks')),
+        documents: createServiceWrapper(app.service('documents')),
+        uploads: createServiceWrapper(app.service('uploads')),
+        parser: createServiceWrapper(app.service('parser')),
+        _logger: logger,
         makeRequest: (args) => openaiAdapter.makeRequest(
             args,
             app.openai, // shared instance
@@ -81,8 +83,12 @@ export const plugins = async (app) => {
     let pluginList = [...defaults, ...restricted, ...development];
     logger.info(`${LOG_KEY}Initializing plugins...`);
     for (const plugin of pluginList) {
-
-        logger.info(`${LOG_KEY}Initializing plugin: ${plugin.name}`);
+        logger.info({ 
+            message: `Initializing plugin: ${plugin.name}`,
+            subcomponent: plugin.name.toUpperCase(),
+            component: 'PLUGINS',
+            full: true
+        });
 
         // create instance
         const instance = new plugin.module.Plugin(options);
@@ -94,10 +100,39 @@ export const plugins = async (app) => {
     logger.info(`${LOG_KEY}Plugins successfully initialized.`);
 };
 
-function registerTools(instance){
+function registerTools(instance) {
     const functionName = instance.describe().function.name;
-    toolFuncs[functionName] = (...args) => instance.run(...args);
-    toolRefreshFuncs[functionName] = (...args) => instance.refresh(...args);
+
+    const wrapMethod = (method) => (...args) => {
+        return instance[method](...args);
+    };
+
+    toolFuncs[functionName] = (user)=>wrapMethod('run')(user);
+    toolRefreshFuncs[functionName] = (user)=>wrapMethod('refresh')(user);
     toolDescs[functionName] = instance.describe();
     defaultTools.push(functionName);
+}
+
+
+
+// Function to create a secure wrapper for a service
+function createServiceWrapper(service) {
+    const wrapMethod = (method) => (user)=>(...args) => {
+        const params = args[args.length - 1];
+        if (params.plugin !== service.name && params.plugin !== 'all') {
+            throw new Error(`Invalid plugin name: ${params.plugin}. Expected ${service.name} or 'all'.`);
+        }
+        if (params.user.id !== user.id){
+            throw new Error(`Invalid user: ${params.user}. Expected ${user}.`);
+        }
+        return service[method](...args);
+    };
+
+    return {
+        find: wrapMethod('find'),
+        get: wrapMethod('get'),
+        create: wrapMethod('create'),
+        patch: wrapMethod('patch'),
+        remove: wrapMethod('remove'),
+    };
 }
