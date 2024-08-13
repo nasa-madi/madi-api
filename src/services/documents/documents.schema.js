@@ -68,7 +68,7 @@ export const documentDataResolver = resolve({
   // converts the content into a hash
   hash: virtual(async(entity,context)=>{
     let [data, params] = context.arguments
-    return getIdFromText(data.content + data.abstract + data.toolName + data.uploadId 
+    return getIdFromText(data.content + data.abstract + data.toolName + data.uploadPath
       // + Math.random()
     )
   }),
@@ -88,7 +88,7 @@ export const documentPatchResolver = resolve({})
 
 
 // Schema for allowed query properties
-export const documentQueryProperties = Type.Pick(documentSchema, ['id', 'hash', 'metadata','userId','abstract','toolName','uploadId','content'])
+export const documentQueryProperties = Type.Pick(documentSchema, ['id', 'hash', 'metadata','userId','abstract','toolName','uploadPath','content'])
 export const documentQuerySchema = Type.Intersect(
   [
     querySyntax(documentQueryProperties),
