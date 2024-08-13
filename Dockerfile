@@ -13,7 +13,7 @@ RUN npm ci
 COPY --chown=node:node . .
 
 # Curl is required for health checks
-RUN apk update && apk add --no-cache curl 
+RUN apk add --no-cache curl
 
 # Switch to a non-root user
 USER node

@@ -30,8 +30,8 @@
   "main": "lib/index",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run dev:db\"  \"npm run dev:src\" \"npm run dev:storage\"",
-    "dev:db": "docker-compose up -d database parser",
+    "dev": "concurrently \"npm run dev:db\"  \"npm run dev:src\"",
+    "dev:db": "docker-compose up -d database parser storage",
     "dev:src": "nodemon --exec 'npm start'",
     "dev:storage": "docker-compose up -d storage",
     "knex": "knex --debug",

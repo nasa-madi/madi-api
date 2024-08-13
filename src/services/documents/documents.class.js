@@ -44,7 +44,7 @@ export class DocumentService extends KnexService {
             metadata: c.metadata,
             documentId: newDoc.id,
             documentIndex: index,
-            toolName: newDoc.toolName,
+            toolName: newDoc.toolName || undefined,
       }, {...params, provider:'internal'});
         
       await pMap(chunks, mapper, {concurrency: 10});
