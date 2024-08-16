@@ -1,11 +1,14 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/authentication.html
 import { AuthenticationService } from '@feathersjs/authentication'
 import { GoogleIAPStrategy } from './googleIAP.strategy.js';
+import { GoogleCLIStrategy } from './googleCLI.strategy.js';
 
 export const authentication = async (app) => {
   const authentication = new AuthenticationService(app)
 
   authentication.register('googleIAP', new GoogleIAPStrategy());
+  authentication.register('googleCLI', new GoogleCLIStrategy());
+
 
   app.use('authentication', authentication)
 }

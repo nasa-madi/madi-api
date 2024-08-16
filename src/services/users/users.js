@@ -58,17 +58,17 @@ export const user = (app) => {
         schemaHooks.resolveQuery(userQueryResolver)
       ],
       find: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook,
       ],
       get: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook,
       ],
       create: [
         (context)=>context.params.returnAuthBool=true,
         // (context)=>{console.log('user create', context)},
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         iffElse((context)=>!!context.params.user,
           [authorizeHook],[
             (context)=>{
@@ -87,13 +87,13 @@ export const user = (app) => {
         schemaHooks.resolveData(userDataResolver)
       ],
       patch: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook,
         schemaHooks.validateData(userPatchValidator),
         schemaHooks.resolveData(userPatchResolver)
       ],
       remove: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook
       ]
     },

@@ -28,7 +28,7 @@ export const parser = (app) => {
     },
     before: {
       all: [
-        // authenticate('googleIAP'),
+        // authenticate('googleIAP','googleCLI'),
         // authorizeHook,
         schemaHooks.validateQuery(parserQueryValidator)
       ],

@@ -11,6 +11,7 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
           ...query
       };
     }
+    
   
     get configuration() {
       const authConfig = this.authentication.configuration
@@ -32,7 +33,8 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
       //   googleIAPEmail: "example@gmail.com",
       //   googleIAPUserId: "123456789",
       // }
-      
+      console.log('AUTHENTICATE',authentication)
+      console.log('PARAMS',params)
   
       const { emailField, idField, entity, errorMessage } = this.configuration;
       const entityService = this.entityService;
