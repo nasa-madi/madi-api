@@ -33,8 +33,9 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
       //   googleIAPEmail: "example@gmail.com",
       //   googleIAPUserId: "123456789",
       // }
-      console.log('AUTHENTICATE',authentication)
-      console.log('PARAMS',params)
+      // console.log('AUTHENTICATE',authentication)
+      // console.log('PARAMS',params)
+      // console.log('USING IAP STRATEGY')
   
       const { emailField, idField, entity, errorMessage } = this.configuration;
       const entityService = this.entityService;
@@ -81,15 +82,18 @@ export class GoogleIAPStrategy extends AuthenticationBaseStrategy {
       const emailScheme = headerToLowerCase['x-goog-authenticated-user-email'];
       const userIdScheme = headerToLowerCase['x-goog-authenticated-user-id'];
 
-      // if(!emailScheme || !userIdScheme){
-      //   throw new NotAuthenticated('Missing required IAP Headers')
-      // }
+      if(!emailScheme || !userIdScheme){
+        return null
+        // throw new NotAuthenticated('Missing required IAP Headers')
+      }
+
       const [, email] = (emailScheme||'').match(/accounts\.google\.com:(.*)/) || [];
       const [, userId] = (userIdScheme||'').match(/accounts\.google\.com:(.*)/) || [];
   
-      // if(!email || !userId){
-      //   throw new NotAuthenticated('Missing required IAP Headers')
-      // }
+      if(!email || !userId){
+        return null
+        // throw new NotAuthenticated('Missing required IAP Headers')
+      }
   
       return {
         strategy: this.name,
