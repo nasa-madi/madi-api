@@ -85,6 +85,10 @@ authentication:
   secret: XXXXXXXXXXXXXXXXXXXXXXXXXXX
   authStrategies:
     - googleIAP
+    - googleCLI
   googleIAP:
+    emailField: email
+    idField: googleId
+  googleCLI:
     emailField: email
     idField: googleId
