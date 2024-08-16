@@ -132,7 +132,10 @@
     },
     "nodemonConfig": {
       "ignoreRoot": [
-        ".git"
+        ".git",
+        "node_modules",
+        ".cicd",
+        "ignore"
       ]
     }
   }

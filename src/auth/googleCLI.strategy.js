@@ -64,12 +64,14 @@ export class GoogleCLIStrategy extends AuthenticationBaseStrategy {
   
     const authorizationHeader = headerToLowerCase['authorization'];
     if (!authorizationHeader) {
-      throw new NotAuthenticated('Missing Authorization header');
+      return null;
+      // throw new NotAuthenticated('Missing Authorization header');
     }
         
     const token = authorizationHeader.split(' ')[1];
     if (!token) {
-      throw new NotAuthenticated('Invalid Authorization header format');
+      return null
+      // throw new NotAuthenticated('Invalid Authorization header format');
     }
   
     const tokenInfoUrl = `https://oauth2.googleapis.com/tokeninfo?access_token=${token}`;
@@ -85,6 +87,7 @@ export class GoogleCLIStrategy extends AuthenticationBaseStrategy {
       throw new NotAuthenticated('Error verifying token');
     }
 
+    console.log('TOKEN INFO', tokenInfo)
     const email = tokenInfo.email;
     const userId = tokenInfo.sub;
   
