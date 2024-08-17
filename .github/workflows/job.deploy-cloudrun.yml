@@ -104,7 +104,6 @@ jobs:
             MIGRATION=false
             SEED=false
             NODE_CONFIG_ENV=${{ env.ENV }}
-          no_traffic: true
 
       
       - name: Create Deployed Tag
