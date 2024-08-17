@@ -105,7 +105,6 @@ jobs:
             MIGRATION=false
             SEED=false
             NODE_CONFIG_ENV=${{ env.ENV }}
-            
       
       - name: Create Deployed Tag
         uses: actions/github-script@v7
