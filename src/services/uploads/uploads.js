@@ -1,5 +1,6 @@
 import { UploadService, getOptions } from './uploads.class.js'
 import { gcs } from './providers/gcs.provider.js'
+import { authenticate } from '@feathersjs/authentication'
 
 
 export const uploadPath = 'uploads'
@@ -33,6 +34,7 @@ export const upload= (app) => {
     },
     before: {
       all: [
+        authenticate('googleIAP','googleCLI'),
         // schemaHooks.validateQuery(uploadQueryValidator), 
         // schemaHooks.resolveQuery(uploadQueryResolver)
       ],

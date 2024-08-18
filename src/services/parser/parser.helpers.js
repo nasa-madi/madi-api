@@ -19,7 +19,7 @@ export const uploadFileToNLM = async (file, options)=> {
 
   form.append('file', readStream, {
     filename: file.originalname, 
-    contentType: 'application/pdf'
+    contentType: file.mimetype
   });
 
   let url = new URL(options.path);

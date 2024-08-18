@@ -43,9 +43,10 @@ export const documentSchema = Type.Object(
 
     },{ additionalProperties: true })),
     content: Type.String(), // The content of the document in text format.
+    parsedPath: Type.Optional(Type.String()), // The path to the parsed document
     uploadPath: Type.Optional(Type.String()), // filePath of the upload
     abstract: Type.Optional(Type.String()), // Shortened summary of the document. 
-    toolName: Type.Optional(Type.String()), // The tool the created the specific chunk (if applicable)
+    plugin: Type.Optional(Type.String()), // The tool the created the specific chunk (if applicable)
     userId: Type.Optional(Type.Number()), // The user that created the specific chunk (if applicable)
   },
   { $id: 'Document', additionalProperties: false }

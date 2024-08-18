@@ -1,4 +1,6 @@
 import { PipelinesService, getOptions } from './pipelines.class.js'
+import { authenticate } from '@feathersjs/authentication'
+import { authorizeHook } from '../../auth/authorize.hook.js'
 
 export const pipelinesPathAndId = 'pipelines/:id'
 export const pipelinesPath = 'pipelines'
@@ -19,6 +21,8 @@ export const pipelines = (app) => {
     },
     before: {
       all: [
+        authenticate('googleIAP','googleCLI'),
+        authorizeHook
         // schemaHooks.validateQuery(pipelinesQueryValidator),
         // schemaHooks.resolveQuery(pipelinesQueryResolver)
       ],

@@ -4,10 +4,11 @@ import crypto from 'crypto';
 
 export function getPathPrefix(data, params, {}) {
     let { restrictToUser, user, plugin, restrictToPlugin } = params
-    console.log('\n\n\ngetPathPrefix', params)
+    // console.log('\n\n\ngetPathPrefix', params)
     let userString = restrictToUser ? user.id : 'all'
     let pluginString = restrictToPlugin ? plugin : 'all'
     let prefix = `${pluginString}/${userString}/`
+    console.log('\n\n\ngetPathPrefix', prefix)
     return prefix
 }
 
