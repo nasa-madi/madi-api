@@ -75,9 +75,9 @@ export const uploadFileToNLM = async (file, options) => {
     let identityHeaders = {}
     if (options.identityProvider === 'google'){
         // Get the identity token
-        getAccessToken(); // Call the function to get the access token
+        let token = getAccessToken(); // Call the function to get the access token
 
-        const token = await getGoogleIdentityToken(url.toString());
+        // const token = await getGoogleIdentityToken(url.toString());
         identityHeaders = {
             'Authorization': `Bearer ${token}`,
         }
