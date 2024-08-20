@@ -59,7 +59,7 @@ components:
         pageContent: content
         documentId: 1
         documentIndex: 0
-        toolName: "get_current_weather"
+        plugin: "get_current_weather"
     example_chunk_post_res_0:
       summary: 'Chunk created'
       value:
@@ -72,7 +72,7 @@ components:
         pageContent: content
         documentId: 1
         documentIndex: 0
-        toolName: get_current_weather
+        plugin: get_current_weather
         userId: "1"
     example_chunk_post_res_0_error:
       summary: 'Error - Duplicate pageContent'
@@ -146,7 +146,7 @@ components:
           type: integer
         documentIndex:
           type: integer
-        toolName:
+        plugin:
           type: string
         userId:
           type: integer

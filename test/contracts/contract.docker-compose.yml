@@ -76,7 +76,7 @@ services:
       - "9023:9023"
     volumes:
       - ${PWD}/.uploads/preload:/app/api/preload
-      - ${PWD}/.uploads/mounted:/app/api/uploads
+      # - ${PWD}/.uploads/mounted:/app/api/uploads
     networks:
       - madi
     entrypoint: >

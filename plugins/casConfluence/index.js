@@ -58,8 +58,8 @@ export class Plugin extends BasePlugin {
       ...params,
       query: {
         $search: runOptions?.data?.query,
-        toolName: TOOLNAME,
-        $select: ['metadata','pageContent','documentId','toolName'],
+        plugin: TOOLNAME,
+        $select: ['metadata','pageContent','documentId','plugin'],
         $limit: 20
       }
     })).data
@@ -69,8 +69,8 @@ export class Plugin extends BasePlugin {
         let doc = await this.documents.get(c.documentId, {
           ...params,
           query: {
-            $select: ['metadata', 'abstract', 'toolName'],
-            toolName: TOOLNAME,
+            $select: ['metadata', 'abstract', 'plugin'],
+            plugin: TOOLNAME,
           },
         });
         if (doc) {
@@ -98,7 +98,7 @@ export class Plugin extends BasePlugin {
   async refresh(_data, params) {
     let data = _data.data;
     let converted = data.map((d) => {
-      d.toolName = TOOLNAME;
+      d.plugin = TOOLNAME;
       return d
     })
 

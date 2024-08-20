@@ -4,6 +4,7 @@ import { authorizeHook } from '../../auth/authorize.hook.js'
 import { authenticate } from '@feathersjs/authentication'
 import { parserQueryValidator, parserDataValidator } from './parser.schema.js'
 import { softValidator } from '../../hooks/soft-validator.js'
+import { unless  } from 'feathers-hooks-common'
 
 export const parserPath = 'parser'
 export const parserMethods = ['create']
@@ -38,7 +39,11 @@ export const parser = (app) => {
 
         // TODO: Hard Validation Disabled until sufficient sample docs can be collected to confirm structure
         // See https://llmsherpa.readthedocs.io/en/latest/llmsherpa.html
-        softValidator(parserDataValidator,{verbose:true})
+        unless(
+          c=>!!c.params.file, // Skip validation if file is present
+          softValidator(parserDataValidator,{verbose:true})
+        )
+
         // schemaHooks.validateData(parserDataValidator, { skipOnError: true })
 
       ],

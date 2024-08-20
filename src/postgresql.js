@@ -27,7 +27,7 @@ export const automigrate = async ({app},next) => {
     logger.info('MIGRATE: Automigrating database')
     const db = knex(config)
     let list = await db.migrate.list()
-    if(list[0].length < 3){
+    if(list[1].length > 0){
       await db.migrate.latest()
       logger.info('MIGRATE: Migrations complete')
   

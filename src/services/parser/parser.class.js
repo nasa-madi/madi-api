@@ -22,13 +22,13 @@ export class ParserService {
   }
 
   convert(data, params) {
+    const splitter = new SbdSplitter({...this.options.splitter, ...params.splitter});
     switch(params?.query?.format){
       case 'html':
         return createHTMLfromNLM(data)
       case 'markdown':
         return this.turndownService.turndown(createHTMLfromNLM(data))
       case 'chunks':
-        const splitter = new SbdSplitter({...this.options.splitter, ...params.splitter});
         return splitter.splitText(this.turndownService.turndown(createHTMLfromNLM(data)))
       default:
         return data

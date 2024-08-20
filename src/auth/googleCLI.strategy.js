@@ -1,6 +1,8 @@
 import { AuthenticationBaseStrategy } from '@feathersjs/authentication';
 import { NotAuthenticated } from '@feathersjs/errors';
 import { createDebug } from '@feathersjs/authentication/node_modules/@feathersjs/commons/lib/debug.js';
+import { logger } from '../logger.js';
+
 
 export class GoogleCLIStrategy extends AuthenticationBaseStrategy {
   debug = createDebug('authentication/googleIAP');
@@ -84,10 +86,10 @@ export class GoogleCLIStrategy extends AuthenticationBaseStrategy {
       }
       tokenInfo = await response.json();
     } catch (error) {
-      throw new NotAuthenticated('Error verifying token');
+      throw new NotAuthenticated('Error verifying token',error);
     }
 
-    console.log('TOKEN INFO', tokenInfo)
+    logger.info('AUTH: GOOGLE CLI: Email from token ' + tokenInfo.email)
     const email = tokenInfo.email;
     const userId = tokenInfo.sub;
   

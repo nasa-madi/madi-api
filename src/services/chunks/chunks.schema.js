@@ -24,7 +24,7 @@ export const chunkSchema = Type.Object(
     embedding:  Type.Array(Type.Number()), // Representing a vector as an array of numbers
     documentId:  Type.Optional(Type.Number()),
     documentIndex:  Type.Optional(Type.Number()), // order of the chunk in the final document
-    toolName: Type.Optional(Type.String()), // The tool the created the specific chunk (if applicable)
+    plugin: Type.Optional(Type.String()), // The tool the created the specific chunk (if applicable)
     userId:  Type.Optional(Type.Number()), // The user that created the specific chunk (if applicable)
   },
   { $id: 'Chunk', additionalProperties: false }
@@ -36,7 +36,7 @@ export const chunkDataResolver = resolve({
   // converts the content into a hash
   hash: virtual(async(chunk,context)=>{
     let [data, params] = context.arguments
-    return getIdFromText(data.pageContent + data.documentId + data.toolName + data.documentIndex)
+    return getIdFromText(data.pageContent + data.documentId + data.plugin + data.documentIndex)
   }),
   userId: virtual(async (chunk,context) => {
     let [data, params] = context.arguments
@@ -87,7 +87,7 @@ export const chunkExternalResolver = resolve({
 
 // Schema for creating new entries
 export const chunkDataSchema = Type.Partial( Type.Pick(chunkSchema,
-    [ 'metadata', 'pageContent','documentId','documentIndex','toolName'] // prevents user from manually overriding generated fields
+    [ 'metadata', 'pageContent','documentId','documentIndex','plugin'] // prevents user from manually overriding generated fields
   ), {$id: 'ChunksData'})
 export const chunkDataValidator = getValidator(chunkDataSchema, dataValidator)
 
@@ -96,7 +96,7 @@ export const chunkDataValidator = getValidator(chunkDataSchema, dataValidator)
 
 // Schema for updating existing entries
 export const chunkPatchSchema = Type.Partial(Type.Pick(chunkSchema, 
-    [ 'metadata', 'pageContent','documentId','documentIndex','toolName'] // prevents user from manually overriding generated fields
+    [ 'metadata', 'pageContent','documentId','documentIndex','plugin'] // prevents user from manually overriding generated fields
   ),{$id: 'ChunksPatch'})
 export const chunkPatchValidator = getValidator(chunkPatchSchema, dataValidator)
 export const chunkPatchResolver = resolve({
@@ -122,7 +122,7 @@ export const chunkPatchResolver = resolve({
 
 // Schema for allowed query properties
 export const chunkQueryProperties = Composite([
-  Type.Pick(chunkSchema, ['id', 'hash', 'metadata', 'pageContent', 'documentId', 'documentIndex', 'toolName', 'embedding']),
+  Type.Pick(chunkSchema, ['id', 'hash', 'metadata', 'pageContent', 'documentId', 'documentIndex', 'plugin', 'embedding']),
 ]);
 
 
