@@ -4,27 +4,27 @@ import { Readable } from 'stream';
 import { Buffer } from 'buffer';
 import { logger } from '../../logger.js';
 import { GoogleAuth } from 'google-auth-library';
-import axios from 'axios';
-import { get } from 'http';
+// import axios from 'axios';
+// import { get } from 'http';
 
-async function getAccessToken() {
-    try {
-      const response = await axios.get(
-        'http://metadata/computeMetadata/v1/instance/service-accounts/default/token',
-        {
-          headers: {
-            'Metadata-Flavor': 'Google'
-          }
-        }
-      );
-      console.log('Access Token:', response.data);
-      console.log('Access Token:', response.data.access_token);
-      return response.data.access_token;
-    } catch (error) {
-      console.error('Error fetching access token:', error);
-      throw error;
-    }
-  }
+// async function getAccessToken() {
+//     try {
+//       const response = await axios.get(
+//         'http://metadata/computeMetadata/v1/instance/service-accounts/default/token',
+//         {
+//           headers: {
+//             'Metadata-Flavor': 'Google'
+//           }
+//         }
+//       );
+//       console.log('Access Token:', response.data);
+//       console.log('Access Token:', response.data.access_token);
+//       return response.data.access_token;
+//     } catch (error) {
+//       console.error('Error fetching access token:', error);
+//       throw error;
+//     }
+//   }
 
 // Function to obtain the identity token
 async function getGoogleIdentityToken(targetAudience) {
@@ -33,7 +33,9 @@ async function getGoogleIdentityToken(targetAudience) {
     // Request with the client to obtain the ID token
     const response = await client.request({ url: targetAudience });
     console.log(JSON.stringify(response));
-    const idToken = response.headers['x-goog-identity-token'];
+    console.log(JSON.stringify(response?.config));
+    // const idToken = response.headers['x-goog-identity-token'];
+    const idToken = response?.config?.headers?.Authorization
     
     if (!idToken) {
         throw new Error('Failed to obtain ID token', { cause: response });
@@ -83,7 +85,7 @@ export const uploadFileToNLM = async (file, options) => {
         console.log('basePath', url.origin)
         const token = await getGoogleIdentityToken(basePath);
         identityHeaders = {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': token,
         }
     }
     
