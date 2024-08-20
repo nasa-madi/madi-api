@@ -33,6 +33,11 @@ const defineRules = (can, cannot, user) => {
       can("read",   "tools");
       can("create", "tools");
 
+      can('read', 'pipelines');
+      can('read', 'pipelines/:id');
+      can('create', 'pipelines');
+      can('create', 'pipelines/:id');
+
       can("read",   "documents");
       can("create", "documents");
       can("update", "documents", {userId: user.id});

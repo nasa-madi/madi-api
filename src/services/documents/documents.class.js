@@ -63,7 +63,6 @@ export class DocumentService extends KnexService {
       // uses pMap to limit concurrent chunks to 10.
       // TODO convert to a pubsub or queue
       const mapper = (c, index) => {
-          console.log('chunk',c)
           return this.options.chunks.create({
             pageContent: c.pageContent,
             metadata: c.metadata,
@@ -86,6 +85,7 @@ export class DocumentService extends KnexService {
     await this.options.chunks.getModel().from('chunks').where('documentId', id).del();
 
     // Remove the document
+    // TODO fix this logic.  With CASL it binds the query: {userId: user.id} to the underlying findOrGet and returns a Not Found instead of a Forbidden.
     let newDoc = await this._remove(id, params);
 
     return newDoc;
