@@ -9,7 +9,9 @@ import { GoogleAuth } from 'google-auth-library';
 async function getGoogleIdentityToken(targetAudience) {
     const auth = new GoogleAuth();
     const client = await auth.getIdTokenClient(targetAudience);
-    return await client.getAccessToken();
+    // Obtain the ID token
+    const idTokenResponse = await client.getIdToken(targetAudience);
+    return idTokenResponse;
 }
 
 // Function to upload a file to NLM service
