@@ -45,6 +45,7 @@ export const getOptions = (app) => {
     path: app.get('parser')?.nlm?.host + '/api/parseDocument',
     applyOcr: app.get('parser')?.nlm?.applyOcr || 'no',
     renderFormat: app.get('parser')?.nlm?.renderFormat || 'all',
+    identityProvider: app.get('parser')?.nlm?.identityProvider || 'none',
     splitter:{
       chunkSize: app.get('parser')?.nlm?.splitter?.chunkSize || 10000,
       softMaxChunkSize: app.get('parser')?.nlm?.splitter?.softMaxChunkSize || 3000,

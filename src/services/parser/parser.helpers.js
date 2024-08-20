@@ -3,6 +3,15 @@ import FormData from 'form-data';
 import { Readable } from 'stream';
 import { Buffer } from 'buffer';
 import { logger } from '../../logger.js';
+import { GoogleAuth } from 'google-auth-library';
+
+// Function to obtain the identity token
+async function getGoogleIdentityToken(targetUrl) {
+    const auth = new GoogleAuth();
+    const client = await auth.getIdTokenClient(targetUrl);
+    const response = await client.request({ url: targetUrl });
+    return response.headers.get('x-goog-identity-token');
+}
 
 // Function to upload a file to NLM service
 export const uploadFileToNLM = async (file, options) => {
@@ -32,9 +41,21 @@ export const uploadFileToNLM = async (file, options) => {
     if (options.renderFormat) url.searchParams.append('renderFormat', options.renderFormat);
     if (options.applyOcr) url.searchParams.append('applyOcr', options.applyOcr);
 
+
+    let identityHeaders = {}
+    if (options.identityProvider === 'google'){
+        // Get the identity token
+        const token = await getGoogleIdentityToken(url.toString());
+        identityHeaders = {
+            'Authorization': `Bearer ${token}`,
+        }
+    }
+    
+
     // Set up the headers, including form-specific headers
     const headers = {
         'accept': 'application/json',
+        ...identityHeaders,
         ...form.getHeaders()
     };
 
