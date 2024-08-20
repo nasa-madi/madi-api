@@ -4,6 +4,27 @@ import { Readable } from 'stream';
 import { Buffer } from 'buffer';
 import { logger } from '../../logger.js';
 import { GoogleAuth } from 'google-auth-library';
+import axios from 'axios';
+import { get } from 'http';
+
+async function getAccessToken() {
+    try {
+      const response = await axios.get(
+        'http://metadata/computeMetadata/v1/instance/service-accounts/default/token',
+        {
+          headers: {
+            'Metadata-Flavor': 'Google'
+          }
+        }
+      );
+      console.log('Access Token:', response.data);
+      console.log('Access Token:', response.data.access_token);
+      return response.data.access_token;
+    } catch (error) {
+      console.error('Error fetching access token:', error);
+      throw error;
+    }
+  }
 
 // Function to obtain the identity token
 async function getGoogleIdentityToken(targetAudience) {
@@ -54,6 +75,8 @@ export const uploadFileToNLM = async (file, options) => {
     let identityHeaders = {}
     if (options.identityProvider === 'google'){
         // Get the identity token
+        getAccessToken(); // Call the function to get the access token
+
         const token = await getGoogleIdentityToken(url.toString());
         identityHeaders = {
             'Authorization': `Bearer ${token}`,
