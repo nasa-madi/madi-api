@@ -6,17 +6,18 @@ import { logger } from '../../logger.js';
 import { GoogleAuth } from 'google-auth-library';
 
 // Function to obtain the identity token
-async function getGoogleIdentityToken(targetUrl) {
+async function getGoogleIdentityToken(targetAudience) {
     const auth = new GoogleAuth();
-    const client = await auth.getIdTokenClient(targetUrl);
-    const response = await client.request({ url: targetUrl });
-    return response.headers.get('x-goog-identity-token');
+    const client = await auth.getIdTokenClient(targetAudience);
+    return await client.getAccessToken();
 }
 
 // Function to upload a file to NLM service
 export const uploadFileToNLM = async (file, options) => {
     const form = new FormData();
     let readStream;
+
+    console.log('uploadFileToNLM OPTIONS', JSON.stringify(options))
 
     // Convert buffer to a readable stream if the file is provided as a buffer
     if (file && file.buffer && Buffer.isBuffer(file.buffer)) {
