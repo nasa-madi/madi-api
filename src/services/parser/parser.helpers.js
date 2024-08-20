@@ -41,7 +41,7 @@ export const uploadFileToNLM = async (file, options) => {
     try {
         // Send the POST request to the NLM service
         console.log('url', url.toString())
-        console.log('headers', headers))
+        console.log('headers', headers)
         const response = await fetch(url.toString(), {
             method: 'POST',
             headers: headers,
