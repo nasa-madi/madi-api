@@ -194,7 +194,8 @@ export class GcsService {
     return { fileName, message: 'File deleted successfully.' };
   }
 
-  async setup(app) {
+  async setup() {
+    logger.info(`${logKey}: Setting up Google Cloud Storage with options: ${JSON.stringify(this.options.config)} and bucket: ${this.options.bucketName}`);
     this.storage = new Storage({
       ...this.options.config,
     });
@@ -247,9 +248,6 @@ export const getOptions = (app) => {
   return {
     config,
     bucketName: bucket,
-    local,
-    apiEndpoint,
-    projectId,
     app,
     expiration,
     allowDuplicates,
