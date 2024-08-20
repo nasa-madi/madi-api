@@ -37,7 +37,7 @@ async function getGoogleIdentityToken(targetAudience) {
     if (!idToken) {
         throw new Error('Failed to obtain ID token');
     }
-
+    console.log('ID Token:', idToken);
     return idToken;
 }
 
@@ -68,6 +68,7 @@ export const uploadFileToNLM = async (file, options) => {
 
     // Construct the URL with optional query parameters
     let url = new URL(options.path);
+    console.log('og url', url.toString())
     if (options.renderFormat) url.searchParams.append('renderFormat', options.renderFormat);
     if (options.applyOcr) url.searchParams.append('applyOcr', options.applyOcr);
 
@@ -76,8 +77,10 @@ export const uploadFileToNLM = async (file, options) => {
     if (options.identityProvider === 'google'){
         // Get the identity token
         // let token = await getAccessToken(); // Call the function to get the access token
-
-        const token = await getGoogleIdentityToken(url.toString());
+        
+        const basePath = new URL(url).origin; // Extract the base path
+        console.log('basePath', url.origin)
+        const token = await getGoogleIdentityToken(basePath);
         identityHeaders = {
             'Authorization': `Bearer ${token}`,
         }
