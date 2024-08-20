@@ -42,9 +42,9 @@ export const documentSchema = Type.Object(
       archivedUrl: Type.Optional(Type.String()), // The URL of the archived version of the source
 
     },{ additionalProperties: true })),
-    content: Type.String(), // The content of the document in text format.
-    parsedPath: Type.Optional(Type.String()), // The path to the parsed document
-    uploadPath: Type.Optional(Type.String()), // filePath of the upload
+    content: Type.Optional(Type.Union([Type.String(), Type.Null()])), // The content of the document in text format.
+    parsedPath: Type.Optional(Type.Union([Type.String(), Type.Null()])), // The path to the parsed document
+    uploadPath: Type.Optional(Type.Union([Type.String(), Type.Null()])), // filePath of the upload
     abstract: Type.Optional(Type.String()), // Shortened summary of the document. 
     plugin: Type.Optional(Type.String()), // The tool the created the specific chunk (if applicable)
     userId: Type.Optional(Type.Number()), // The user that created the specific chunk (if applicable)
@@ -69,9 +69,11 @@ export const documentDataResolver = resolve({
   // converts the content into a hash
   hash: virtual(async(entity,context)=>{
     let [data, params] = context.arguments
-    return getIdFromText(data.content + data.abstract + data.toolName + data.uploadPath
-      // + Math.random()
-    )
+    if(data.uploadPath){
+      return getIdFromText(data.uploadPath)
+    }else{
+      return getIdFromText(data.content)
+    }
   }),
   userId: virtual(async (chunk,context) => {
     let [data, params] = context.arguments
@@ -89,7 +91,7 @@ export const documentPatchResolver = resolve({})
 
 
 // Schema for allowed query properties
-export const documentQueryProperties = Type.Pick(documentSchema, ['id', 'hash', 'metadata','userId','abstract','toolName','uploadPath','content'])
+export const documentQueryProperties = Type.Pick(documentSchema, ['id', 'hash', 'metadata','userId','abstract','plugin','uploadPath','content'])
 export const documentQuerySchema = Type.Intersect(
   [
     querySyntax(documentQueryProperties),

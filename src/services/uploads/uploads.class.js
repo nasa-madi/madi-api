@@ -1,7 +1,4 @@
 import { BadRequest } from '@feathersjs/errors';
-import { EmbeddingKnexService } from '../utils/EmbeddingKnexAdapter.js'
-
-
 
 
 // By default calls the standard Knex adapter service methods but can be customized with your own functionality.
@@ -38,7 +35,6 @@ export class UploadService{
     return await this.serviceSwitch('remove', id, {...params, provider: null})
   }
 
-
   async serviceSwitch(func, ...args){
     let params = args[args.length-1]
     let config = this.app.get('storage');
@@ -70,5 +66,14 @@ export class UploadBaseService{
     return filePath
   }
 
-
 }
+
+// eslint-disable-next-line no-unused-vars
+export function getPathPrefix(_data, params, _options) {
+  let { restrictToUser, user, plugin, restrictToPlugin } = params
+  let userString = restrictToUser ? user.id : 'all'
+  let pluginString = restrictToPlugin ? plugin : 'all'
+  let prefix = `${pluginString}/${userString}/`
+  return prefix
+}
+

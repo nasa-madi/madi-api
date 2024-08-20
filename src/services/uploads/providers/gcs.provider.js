@@ -4,9 +4,9 @@ import { logger } from '../../../logger.js';
 import { BadRequest, GeneralError, Conflict } from '@feathersjs/errors';
 import { disallow } from 'feathers-hooks-common'
 import omit from 'lodash/omit.js'
-import fs from 'fs'
 
-import { getSharedBuffer, getPathPrefix, getFilePrefix } from './gcs.helpers.js'
+import { getSharedBuffer, getFilePrefix } from './gcs.helpers.js'
+import { getPathPrefix } from '../uploads.class.js';
 
 export const gcsPath = 'gcs'
 export const gcsMethods = ['find', 'get', 'create', 'remove']

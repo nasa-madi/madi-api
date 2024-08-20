@@ -7,7 +7,7 @@ export const logError = async (context, next) => {
     // logger.error(error.stack)
     // Log validation errors
     if (error.data) {
-      logger.error('Data: %O', error.data)
+      // logger.error('Data: %O', error.data)
     }
 
     if(error.cleanMessage){

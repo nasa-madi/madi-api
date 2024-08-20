@@ -6,6 +6,7 @@ const resolveAction = createAliasResolver({
   delete: "remove"
 });
 
+
 const defineRules = (can, cannot, user) => {
   switch (user.role) {
 
@@ -15,7 +16,17 @@ const defineRules = (can, cannot, user) => {
 
     case "admin":
       can("manage", "chunks");
+      can("manage", "uploads");
+      can("manage", "pipelines");
+      can("manage", "tools");
+      can("manage", "documents");
+      can("manage", "chats");
 
+      // basically manage everything except deleting and patching users
+      can("read", "users");
+      can("create", "users");
+
+    // eslint-disable-next-line no-fallthrough
     default:
       can("read", "chunks");
 
@@ -26,13 +37,26 @@ const defineRules = (can, cannot, user) => {
       can("create", "documents");
       can("update", "documents", {userId: user.id});
       can("delete", "documents", {userId: user.id});
-
       
       can("create", "chats");
 
       can("read", "users", {id: user.id});
       cannot("update", "users")
       cannot("delete", "users");
+
+      // User-specific rule for uploading to paths
+      can("manage", "uploads", {
+        userString: {$in: ["all", user.id]}, // can always upload to own path or to all
+        pluginString: {$in: ["all", ...(user.allowedManagedPlugins||[])]} // can always upload to all plugins or to allowed plugins
+      });
+      //TODO: Add allowedPlugins permissions column to users table
+
+      can("read", "uploads", {
+        userString: {$in: ["all", user.id]},
+        pluginString: {$in: ["all", ...(user.allowedPlugins||[])]}
+      });
+      //TODO: Add allowedPlugins permissions column to users table
+
       break;
   }
 };
