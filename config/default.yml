@@ -72,6 +72,7 @@ plugins:
     - casScamper
     - casScenarios
     - searchSemanticScholar
+    - casConfluence
   restricted:
     # - searchPatents
   development:
