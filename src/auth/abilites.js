@@ -44,8 +44,12 @@ const defineRules = (can, cannot, user) => {
       cannot("update", "users")
       cannot("delete", "users");
 
-      // User-specific rule for uploading to paths
-      can("manage", "uploads", {
+      
+      can("create", "uploads");
+      can("read", "uploads");
+      
+
+      can("upload-parse-chunk", "pipelines", {
         userString: {$in: ["all", user.id]}, // can always upload to own path or to all
         pluginString: {$in: ["all", ...(user.allowedManagedPlugins||[])]} // can always upload to all plugins or to allowed plugins
       });

@@ -38,7 +38,7 @@ export const UploadParseChunkPipeline = async function (data, params) {
     const userString = params.restrictToUser ? params?.user?.id || 'all' : 'all';
 
     // Check if the user has the ability to upload based on the restrictions
-    if (!params.ability.can('upload', subject('uploads', {
+    if (!params.ability.can('upload-parse-chunk', subject('pipelines', {
         pluginString,
         userString
     }))) {
