@@ -32,10 +32,11 @@ async function getGoogleIdentityToken(targetAudience) {
     const client = await auth.getIdTokenClient(targetAudience);
     // Request with the client to obtain the ID token
     const response = await client.request({ url: targetAudience });
+    console.log(JSON.stringify(response));
     const idToken = response.headers['x-goog-identity-token'];
     
     if (!idToken) {
-        throw new Error('Failed to obtain ID token');
+        throw new Error('Failed to obtain ID token', { cause: response });
     }
     console.log('ID Token:', idToken);
     return idToken;
