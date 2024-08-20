@@ -23,7 +23,7 @@ export const postgresql = async (app) => {
 
 export const automigrate = async ({app},next) => {
   const config = app.get('postgresql')
-  if(config.automigrate){
+  if(config.automigrate || process.env.MIGRATE==='true'){
     logger.info('MIGRATE: Automigrating database')
     const db = knex(config)
     let list = await db.migrate.list()
@@ -41,7 +41,7 @@ export const automigrate = async ({app},next) => {
 export const autoseed = async ({app},next) => {
   const config = app.get('postgresql')
 
-  if(config.autoseed){
+  if(config.autoseed || process.env.SEED==='true'){
     logger.info('SEED: Autoseeding database')  
     const db = knex(config)
     let users = await db('users').select()

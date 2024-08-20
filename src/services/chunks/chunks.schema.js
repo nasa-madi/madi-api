@@ -8,9 +8,9 @@ import config from '@feathersjs/configuration'
 import {Composite} from '@sinclair/typebox/type'
 
 
-const MAX_LENGTH = config()().chunks.maxLength
+const MAX_LENGTH = config()()?.chunks?.maxLength
 
-
+console.log('MAX_LENGTH', MAX_LENGTH)
 
 // Main data model schema
 export const chunkSchema = Type.Object(
