@@ -40,6 +40,8 @@ export const uploadFileToNLM = async (file, options) => {
 
     try {
         // Send the POST request to the NLM service
+        console.log('url', url.toString())
+        console.log('headers', headers))
         const response = await fetch(url.toString(), {
             method: 'POST',
             headers: headers,
@@ -47,6 +49,7 @@ export const uploadFileToNLM = async (file, options) => {
             redirect: "follow"
         });
 
+        console.log('response', response)
         // Parse the response as JSON
         const data = await response.json();
 
@@ -56,6 +59,7 @@ export const uploadFileToNLM = async (file, options) => {
         
         return data;
     } catch (error) {
+        console.log('error', error)
         logger.error('Error during file upload to NLM', { error }); // Log the error with context
         throw error;
     }
