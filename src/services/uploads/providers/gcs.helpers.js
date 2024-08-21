@@ -1,16 +1,6 @@
 
 import crypto from 'crypto';
-
-
-export function getPathPrefix(data, params, {}) {
-    let { restrictToUser, user, plugin, restrictToPlugin } = params
-    console.log('\n\n\ngetPathPrefix', params)
-    let userString = restrictToUser ? user.id : 'all'
-    let pluginString = restrictToPlugin ? plugin : 'all'
-    let prefix = `${pluginString}/${userString}/`
-    return prefix
-}
-
+import { BadRequest } from '@feathersjs/errors';
 
 export function getFilePrefix(data, params, { allowDuplicates, useMetadataInHash }) {
     if(allowDuplicates){

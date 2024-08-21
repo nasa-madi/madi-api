@@ -8,6 +8,10 @@ paginate:
   default: 10
   max: 50
 
+# TESTING
+debug: false
+verbose: false
+
 # DATABASE
 postgresql:
   client: pg
@@ -19,7 +23,7 @@ postgresql:
     port: 5432
   pool: 
     min: 0
-    max: 10
+    max: 100
     idleTimeoutMillis: 5000
   #   createTimeoutMillis: 30000
   #   acquireTimeoutMillis: 60000
@@ -40,48 +44,32 @@ openai:
   use_proxy: false
   proxy_port: 8888
 
-# TESTING
-debug: false
-verbose: false
-
+# DOCUMENT SERVICE
 chunks:
   maxLength: 2000
   overlap: 300
   size: 2000
 
+# STORAGE SERVICE
 storage:
   default: gcs
   gcs:
     allowDuplicates: false
-    keyFilename: ./test/contracts/credentials.json
-    bucket: madi-sample-bucket
-    apiEndpoint: http://localhost:9023
-    local: true
     projectId: test
+    bucket: madi-sample-bucket
     useMetadataInHash: true
 
-plugins:
-  failOnImportError: true
-  path: ../plugins
-  start: index.js
-  default:
-    # - armdEBooks:
-    #     path: ../plugins
-    #     start: index.js
-    - casHIT
-    - casScamper
-    - casScenarios
-    - searchSemanticScholar
-  restricted:
-    # - searchPatents
-  development:
-    - devGetWeather
+    # local only settings
+    local: true
+    keyFilename: ./test/contracts/credentials.json
+    apiEndpoint: http://localhost:9023
 
-    
-
+  
+# AUTHENTICATION SERVICE
 authentication:
   entity: user
   service: users
+  client_id: XXX
   secret: XXXXXXXXXXXXXXXXXXXXXXXXXXX
   authStrategies:
     - googleIAP
@@ -91,4 +79,22 @@ authentication:
     idField: googleId
   googleCLI:
     emailField: email
-    idField: googleId
+    idField: googleId 
+    
+# PLUGIN SERVICES
+plugins:
+  failOnImportError: true
+  path: ../plugins
+  start: index.js
+  default:
+    - armdEbooks
+    - casHIT
+    - casScamper
+    - casScenarios
+    - searchSemanticScholar
+    - casConfluence
+  restricted:
+    # - searchPatents
+  development:
+    - devGetWeather
+

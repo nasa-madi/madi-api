@@ -22,13 +22,13 @@ export class ParserService {
   }
 
   convert(data, params) {
+    const splitter = new SbdSplitter({...this.options.splitter, ...params.splitter});
     switch(params?.query?.format){
       case 'html':
         return createHTMLfromNLM(data)
       case 'markdown':
         return this.turndownService.turndown(createHTMLfromNLM(data))
       case 'chunks':
-        const splitter = new SbdSplitter({...this.options.splitter, ...params.splitter});
         return splitter.splitText(this.turndownService.turndown(createHTMLfromNLM(data)))
       default:
         return data
@@ -45,6 +45,7 @@ export const getOptions = (app) => {
     path: app.get('parser')?.nlm?.host + '/api/parseDocument',
     applyOcr: app.get('parser')?.nlm?.applyOcr || 'no',
     renderFormat: app.get('parser')?.nlm?.renderFormat || 'all',
+    identityProvider: app.get('parser')?.nlm?.identityProvider || 'none',
     splitter:{
       chunkSize: app.get('parser')?.nlm?.splitter?.chunkSize || 10000,
       softMaxChunkSize: app.get('parser')?.nlm?.splitter?.softMaxChunkSize || 3000,

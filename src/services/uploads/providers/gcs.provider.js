@@ -4,9 +4,9 @@ import { logger } from '../../../logger.js';
 import { BadRequest, GeneralError, Conflict } from '@feathersjs/errors';
 import { disallow } from 'feathers-hooks-common'
 import omit from 'lodash/omit.js'
-import fs from 'fs'
 
-import { getSharedBuffer, getPathPrefix, getFilePrefix } from './gcs.helpers.js'
+import { getSharedBuffer, getFilePrefix } from './gcs.helpers.js'
+import { getPathPrefix } from '../uploads.class.js';
 
 export const gcsPath = 'gcs'
 export const gcsMethods = ['find', 'get', 'create', 'remove']
@@ -40,10 +40,12 @@ export class GcsService {
 
   async create(sourceMetadata, params) {
 
+
     // Get the buffer and original name from the file
-    params.file.buffer = getSharedBuffer(sourceMetadata, params, this.options)
-    params.file.filePrefix = getFilePrefix(sourceMetadata, params, this.options)
-    params.file.pathPrefix = getPathPrefix(sourceMetadata, params, this.options)
+    params.file.buffer = params?.file?.buffer || getSharedBuffer(sourceMetadata, params, this.options)
+    params.file.filePrefix = params?.file?.filePrefix || getFilePrefix(sourceMetadata, params, this.options)
+    params.file.pathPrefix = params?.file?.pathPrefix || getPathPrefix(sourceMetadata, params, this.options)
+    
     params.file.fullPath = params.file.pathPrefix + params.file.filePrefix + "_" + params.file.originalname
 
     // Check for duplicates
@@ -79,7 +81,7 @@ export class GcsService {
 
   async checkForDuplicates(filePath, params) {
     const [files] = await this.bucket.getFiles({ prefix: filePath });
-    console.log(files)
+    // console.log(files)
     if(files.length > 0 && !this.options.allowDuplicates && !params.query?.force){
       throw new Conflict('File already exists',{
         filePath: params.file.fullPath
@@ -192,7 +194,8 @@ export class GcsService {
     return { fileName, message: 'File deleted successfully.' };
   }
 
-  async setup(app) {
+  async setup() {
+    logger.info(`${logKey}: Setting up Google Cloud Storage with options: ${JSON.stringify(this.options.config)} and bucket: ${this.options.bucketName}`);
     this.storage = new Storage({
       ...this.options.config,
     });
@@ -245,9 +248,6 @@ export const getOptions = (app) => {
   return {
     config,
     bucketName: bucket,
-    local,
-    apiEndpoint,
-    projectId,
     app,
     expiration,
     allowDuplicates,
