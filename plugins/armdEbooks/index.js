@@ -3,6 +3,7 @@ import { BasePlugin } from 'madi-plg-base-class'
 var turndownService = new Turndown()
 
 const TOOLNAME = 'search_armd_ebooks'; // Identifier for the plugin
+
 export const test = true;
 
 // The static description object for the Confluence search tool.
@@ -52,6 +53,7 @@ export class Plugin extends BasePlugin {
    */
   async run(runOptions, params) {
     // Destructure the search parameters or set defaults
+
     const related = (await this.chunks?.find({
       ...params,
       query: {
