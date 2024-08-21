@@ -1,64 +1,285 @@
-import pick from 'lodash/pick.js'
-import omit from 'lodash/omit.js'
+import pick from 'lodash/pick.js';
+import omit from 'lodash/omit.js';
+import isEqual from 'lodash/isEqual.js';
+import path from 'path';
+import { Buffer } from 'buffer';
+import { subject } from '@casl/ability';
+import { BadRequest, Forbidden } from '@feathersjs/errors';
+import { logger } from '../../logger.js';
 
+const LOGKEY = 'PIPELINE: UPLOAD-PARSE-CHUNK: ';
+
+// Main pipeline function to handle the upload, parsing, and processing of documents
 export const UploadParseChunkPipeline = async function (data, params) {
-    let uploadResult = await this.app.service('uploads').create(data, params).catch(err => {
-        console.log('upload error', err)
-        if (err.name === 'Conflict') {
-            return this.app.service('uploads').get(encodeURIComponent(err.data.filePath), params)
+    // Retrieve pipeline-specific configurations from the app or params
+    const config = this.app.get('pipelines')?.[params?.pipelineId] || {};
+
+    // Set contentLimit from the config or query parameters, with a default value
+    const contentLimit = config.contentLimit || params?.query?.contentLimit || 30000;
+
+    // Determine the plugin to be used for processing, with 'Core' as the default
+    if (!params?.query?.plugin) {
+        logger.error('Plugin not specified in query parameters');
+        throw new BadRequest('A specific name, e.g. "search_books", or "all" must be set as the "plugin" query parameter.');
+    }
+
+    if (params?.query?.plugin !== 'all') {
+        // TODO: check if the plugin exists
+        logger.warn(LOGKEY+'Specific plugin provided, but existence check is not yet implemented');
+    }
+
+    // Set the plugin and restriction flags in params for later use
+    params.plugin = params?.query?.plugin;
+    params.restrictToPlugin = ['true', 'yes', 1, '1', true].includes(params?.query?.restrictToPlugin) || false;
+    params.restrictToUser = ['true', 'yes', 1, '1', true].includes(params?.query?.restrictToUser) || false;
+
+    // Prepare strings for user and plugin restriction checks
+    const pluginString = params.restrictToPlugin ? params.plugin : 'all';
+    const userString = params.restrictToUser ? params?.user?.id || 'all' : 'all';
+
+    // Check if the user has the ability to upload based on the restrictions
+    if (!params.ability.can('upload-parse-chunk', subject('pipelines', {
+        pluginString,
+        userString
+    }))) {
+        logger.error('User is not authorized to upload to this location');
+        throw new Forbidden('You are not authorized to upload to this location.');
+    }
+
+    // Set character limits for different sections of the document
+    const metaCharCount = config.metaCharCount || params?.query?.metaCharCount || 20000;
+
+    // Step 1: Upload the document
+    // The uploadDocument function handles the actual file upload and conflict checks
+    let upload;
+    try {
+        upload = await uploadDocument(this.app, { ...data }, params);
+        logger.info(LOGKEY+'Document uploaded successfully', { filePath: upload.filePath });
+    } catch (err) {
+        logger.error('Document upload failed', err);
+        throw err;
+    }
+
+    // Step 2: Check if the document has already been processed (exists in the database)
+    let document;
+    try {
+        document = await findExistingDocument(this.app, upload.filePath, params) || {};
+        if (document.id) {
+            logger.info(LOGKEY+'Existing document found', { documentId: document.id });
         } else {
-            throw err
+            logger.info(LOGKEY+'No existing document found, proceeding with parsing');
         }
-    })
-    console.log('uploadResult', uploadResult)
+    } catch (err) {
+        logger.error('Error while checking for existing document', err);
+        throw err;
+    }
 
-    let parseResult = await this.app.service('parser').create({}, params)
-    console.log('parseResult', parseResult)
+    // Step 3: Parse the document if it hasn't been processed before
+    let parseMarkdown;
+    if (!document?.content && !document?.parsedPath) {
+        try {
 
-    let metadataResult = await this.app.service('chats').create({
-        messages: [
-            { role: "system", content: "You are a document parsing engine for a search solution. You must parse the given text into the appropriate fields.  It is critical that you do not guess on fields.  Approximations for dates are acceptable.  If you do not know or the document does not specify, leave the field blank. The user will provide the text below" },
-            {
-                role: "user", content: `\n
-CONTENT TO EXTRACT METADATA FROM:\n
----------------------------------\n
-\`\`\`
-${parseResult}
----------------------------------\n
-\`\`\``
+            // check if parsed Document exists
+
+
+            // If the document hasn't been parsed, start the parsing process
+            const parseJson = await parseDocument(this.app, upload, params);
+
+            // Check if parsing was successful
+            if (parseJson.status !== 200) {
+                logger.error('Parsing failed', { status: parseJson.status });
+                throw new Error('Parsing failed');
             }
-        ],
-        tools: [instructions],
-       
-        tool_choice: {"type": "function", "function": {"name": 'generate_document_metadata'}} 
-    }, omit(params, ['query']))
 
-    let fullChat = {}
-    try{
-        const stringifiedJson = metadataResult?.choices[0]?.message?.tool_calls[0]?.function?.arguments || '{}'
-        fullChat = JSON.parse(stringifiedJson)
-    }catch(e){
-        console.log('metadata parsing error', e)
+            // Convert the parsed JSON result to a string for storage or further processing
+            let parseJsonString = JSON.stringify(parseJson);
+
+            // Convert the parsed content to Markdown format
+            parseMarkdown = await this.app.service('parser').convert(parseJson, { query: { format: "markdown" } });
+
+            // If the parsed content exceeds the content limit, upload the parsed content
+            if (parseMarkdown.length > contentLimit) {
+                logger.info(LOGKEY+'Parsed content exceeds limit, uploading parsed content');
+                const uploadedParse = await uploadParsedDocument(this.app, upload, params, parseJsonString);
+                document = { ...document, parsedPath: uploadedParse.filePath };
+
+                // Include full content for chunking
+                params.rawContent = parseMarkdown;
+            } else {
+                // If the content is within the limit, store it directly in the document
+                logger.info(LOGKEY+'Parsed content within limit, storing directly in document');
+                document = { ...document, content: parseMarkdown };
+            }
+        } catch (err) {
+            logger.error('Error during document parsing', err);
+            throw err;
+        }
     }
-    let newDocument = {
-        ...fullChat,
-        metadata: {
-            systemMetadata: uploadResult?.metadata?.systemMetadata || {},
-            ...fullChat?.metadata,
-            ...uploadResult?.metadata?.sourceMetadata
-        },
-        content: parseResult,
-        uploadPath: uploadResult.filePath
+
+    // Step 4: Save or update the document in the database
+    if (document.id) {
+        // Update the existing document if it already exists
+
+        const updatedFields = pick(document, ['parsedPath', 'uploadPath', 'content']);
+        const existingDocument = await this.app.service('documents').get(document.id);
+
+        // Check if the document's content has changed
+        if (!isEqual(pick(existingDocument, ['parsedPath', 'uploadPath', 'content']), updatedFields)) {
+            logger.info(LOGKEY+'Document content has changed, updating document', { documentId: document.id });
+            return await this.app.service('documents').patch(document.id, updatedFields, omit(params, ['query']));
+        } else {
+            logger.info(LOGKEY+'No changes detected, returning existing document', { documentId: existingDocument.id });
+            return existingDocument;
+        }
+    } else {
+        // Create a new document if it doesn't exist
+        const metadataResult = await extractMetadata(this.app, document.content || parseMarkdown, params, metaCharCount);
+        const newDocument = buildNewDocument(metadataResult, upload, document.content, document.parsedPath, params.plugin);
+        logger.info(LOGKEY+'Creating a new document', { plugin: params.plugin });
+        return await this.app.service('documents').create(newDocument, omit(params, ['query']));
     }
+};
 
-
-    let documentResult = await this.app.service('documents').create(newDocument, omit(params, ['query']))
-
-
-
-
-    return documentResult
+// Function to upload a document
+async function uploadDocument(app, data, params) {
+    const uploadQueryFields = ['sign']; // Relevant query fields for uploads
+    try {
+        // Attempt to upload the document with specific query parameters
+        const result = await app.service('uploads').create(data, {
+            ...params,
+            query: pick(params?.query || {}, uploadQueryFields)
+        });
+        logger.info(LOGKEY+'Document upload successful', { filePath: result.filePath });
+        return result;
+    } catch (err) {
+        if (err.name === 'Conflict') {
+            // If a conflict occurs (document already exists), retrieve the existing document
+            logger.info(LOGKEY+'Document conflict detected, retrieving existing document', { filePath: err.data.filePath });
+            return app.service('uploads').get(encodeURIComponent(err.data.filePath), params);
+        } else {
+            // Throw any other errors
+            logger.error('Document upload failed with error', err);
+            throw err;
+        }
+    }
 }
+
+// Function to check for existing documents in the database
+async function findExistingDocument(app, filePath, params) {
+    try {
+        // Search for documents in the database with the same upload path
+        const result = await app.service('documents').find({
+            ...params,
+            query: {
+                uploadPath: filePath,
+                $limit: 1 // We only need the first match
+            }
+        });
+        // Return the existing document (if any)
+        return result.data[0];
+    } catch (err) {
+        logger.error('Error during document lookup', err);
+        throw new Error(err);
+    }
+}
+
+// Function to parse the document
+async function parseDocument(app, document, params) {
+    const config = app.get('pipelines')?.[params?.pipelineId] || {};
+
+    // Determine if OCR should be applied during parsing
+    const applyOcr = config.defaultApplyOcr || params?.query?.applyOcr || 'no';
+    params.query = { ...params.query, applyOcr };
+
+    const parserQueryFields = ['applyOcr']; // Only relevant query fields for parsing
+    try {
+        // Send the document to the parser service
+        const parseResult = await app.service('parser').create({}, {
+            ...params,
+            query: pick(params?.query || {}, parserQueryFields)
+        });
+        logger.info(LOGKEY+'Document parsed successfully');
+        return parseResult;
+    } catch (err) {
+        logger.error('Error during document parsing', err);
+        throw err;
+    }
+}
+
+// Function to upload parsed content
+async function uploadParsedDocument(app, upload, params, parseResult) {
+    const parseBuffer = Buffer.from(parseResult, 'utf-8'); // Convert the parsed result to a buffer
+    try {
+        // Attempt to upload the parsed content as a new document
+        const result = await app.service('uploads').create({
+            originalFilePath: upload.filePath // The original file's path
+        }, {
+            ...params,
+            file: {
+                buffer: parseBuffer,
+                filePrefix: upload.metadata.systemMetadata.filePrefix, // Use filePrefix from system metadata
+                pathPrefix: upload.metadata.systemMetadata.pathPrefix, // Use pathPrefix from system metadata
+                originalname: `${path.basename(upload.filePath, path.extname(upload.filePath))}-parsed.json`,
+                mimetype: 'application/json' // The parsed content is JSON formatted
+            },
+            query: {
+                sign: true // Sign the upload request
+            }
+        });
+        logger.info(LOGKEY+'Parsed document uploaded successfully', { filePath: result.filePath });
+        return result;
+    } catch (err) {
+        if (err.name === 'Conflict') {
+            // Handle document conflicts
+            logger.info(LOGKEY+'Conflict detected during parsed document upload', { filePath: err.data.filePath });
+            return app.service('uploads').get(encodeURIComponent(err.data.filePath), params);
+        } else {
+            // Throw any other errors
+            logger.error('Parsed document upload failed', err);
+            throw err;
+        }
+    }
+}
+    
+// Function to extract metadata using the chat service
+async function extractMetadata(app, parseResult = '', params, metaCharCount) {
+    try {
+        logger.debug('Extracting metadata from document');
+        let parseSlice = parseResult.slice(0, metaCharCount);
+
+        const metadataResult = await app.service('chats').create({
+            messages: [
+                { role: "system", content: "You are a document parsing engine for a search solution..." },
+                { role: "user", content: parseSlice }
+            ],
+            tools: [instructions],
+            tool_choice: { "type": "function", "function": { "name": 'generate_document_metadata' } }
+        }, omit(params, ['query']));
+
+        return JSON.parse(metadataResult?.choices[0]?.message?.tool_calls[0]?.function?.arguments || '{}');
+    } catch (e) {
+        logger.error('Metadata parsing error:', e);
+        return {};
+    }
+}
+
+// Function to build the final document object
+function buildNewDocument(metadata, upload, content = null, parsedPath = null, plugin) {
+    logger.debug('Building new document object');
+    return {
+        ...metadata,
+        metadata: {
+            systemMetadata: upload?.metadata?.systemMetadata || {},
+            ...metadata?.metadata,
+            ...upload?.metadata?.sourceMetadata
+        },
+        content,
+        parsedPath,
+        plugin,
+        uploadPath: upload.filePath
+    };
+}
+
 
 export const instructions = {
     type: 'function',
@@ -193,7 +414,7 @@ export const instructions = {
                 },
                 abstract: {
                     type: "string",
-                    description: "A brief summary of the document."
+                    description: "A concise abstract based on the provided [pages/section] of the [document/article/research paper]. This field should summarize the main objectives, key findings or arguments introduced so far, and any methodologies mentioned. Ensure that the abstract is informative, focusing on the content given, and highlight the significance of the work if indicated. Limit the summary to 150-250 words."
                 }
             },
             required: ["metadata"]

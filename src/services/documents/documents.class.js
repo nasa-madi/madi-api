@@ -1,31 +1,52 @@
 import { KnexService } from '@feathersjs/knex'
 import pMap from 'p-map'
-import {
-  SupportedTextSplitterLanguages,
-  RecursiveCharacterTextSplitter,
-} from "langchain/text_splitter";
+import { SbdSplitter } from 'sbd-splitter';
+
 import config from '@feathersjs/configuration'
 
-
-const OVERLAP = config()().chunks.overlap || 200
 const SIZE = config()().chunks.size || 2000
-
 
 export class DocumentService extends KnexService {
 
   constructor(options) {
     super(options)
     this.options = options
-    
+
   }
 
   async splitDoc(document){
-    const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
+    const splitter = new SbdSplitter({
       chunkSize: SIZE,
-      chunkOverlap: OVERLAP
+      softMaxChunkSize: 3000,
+      delimiters: [
+          '\n# ',
+          '\n## ',
+          '\n### ',
+          '\n#### ',
+          '\n##### ',
+          '\n###### ',
+          '```\n\n',
+          '\n\n***\n\n',
+          '\n\n---\n\n',
+          '\n\n___\n\n',
+          '\n\n',
+          '\n',
+          '&#&#&#',
+          ' ',
+          ''
+      ]
     });
-    return splitter.createDocuments([document.content]);
-    
+    let result = await splitter.splitText(document)    
+    return result.map((r, i) => {
+      return {
+        pageContent: r,
+        metadata: {
+          loc: {lines: {from: i, to: i}},
+          chunkIndex: i,
+          chunkSize: r.length,
+        }
+      }
+    })
   }
 
 
@@ -33,20 +54,23 @@ export class DocumentService extends KnexService {
 
     let newDoc = await this._create(data, params)
     
+    // allows raw content to be passed in when uploadPath is being used instead of content
+    let content = params.rawContent || data.content
+    
     try{
-      let chunks = await this.splitDoc(newDoc)
+      let chunks = await this.splitDoc(content)
 
       // uses pMap to limit concurrent chunks to 10.
       // TODO convert to a pubsub or queue
-      const mapper = (c, index) => 
-          this.options.chunks.create({
+      const mapper = (c, index) => {
+          return this.options.chunks.create({
             pageContent: c.pageContent,
             metadata: c.metadata,
             documentId: newDoc.id,
             documentIndex: index,
-            toolName: newDoc.toolName || undefined,
+            plugin: newDoc.plugin || undefined,
       }, {...params, provider:'internal'});
-        
+    }
       await pMap(chunks, mapper, {concurrency: 10});
     }catch(e){
       await this.remove(newDoc.id)
@@ -61,6 +85,7 @@ export class DocumentService extends KnexService {
     await this.options.chunks.getModel().from('chunks').where('documentId', id).del();
 
     // Remove the document
+    // TODO fix this logic.  With CASL it binds the query: {userId: user.id} to the underlying findOrGet and returns a Not Found instead of a Forbidden.
     let newDoc = await this._remove(id, params);
 
     return newDoc;
