@@ -87,9 +87,7 @@ plugins:
   path: ../plugins
   start: index.js
   default:
-    # - armdEBooks:
-    #     path: ../plugins
-    #     start: index.js
+    - armdEbooks
     - casHIT
     - casScamper
     - casScenarios

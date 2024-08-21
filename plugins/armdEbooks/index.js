@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Turndown from 'turndown'
 import { BasePlugin } from 'madi-plg-base-class'
 var turndownService = new Turndown()
 
-const TOOLNAME = 'search_cas_confluence'
+const TOOLNAME = 'search_armd_ebooks'; // Identifier for the plugin
+
 export const test = true;
 
 // The static description object for the Confluence search tool.
@@ -53,16 +54,17 @@ export class Plugin extends BasePlugin {
    */
   async run(runOptions, params) {
     // Destructure the search parameters or set defaults
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     const related = (await this.chunks?.find({
       ...params,
       query: {
-        $search: runOptions?.data?.query,
+        $search: runOptions?.data?.query ?? '',
         plugin: TOOLNAME,
         $select: ['metadata','pageContent','documentId','plugin'],
-        $limit: 20
+        $limit: 50
       }
-    })).data
+    }))?.data ?? [];
+
 
     const filled = await Promise.all(
       related.map(async (c) => {
@@ -90,7 +92,8 @@ export class Plugin extends BasePlugin {
     });
 
 
-    const INSTRUCTION = `INSTRUCTIONS: Below are several snippets from Confluence documents pertaining to your request. They are in order of closeness depending on the cosine similarity of the embeddings of the query and the snippet.  They also include links and ID numbers for pages in the confluence space.  When responding make sure to include the relevant links to the documents and name the document from which the snippet was pulled.`
+    const INSTRUCTION = `INSTRUCTIONS: Below are several snippets from ebooks published by NASA ARMD pertaining to your request. They are in order of closeness depending on the cosine similarity of the embeddings of the query and the snippet.  They also include abstracts and metadata of the full documents.  When responding make sure to include the relevant links to the documents and name the document from which the snippet was pulled.`
+
     const snippets = '##Snippet\n' + cleaned?.map(d => JSON.stringify(d)).join('\n\n##Snippet\n');
     return {"content":INSTRUCTION + snippets}
   }
