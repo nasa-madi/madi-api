@@ -41,7 +41,7 @@ export const document = (app) => {
     },
     before: {
       all: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         schemaHooks.validateQuery(documentQueryValidator),
         authorizeHook,
         schemaHooks.resolveQuery(documentQueryResolver)

@@ -50,10 +50,14 @@ config/*
 !config/default*
 !config/custom*
 !config/docker.yml
+!config/simple.yml
+!config/contract-test.yml
 
 cache/*
 ignore/
-.uploads/
+.uploads/mounted
+!.uploads/preload
+
 
 #####
 client_secret*

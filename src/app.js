@@ -7,15 +7,18 @@ import { iff, isProvider } from 'feathers-hooks-common'
 
 import { configurationValidator } from './configuration.js'
 import { logError, logErrorExternal } from './hooks/log-error.js'
-import { postgresql } from './postgresql.js'
+import { automigrate, autoseed, postgresql } from './postgresql.js'
 
-import { authentication } from './auth/authentication.js'
-import multer from '@koa/multer';
+import { authentication, registerSuperAdmins } from './auth/authentication.js'
 import { services } from './services/index.js'
 import koaQs from 'koa-qs' //override koa's default query string function to allow nested fields
 import { decoder } from './services/utils/numericDecoder.js';
-import { plugins } from './plugin-tools/index.js'
+import { plugins } from './plugins.js'
 import parseRpcVerb from 'feathers-rpc'
+import { logger } from './logger.js'
+import { multer } from './hooks/multer.js'
+
+
 
 const app = koaQs(koa(feathers()),'extended',{ decoder }) 
 
@@ -25,6 +28,10 @@ import { openaiConfig } from './services/utils/cacheProxy.js'
 // Load our app configuration (see config/ folder)
 app.configure(configuration(configurationValidator))
 
+logger.info(`CONFIGURATION: ${app.get('file')}`)
+
+
+
 // Set up Koa middleware
 app.use(cors())
 app.use(serveStatic('specifications/build'))
@@ -33,24 +40,30 @@ app.use(parseAuthentication())
 app.use(bodyParser({
   jsonLimit: '10mb'
 }));
+app.use(multer('file'))
+
 app.configure(openaiConfig)
 
 
 
 // Configure services and transports
-app.use(parseRpcVerb());                         
+app.use(parseRpcVerb());
 
 app.configure(rest())
 
 app.configure(postgresql)
 
-app.configure(authentication)
+
 
 app.configure(services)
+
+app.configure(authentication)
 
 app.configure(feathersCasl());
 
 app.configure(plugins);
+
+
 
 // Register hooks that run on all service methods
 app.hooks({
@@ -59,7 +72,9 @@ app.hooks({
       logError,
     ]
   },
-  before: {},
+  before: {
+    all:[]
+  },
   after: {},
   error: {
     all:[
@@ -67,10 +82,15 @@ app.hooks({
     ]
   }
 })
+
 // Register application setup and teardown hooks here
 app.hooks({
-  setup: [],
-  teardown: []
+  setup: [
+    automigrate,
+    autoseed,
+    registerSuperAdmins,
+  ],
+  teardown: [],
 })
 
 export { app }

@@ -1,13 +1,10 @@
-# TODO
- - Add Gitleaks install instructions https://github.com/gitleaks/gitleaks/blob/master/README.md
- - 
 
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/ec559a9f6bfd399b82bb44393651661b08aaf7ba/icons/folder-markdown-open.svg" width="100" />
+  <img src="https://avatars.githubusercontent.com/u/153765854?s=400&u=423f0cfc70b57a1fa790b1103aa4a8cd13ad79a0&v=4" width="100" />
 </p>
 <p align="center">
-    <h1 align="center">MADI-API</h1>
+    <h1 align="center">MADI API</h1>
 </p>
 <p align="center">
     <em></em>
@@ -17,12 +14,26 @@
 	<img src="https://img.shields.io/github/last-commit/nasa-madi/madi-api?style=default&color=0080ff" alt="last-commit">
 	<img src="https://img.shields.io/github/languages/top/nasa-madi/madi-api?style=default&color=0080ff" alt="repo-top-language">
 	<img src="https://img.shields.io/github/languages/count/nasa-madi/madi-api?style=default&color=0080ff" alt="repo-language-count">
+    <img src="https://img.shields.io/github/checks-status/nasa-madi/madi-api/main?style=default&color=0080ff" alt="branch-status">
 <p>
 <p align="center">
 	<!-- default option, no dependency badges. -->
 </p>
 <hr>
 
+See [full documentation](https://nasa-madi.github.io/madi-core/api)
+
+### TODO
+- [ ] Add Gitleaks install instructions https://github.com/gitleaks/gitleaks/blob/master/README.md
+- [ ] Add configuration explanations
+- [ ] Add example service creation (advanced)
+- [ ] Add plugin service api (advanced)
+- [ ] Add unit tests to custom helpers and methods
+- [ ] Add a Hoverfly instance to proxy against tests
+
+
+
+<!-- 
 ##  Quick Links
 
 > - [ Overview](#-overview)
@@ -725,4 +736,4 @@ This project is protected under the [SELECT-A-LICENSE](https://choosealicense.co
 
 [**Return**](#-quick-links)
 
----
+--- -->

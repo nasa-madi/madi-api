@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   ## This is the mock API available at port 8080
   api_mock:
@@ -16,11 +14,18 @@ services:
   ##     and may not be the same image as built under the /api folder directly
   api:
     build: .
+    command: node src/index.js
     environment:
       - NODE_ENV=development
       - NODE_CONFIG_ENV=docker
+      - PLUGINS={"development":["casConfluence"]}
     ports:
       - "3030:3030"
+    volumes:
+      # adds the plugin folder
+      - ./plugins:/app/plugins
+      # adds the base class plugin
+      - ./plugins/madi-plg-base-class:/app/node_modules/madi-plg-base-class
     networks:
       - madi
     depends_on:
@@ -55,7 +60,7 @@ services:
   # This mocks out a Google Cloud Storage server so that local testing
   # can be done with a GCS Bucket library.
   storage:
-    image: jamesmtc/madi-gcp-emulator:latest
+    image: nasamadi/madi-storage-gcs-emulator:latest
     environment:
       - PORT=9023
       - STORAGE_BASE=./api
@@ -63,14 +68,23 @@ services:
     ports:
       - "9023:9023"
     volumes:
-      - ./uploads:/storage
+      - ${PWD}/.uploads/preload:/app/api/preload
+      - ${PWD}/.uploads/mounted:/app/api/uploads
     networks:
       - madi
+    entrypoint: > 
+      sh -c "cp -r /app/api/preload/* /app/api/uploads && gcp-storage-emulator start"
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9023 | grep 'OK' || exit 1"]
       interval: 60s
       timeout: 5s
       retries: 5
+
+  # https://github.com/nlmatics/nlm-ingestor
+  parser:
+    image: nasamadi/madi-parsers-nlm:latest
+    ports:
+      - 5001:5001
 
 networks:
   madi:

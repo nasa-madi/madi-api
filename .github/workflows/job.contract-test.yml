@@ -6,14 +6,14 @@ on:
 
 env:
   WORKDIR: "./"
-  FILE: "./test/contracts/contract.docker-compose.yml"
-  ENTRYPOINT: "entrypoint-command"
-  SERVICE: "newman"
-  COMMAND: run /etc/newman/contract.collection.json
   DOCKER_REGISTRY: https://ghcr.io # the github registry
+  FILE: "./test/contracts/contract.docker-compose.yml"
 
 jobs:
-  test:
+  blueprint:
+    name: "API Blueprint Tests"
+    env:
+      CONTRACT_TYPE: "blueprint"
     runs-on: ubuntu-latest
     timeout-minutes: 7
     steps:
@@ -33,7 +33,72 @@ jobs:
         shell: bash
         run: |
           echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} > .env
+          echo CONTRACT_TYPE=${{ env.CONTRACT_TYPE }} >> .env
           docker compose --env-file ./.env -f ${{ env.FILE }} up --exit-code-from newman
+        
+      - name: Stop stacks
+        if: always()
+        shell: bash
+        run: |
+          cd ${{ env.WORKDIR }}
+          docker compose -f ${{ env.FILE }} down
+  
+  plugin-loader:
+    name: "Plugin Loader Test"
+    env:
+      CONTRACT_TYPE: "plugin-loader"
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start stack
+        shell: bash
+        run: |
+          echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} > .env
+          echo CONTRACT_TYPE=${{ env.CONTRACT_TYPE }} >> .env
+          docker compose --env-file ./.env -f ${{ env.FILE }} up --exit-code-from newman
+        
+      - name: Stop stacks
+        if: always()
+        shell: bash
+        run: |
+          cd ${{ env.WORKDIR }}
+          docker compose -f ${{ env.FILE }} down 
+
+  raw-parser:
+    name: Raw Parser Test"
+    env:
+      CONTRACT_TYPE: "raw-parser"
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-tags: true
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.DOCKER_REGISTRY }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start stack
+        shell: bash
+        run: |
+          docker compose -f ${{ env.FILE }} up parser newman --exit-code-from newman
         
       - name: Stop stacks
         if: always()

@@ -1,6 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 import { authenticate } from '@feathersjs/authentication'
-import { toolDescs } from '../../plugin-tools/index.js'
+import { toolDescs } from '../../plugins.js'
 import { hooks as schemaHooks } from '@feathersjs/schema'
 import { authorizeHook } from '../../auth/authorize.hook.js'
 import { iff, iffElse } from 'feathers-hooks-common';
@@ -58,17 +58,17 @@ export const user = (app) => {
         schemaHooks.resolveQuery(userQueryResolver)
       ],
       find: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook,
       ],
       get: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook,
       ],
       create: [
         (context)=>context.params.returnAuthBool=true,
         // (context)=>{console.log('user create', context)},
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         iffElse((context)=>!!context.params.user,
           [authorizeHook],[
             (context)=>{
@@ -87,13 +87,13 @@ export const user = (app) => {
         schemaHooks.resolveData(userDataResolver)
       ],
       patch: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook,
         schemaHooks.validateData(userPatchValidator),
         schemaHooks.resolveData(userPatchResolver)
       ],
       remove: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook
       ]
     },

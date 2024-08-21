@@ -2,27 +2,24 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Curl is required for health checks
-RUN apk update && apk add --no-cache curl 
-
+# Copy package.json and package-lock.json first to leverage Docker cache
 COPY package.json ./
 COPY package-lock.json ./
 
-RUN npm ci --production
+# Install dependencies (include dev dependencies for development)
+RUN npm ci
 
-COPY . ./
+# Copy the rest of the application code
+COPY --chown=node:node . .
 
-# RUN npm run spec:build
+# Curl is required for health checks
+RUN apk add --no-cache curl
 
+# Switch to a non-root user
+USER node
 
-CMD sh -c ' \
-  echo "SEED $SEED"; \
-  echo "MIGRATION $MIGRATION"; \
-  if [ "${MIGRATION:-false}" = "true" ]; then \
-    npm run migrate; \
-  fi; \
-  if [ "${SEED:-false}" = "true" ]; then \
-    npm run seed:admin; \
-  fi; \
-  npm start \
-'
+# Expose the port
+EXPOSE 3030
+
+# Start the application
+CMD ["npm", "start"]

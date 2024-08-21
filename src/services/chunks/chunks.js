@@ -41,7 +41,7 @@ export const chunk = (app) => {
     },
     before: {
       all: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         iff(isNot(isProvider('internal')), authorizeHook),
         schemaHooks.validateQuery(chunkQueryValidator), 
         schemaHooks.resolveQuery(chunkQueryResolver)

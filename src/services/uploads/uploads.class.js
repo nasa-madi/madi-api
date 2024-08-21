@@ -1,54 +1,79 @@
-// This is a skeleton for a custom service class. Remove or add the methods you need here
-export class UploadService {
-  constructor(options) {
-    this.options = options
+import { BadRequest } from '@feathersjs/errors';
+
+
+// By default calls the standard Knex adapter service methods but can be customized with your own functionality.
+export class UploadService{
+
+  constructor(options){
+    this.app = options.app
   }
 
-  async find(_params) {
-    return []
+  async get(id, params){
+    return await this.serviceSwitch('get', id, {...params, provider: null})
   }
 
-  async get(id, _params) {
-    return {
-      id: 0,
-      text: `A new message with ID: ${id}!`
+  async patch(id, data, params){
+    // only updates the source metadata
+    if(params.file){
+      throw BadRequest('Cannot update file data directly. Please delete and reupload service')
     }
-  }
-  async create(data, params) {
-    if (Array.isArray(data)) {
-      return Promise.all(data.map((current) => this.create(current, params)))
-    }
-
-    return {
-      id: 0,
-      ...data
-    }
+    return await this.serviceSwitch('patch', id, data, {...params, provider: null})
   }
 
-  // This method has to be added to the 'methods' option to make it available to clients
-  async update(id, data, _params) {
-    return {
-      id: 0,
-      ...data
+  async find(params){
+    return await this.serviceSwitch('find', {...params, provider: null})
+  }
+
+  async create(data,params){
+    if(!params.file){
+      throw BadRequest('Requires a form-data "file" field.')
+    }
+    return await this.serviceSwitch('create', data, {...params, provider: null})
+  }
+
+  async remove(id,params){
+    return await this.serviceSwitch('remove', id, {...params, provider: null})
+  }
+
+  async serviceSwitch(func, ...args){
+    let params = args[args.length-1]
+    let config = this.app.get('storage');
+    let service = params?.query?.service || config?.default || 'gcs'
+  
+    switch(service){
+      case 'gcs':
+        return await this.app.service('gcs')[func](...args)
+      default:
+        throw BadRequest(`Invalid storage service: ${service} in query or configuration`)
     }
   }
 
-  async patch(id, data, _params) {
-    return {
-      id: 0,
-      text: `Fallback for ${id}`,
-      ...data
-    }
-  }
-
-  async remove(id, _params) {
-    return {
-      id: 0,
-      text: 'removed'
-    }
-  }
 }
 
 export const getOptions = (app) => {
-  return { app }
+  return {
+    app
+  }
 }
+
+export class UploadBaseService{
+
+  async parseFile(filePath){
+    return filePath
+  }
+
+  async prependPath(filePath){
+    return filePath
+  }
+
+}
+
+// eslint-disable-next-line no-unused-vars
+export function getPathPrefix(_data, params, _options) {
+  let { restrictToUser, user, plugin, restrictToPlugin } = params
+  let userString = restrictToUser ? user.id : 'all'
+  let pluginString = restrictToPlugin ? plugin : 'all'
+  let prefix = `${pluginString}/${userString}/`
+  return prefix
+}
+

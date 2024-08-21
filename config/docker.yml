@@ -2,9 +2,10 @@
 # gcloud secrets create ${ENV}-env-overrides --data-file="./config/${ENV}.yml"
 file: docker.yml
 postgresql:
-  debug: false
   connection:
     host: database
+  automigrate: true
+  autoseed: true
 openai: 
   key: sk-XXXXXXXXXXXXXXXXXXXXXXXXXXX #overriden by github
   cachePath: ./.cicd/cache
@@ -13,4 +14,6 @@ storage:
   bucket: docker-bucket
   apiEndpoint: http://storage:9023
   baseUrl: storage:9023
-
+authentication:
+  superadmin: 
+    - superadmin@example.com

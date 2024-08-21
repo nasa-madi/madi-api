@@ -1,7 +1,9 @@
 import _ from 'lodash'
 import * as openaiAdapter from './chats.openai.js'
+import { logger } from '../../logger.js'
 // import * as geminiAdapter from './chats.gemini.js'
 
+const LOGKEY = 'CHAT: '
 
 export class ChatService {
   constructor(options) {
@@ -9,8 +11,8 @@ export class ChatService {
   }
 
   async create(data, params) {
-    console.log('\n\n************ CHAT SERVICE CREATE')
     let { messages, tools, tool_choice } = data
+    logger.info(LOGKEY + 'create: ' + messages?.slice(-1)[0]?.content.replace(/\n/g, '\\n').substring(0, 100) + '...');
     let stream = !!data.stream
     let options = {
       stream,

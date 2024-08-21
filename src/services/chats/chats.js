@@ -47,7 +47,7 @@ export const chat = (app) => {
     },
     before: {
       all: [
-        authenticate('googleIAP'),
+        authenticate('googleIAP','googleCLI'),
         authorizeHook,
         schemaHooks.validateQuery(chatQueryValidator), schemaHooks.resolveQuery(chatQueryResolver)
       ],
