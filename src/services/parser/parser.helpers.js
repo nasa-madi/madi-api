@@ -4,43 +4,17 @@ import { Readable } from 'stream';
 import { Buffer } from 'buffer';
 import { logger } from '../../logger.js';
 import { GoogleAuth } from 'google-auth-library';
-// import axios from 'axios';
-// import { get } from 'http';
 
-// async function getAccessToken() {
-//     try {
-//       const response = await axios.get(
-//         'http://metadata/computeMetadata/v1/instance/service-accounts/default/token',
-//         {
-//           headers: {
-//             'Metadata-Flavor': 'Google'
-//           }
-//         }
-//       );
-//       console.log('Access Token:', response.data);
-//       console.log('Access Token:', response.data.access_token);
-//       return response.data.access_token;
-//     } catch (error) {
-//       console.error('Error fetching access token:', error);
-//       throw error;
-//     }
-//   }
 
 // Function to obtain the identity token
 async function getGoogleIdentityToken(targetAudience) {
     const auth = new GoogleAuth();
     const client = await auth.getIdTokenClient(targetAudience);
-    // Request with the client to obtain the ID token
     const response = await client.request({ url: targetAudience });
-    console.log(JSON.stringify(response));
-    console.log(JSON.stringify(response?.config));
-    // const idToken = response.headers['x-goog-identity-token'];
     const idToken = response?.config?.headers?.Authorization
-    
     if (!idToken) {
         throw new Error('Failed to obtain ID token', { cause: response });
     }
-    console.log('ID Token:', idToken);
     return idToken;
 }
 
@@ -49,7 +23,6 @@ export const uploadFileToNLM = async (file, options) => {
     const form = new FormData();
     let readStream;
 
-    console.log('uploadFileToNLM OPTIONS', JSON.stringify(options))
 
     // Convert buffer to a readable stream if the file is provided as a buffer
     if (file && file.buffer && Buffer.isBuffer(file.buffer)) {
