@@ -1,10 +1,8 @@
-
 import Turndown from 'turndown'
 import { BasePlugin } from 'madi-plg-base-class'
 var turndownService = new Turndown()
 
 const TOOLNAME = 'search_armd_ebooks'; // Identifier for the plugin
-
 export const test = true;
 
 // The static description object for the Confluence search tool.
@@ -54,7 +52,6 @@ export class Plugin extends BasePlugin {
    */
   async run(runOptions, params) {
     // Destructure the search parameters or set defaults
-
     const related = (await this.chunks?.find({
       ...params,
       query: {
@@ -64,7 +61,6 @@ export class Plugin extends BasePlugin {
         $limit: 50
       }
     }))?.data ?? [];
-
 
     const filled = await Promise.all(
       related.map(async (c) => {
@@ -92,8 +88,7 @@ export class Plugin extends BasePlugin {
     });
 
 
-    const INSTRUCTION = `INSTRUCTIONS: Below are several snippets from ebooks published by NASA ARMD pertaining to your request. They are in order of closeness depending on the cosine similarity of the embeddings of the query and the snippet.  They also include abstracts and metadata of the full documents.  When responding make sure to include the relevant links to the documents and name the document from which the snippet was pulled.`
-
+    const INSTRUCTION = `INSTRUCTIONS: Below are several snippets from ebooks published by NASA ARMD pertaining to your request. They are in order of closeness depending on the cosine similarity of the embeddings of the query and the snippet.  They also include abstracts and metadata of the full documents.  Respond only with information provided by ther snippets. When responding make sure to include the relevant links to the documents and name the document from which the snippet was pulled.  Do not guess at links, names, or other data points. It is CRITICAL that you only use the exact links returned in the document metadata or redirect to the user to www.nasa.gov/ebooks/#aeronautics, otherwise return no link at at. If you are unable to find the information requested, please respond with "No information found".\n\n`
     const snippets = '##Snippet\n' + cleaned?.map(d => JSON.stringify(d)).join('\n\n##Snippet\n');
     return {"content":INSTRUCTION + snippets}
   }
