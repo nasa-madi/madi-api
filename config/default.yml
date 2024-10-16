@@ -93,6 +93,7 @@ plugins:
     - casScenarios
     - searchSemanticScholar
     - casConfluence
+    - casCompost
   restricted:
     # - searchPatents
   development:
